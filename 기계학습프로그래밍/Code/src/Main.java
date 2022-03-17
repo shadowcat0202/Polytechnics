@@ -39,7 +39,40 @@ public class Main {
         return new int[]{hit, miss};
     }
 
-    
+    public static void use_histogram(int[] X, boolean[] y, int min){
+        int[] Bass_histogram = new int[X.length];
+        int[] Salmon_histogram = new int[X.length];
+
+        //Bass와 Salmon에 대한 히스토그램을 각각 분리
+        for(int i = 0; i < X.length; i++){
+            if(y[i] == true)    Bass_histogram[X[i] - min]++;
+            else    Salmon_histogram[X[i] - min]++;
+        }
+
+
+        //히스토그램 그리기
+        System.out.println("■ = BASS, □ = Salmon");
+        for(int i = X.length - 1; i >= 0; i--){
+            if(Bass_histogram[i] > 0 ||  Salmon_histogram[i] > 0){
+                StringBuffer sb = new StringBuffer();
+
+                System.out.printf("%2d\t|", i + min);
+                for(int d = 0; d < Bass_histogram[i]; d++){
+                    sb.append("■");
+                }
+                System.out.println(sb);
+                sb = new StringBuffer();
+                System.out.printf("  \t|");
+                for(int d = 0; d < Salmon_histogram[i]; d++){
+                    sb.append("□");
+                }
+                System.out.println(sb);
+            }
+
+        }
+
+
+    }
 
     public static void stub() throws IOException {
         int row_number = 318;
@@ -77,7 +110,7 @@ public class Main {
         for(int i = 0; i < row_number; i++){
             histogram_langth[fish_langth[i] - min]++;
         }
-
+        use_histogram(fish_langth, fish_type, min);
         //draw_histogram(histogram_langth, min);    //히스토그램 그림 그려주기
 
 
@@ -110,11 +143,6 @@ public class Main {
             len_model += 1;
 
             bf_hit = hm[0];
-
-
-
-
-
         }
     }
 
