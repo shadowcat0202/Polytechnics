@@ -10,9 +10,9 @@ public class Salmon_Bass {
     }
 
     public void start() throws IOException {
-        int row_number = 2318;
+        int row_number = 318;
 
-        FileReader fr = new FileReader("./my_test.csv");
+        FileReader fr = new FileReader("./salmon_bass_data.csv");
         BufferedReader br = new BufferedReader(fr);
 
 
@@ -93,15 +93,26 @@ public class Salmon_Bass {
         Salmon_dp[0] = 0;
         Bass_dp[Bass_dp.length - 1] = 0;
 
-        for(int i = 0; i < Salmon_histo.length - 2; i++){
+        for(int i = 0; i < Salmon_histo.length; i++){
             Salmon_dp[i + 1] = Salmon_histo[i] + Salmon_dp[i];
         }
         for(int i = Salmon_histo.length - 1; i >= 0; i--){
             Bass_dp[i + 1] = Bass_histo[i] + Bass_dp[i + 2];
         }
 
-        System.out.printf("Salmon dp =\t%s\n", Arrays.toString(Salmon_dp));
-        System.out.printf("Bass dp \t=%s\n", Arrays.toString(Bass_dp));
+
+//        System.out.println("dp\thisto");
+//        System.out.println("salmon");
+//        for(int i = 0; i < Salmon_histo.length; i++){
+//            System.out.printf("%2d\t%3d\t%3d\n", i, Salmon_dp[i+1], Salmon_histo[i]);
+//        }
+//        System.out.println("Bass");
+//        for(int i = 0; i < Bass_histo.length; i++){
+//            System.out.printf("%2d\t%3d\t%3d\n", i, Bass_dp[i+1], Bass_histo[i]);
+//        }
+
+//        System.out.printf("Salmon dp =\t%s\n", Arrays.toString(Salmon_dp));
+//        System.out.printf("Bass dp \t=%s\n", Arrays.toString(Bass_dp));
 
 
         int max_hit = 0;    //최대 hit
@@ -112,7 +123,7 @@ public class Salmon_Bass {
         for(int i = 1; i <= Salmon_histo.length; i++){
             hit = 0;    //hit의 최대값을 구하기 위해서 for문을 돌때마다 초기화 해주어야 한다
             hit = Salmon_dp[i] + Bass_dp[i+1];  //hit은 결과적으로
-            //System.out.printf("x = %d, hit = %d\n", i + 1, hit);
+            //System.out.printf("x = %d, hit = %d\n", i + 1, hit);  //보고 싶다
 
             if(max_hit < hit)   {   //최대 hit 갱신
                 model_x = i + 1;  //최소값 만큼 밀어주기
