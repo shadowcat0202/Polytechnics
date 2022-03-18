@@ -3,37 +3,30 @@
     <head>
         <title>원본</title>
         <style>
-            body{
-                font-size: 20px;
+            body {
+                margin:0;
             }
-            h1{
-                font-family: 바탕;
-                font-size: 3em;
+            div {
+                width:100px; height:100px;
+                font-weight:bold;
             }
-            .accent{
-                font-size: 150%;
-                font-weight: 600;
+            #box1 {
+                background-color:red;
             }
-            .italic{
-                font-style: italic;
+            #box2 {
+                background-color:green;
+                margin:10px;
             }
-
-            table{
-                caption-side: bottom;
-                border: 1px solid black;
+            #box3 {
+                background-color:blue;
+                padding:10px;
             }
-            td, th{
-                border: 1px dotted black;
-                padding: 10px;
-                text-align: center;
+             #box4 {
+                background-color:yellow;
+                margin:10px 10px 10px 10px; /* 위쪽 오른쪽 아래쪽 왼쪽 마진속성 한번에 주기 */
+                padding:10px 10px 10px 10px; /* 위 오른쪽 아래쪽 왼쪽 패딩속성 한번에 주기 */
             }
-            span{
-                font-size: large;            
-            }
-            li{
-                margin: 10px;
-            }
-        </style>
+            </style>
     </head>
     <body>
         <h1>레드향</h1>
@@ -76,14 +69,19 @@
             </tr>
         </table>
 
+        <ul>
+            <li><span class="accent">반응형 웹 디자인</span> -다양한 화면 크기에 촤적화</li>
+            <li><span class="accent">플렛 디자인</span> -입체에서 평면으로</li>
+            <li><span class="accent">풀스크린 배경</span> -콘텐츠에 적용</li>
+            <li><span class="accent">웹페이지 사이트</span> -한페이지에 모든 내용을 담다</li>
+            <li><span class="accent">패럴렉스 스크롤링</span> -동적인 효과로 강한 인상을</li>
+        </ul>
+
         <div>
-            <ul>
-                <li><span class="accent">반응형 웹 디자인</span> -다양한 화면 크기에 촤적화</li>
-                <li><span class="accent">플렛 디자인</span> -입체에서 평면으로</li>
-                <li><span class="accent">풀스크린 배경</span> -콘텐츠에 적용</li>
-                <li><span class="accent">웹페이지 사이트</span> -한페이지에 모든 내용을 담다</li>
-                <li><span class="accent">패럴렉스 스크롤링</span> -동적인 효과로 강한 인상을</li>
-            </ul>
+            <div id="box1"> 100*100 <br /> nomal </div>
+            <div id="box2"> 100*100 <br /> margin </div>
+            <div id="box3"> 100*100 <br /> padding </div>
+            <div id="box4"> 100*100 <br /> margin <br /> padding</div>
         </div>
     </body>
 </html>
