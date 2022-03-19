@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>20220318 수업</title>
+        <link rel="stylesheet" href="../css/20220318.css">
+        <style>
+            <!--전체 선택자-->
+            *{
+                margin : 0;
+            }
+            ul{list-style: none;}
+            li{line-height: 30px;}
+            label{
+                width: 100px;
+                float:left;
+            }
+        </style>
+    </head>
+    <body>
+        <details><summary>로그인 관련</summary>
+            <fieldset style="width: 400px; height:auto; background-color:LightGoldenRodYellow"><legend>로그인</legend>                  
+            <form name="login" action="#" >                                      
+                <ul>
+                    <li>
+                        <label for="user-id">아이디:</label>
+                        <input type="text" id="user-id" size="10" required>
+                    </li>
+                    <li>
+                        <label for="user-password">비밀번호:</label>
+                        <input type="password" id="user-password" size="10" required>
+                    </li>
+                    <input type="image" src="./img_collect/login_button.png" alt="로그인" style="float:right; width:70px; height:30px">
+                </ul>                
+            </form>   
+            </fieldset>   
+        </details>
+        <hr>
+        <br>
+        <p>이것은 외부css를 적용한 p 태그입니다</p>
+        <p style="color:indigo; text-align: left;">이것은 인라인 css가 적용된 p 태그입니다</p>
+
+        <details><summary>배송정보 관련</summary>
+            
+                <fieldset style="width: 200px; height:auto; background-color:#AF0"><legend>배송정보</legend>
+                <form name="배송정보">
+                    <ul id="shipping_info">
+                        <li>
+                            <label for="user-name">이름</label>
+                            <input type="text" id="user-name" autofocus>
+                        </li>
+                        <li>
+                            <label for="address">배송주소</label>
+                            <input type="text" id="address" required>
+                        </li>
+                        <li>
+                            <label for="email">이메일</label>
+                            <input type="email" id="email" required>
+                        </li>
+                        <li>
+                            <label for="phone">연락처</label>
+                            <input type="text" id="phone" required>
+                        </li>
+                        <li>
+                            <label for="calendar">배송 지정</label>
+                            <input type="date">
+                        </li>
+                        <li>
+                            <label for="memo">메모</label>
+                            <textarea id="memo" cols="40" rows="4" style="resize:none;"></textarea>
+                        </li>
+
+                        <li>
+                            <label for="select">옵션</label>
+                            <select name="선택" id="select" <!--multiple-->>
+                                <option value="선택사항 1">내용1</option>
+                                <option value="선택사항 2">내용2</option>
+                                <option value="선택사항 3">내용3</option>
+                                <option value="선택사항 4">내용4</option>             
+                                <option value="선택사항 5">내용5</option> 
+                                <option value="선택사항 6">내용6</option> 
+                                <option value="선택사항 7">내용7</option>                    
+                            </select>
+                        </li>
+                        
+                    </ul>
+                    <div style="float:right">                    
+                        <input type="reset" value="취소하기">
+                        <input type="submit" value="주문하기">
+                    </div>    
+                </form> 
+                </fieldset>   
+        </details>
+        <hr>
+        <br>
+        
+
+    </body>
+</html>

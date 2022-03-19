@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>원본</title>
+        <style>
+            body {
+                margin:0;
+            }
+            div {
+                width:100px; height:100px;
+                font-weight:bold;
+            }
+            #box1 {
+                background-color:red;
+            }
+            #box2 {
+                background-color:green;
+                margin:10px;
+            }
+            #box3 {
+                background-color:blue;
+                padding:10px;
+            }
+             #box4 {
+                background-color:yellow;
+                margin:10px 10px 10px 10px; /* 위쪽 오른쪽 아래쪽 왼쪽 마진속성 한번에 주기 */
+                padding:10px 10px 10px 10px; /* 위 오른쪽 아래쪽 왼쪽 패딩속성 한번에 주기 */
+            }
+            </style>
+    </head>
+    <body>
+        <h1>레드향</h1>
+        <p>껍질에 붉은 빛이 돌아 <span class="accent">레드향</span>이라 불린다.</p>
+        <P>레드향은 반라본과 귤을 교배한 것으로</P>
+        <p class="italic">일반 귤보다 2~3배 크고, 과육이 붉고 통통하다</p>
+
+        <table>
+            <caption>선물용 가정용 상품 구성</caption>            
+            <tr>    <!--row-->
+                <th>용도</th>   <!--colum-->
+                <th>중량</th>
+                <th>갯수</th>
+                <th>가격</th>
+            </tr>
+
+            <tr>    <!--row-->
+                <th rowspan="2">선물용</th>   <!--colum 병합-->  
+                <th>3kg</th>
+                <th>11~16과</th>
+                <th>35,000원</th>
+            </tr>
+            <tr>
+
+                <!--<th colspan="3">5kg</th>-->
+                <th>5kg</th>
+                <th>18~26과</th>
+                <th>52,000원</th>
+            </tr>
+            <tr>
+                <th rowspan="2">가정용</th>   <!--colum-->
+                <th>3kg</th>
+                <th>11~16과</th>
+                <th>30,000원</th>
+            </tr>
+            <tr>
+                <th>5kg</th>
+                <th>18~26과</th>
+                <th>47,000원</th>
+            </tr>
+        </table>
+
+        <ul>
+            <li><span class="accent">반응형 웹 디자인</span> -다양한 화면 크기에 촤적화</li>
+            <li><span class="accent">플렛 디자인</span> -입체에서 평면으로</li>
+            <li><span class="accent">풀스크린 배경</span> -콘텐츠에 적용</li>
+            <li><span class="accent">웹페이지 사이트</span> -한페이지에 모든 내용을 담다</li>
+            <li><span class="accent">패럴렉스 스크롤링</span> -동적인 효과로 강한 인상을</li>
+        </ul>
+
+        <div>
+            <div id="box1"> 100*100 <br /> nomal </div>
+            <div id="box2"> 100*100 <br /> margin </div>
+            <div id="box3"> 100*100 <br /> padding </div>
+            <div id="box4"> 100*100 <br /> margin <br /> padding</div>
+        </div>
+    </body>
+</html>
