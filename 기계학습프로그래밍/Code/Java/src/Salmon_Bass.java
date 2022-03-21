@@ -1,8 +1,6 @@
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Queue;
 
 public class Salmon_Bass {
     public Salmon_Bass(){
@@ -12,7 +10,7 @@ public class Salmon_Bass {
     public void start() throws IOException {
         int row_number = 318;
 
-        FileReader fr = new FileReader("./salmon_bass_data.csv");
+        FileReader fr = new FileReader("Java/salmon_bass_data.csv");
         BufferedReader br = new BufferedReader(fr);
 
 

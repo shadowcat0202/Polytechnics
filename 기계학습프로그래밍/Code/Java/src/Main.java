@@ -22,6 +22,8 @@ public class Main {
         }
 
         int l = -1, r = 101;
+
+
         int l_sum = 0, r_sum = 0;
 
         while(l < r){
@@ -73,17 +75,7 @@ public class Main {
 
     }
 
-
-    public static void main(String[] args) throws IOException {
-//        Salmon_Bass ts = new Salmon_Bass();
-//        ts.start();
-        person_mid();
-    }
-
-
     public static int randNum(int min , int max){
-
-
         //Random 객체의 인스턴스 rand
         Random rand = new Random();
         int num = rand.nextInt();
@@ -92,5 +84,11 @@ public class Main {
         num = (num >>> 1) % (max - min) + min;
         //int 형으로 값을 num에 반환한다.
         return num;
+    }
+
+    public static void main(String[] args) throws IOException {
+        Salmon_Bass ts = new Salmon_Bass();
+        ts.start();
+//        person_mid();
     }
 }
