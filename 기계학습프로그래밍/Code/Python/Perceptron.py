@@ -17,3 +17,4 @@ def XOR(x1, x2, w, b):
 
 
 def Perceptron():
+    print("퍼셉트론")
