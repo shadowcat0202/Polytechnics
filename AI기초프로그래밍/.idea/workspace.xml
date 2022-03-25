@@ -2,13 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5734482d-66a3-426c-bf15-7b21c6d9018f" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Pycharm/basic/object.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Pycharm/basic/peristalsis.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pycharm/basic/List.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pycharm/basic/List.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pycharm/basic/String.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pycharm/basic/String.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pycharm/basic/prime.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pycharm/basic/prime.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Pycharm/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Pycharm/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/pythonProject1/Perceptron.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Pycharm/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/Pycharm/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../웹 프로그래밍/Code/Code/css/make_css_folder.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../웹 프로그래밍/Code/Code/html/Attributes_struct.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../웹 프로그래밍/Code/Code/html/Element_struct.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../웹 프로그래밍/Code/Code/html/Entitiy_references.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../웹 프로그래밍/Code/Code/html/creating_hyperlinkes/index.html" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../웹 프로그래밍/Code/Code/html/head/favicon.ico" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../웹 프로그래밍/Code/Code/html/head/head.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,9 +18,10 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
   </component>
   <component name="ProjectId" id="26Mglal3EBmdEdAy6zylaO8xvEn" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectView">
     <navigator currentView="ProjectPane" proportions="" version="1" splitterProportion="0.5">
       <flattenPackages />
@@ -78,6 +81,11 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+  </component>
   <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
@@ -100,5 +108,16 @@
       <updated>1647239022503</updated>
     </task>
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>
