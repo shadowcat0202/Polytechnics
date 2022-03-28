@@ -1,13 +1,98 @@
-import Linear_Regression as LineR
-import Logistic_Regression as logR
 import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn import tree
 import numpy as np
-import tensorflow as tf
-
-def stub():
-    np.random.seed(3)
-    tf.random.set_seed(3)
 
 if __name__ == '__main__':
-    LineR.Mult_linear_regression()
-    stub()
+    df = pd.read_csv("./ai_score_data.csv")
+    # print(df.shape)
+    # print(df.info())
+    # print(df.describe())
+    #
+    # print(df["Math"].mean())
+    # print(df["Math"].median())
+    # print(df.corr())
+
+    canvas = plt.figure(figsize=(7.0,7.0))
+    plt.xlabel("math")
+    plt.ylabel("english")
+
+    for i in range(len(df["Sex"])):
+        if df.loc[i, "Sex"] == "M":
+            plt.scatter(df.loc[i, "Math"], df.loc[i,"English"], color="blue")   #남
+        else:
+            plt.scatter(df.loc[i, "Math"], df.loc[i,"English"], color="red")    #녀
+
+    plt.show()
+
+
+    #==================================1개의 featuer를 가지고 scatter============================
+    df = pd.read_csv("salmon_bass_data.csv")
+    plt.hist(df["Length"],alpha=.2)
+    # plt.show()  #이건 알아보기 어렵다
+
+    salmon = df.loc[df["Class"] == "Salmon"]    #Class feature가 Salmon인 row만 가져온다
+    bass = df.loc[df["Class"] == "Bass"]        #Class feature가 Bass인 row만 가져온다
+    # print(salmon)
+
+    plt.hist(salmon["Length"], bins=20, alpha=.5, label="Salmon") #bins몰?루 alpha=투명도 label=이름 붙여주기
+    plt.hist(bass["Length"], bins=20, alpha=.5, label="Bass")
+    plt.legend(loc="best")
+    plt.show()
+
+
+    #===========================2개의 featuer로 scatter==============================
+    plt.title("Scatter")
+    plt.xlabel("Length")
+    plt.ylabel("Lightness")
+
+    plt.scatter(salmon["Length"], salmon["Lightness"], color="blue", label="Salmon")
+    plt.scatter(bass["Length"], bass["Lightness"], color="red", label="bass")
+    plt.legend(loc="best")
+    plt.show()
+
+
+    #============================가장 간단한 분류 예제===========================
+
+    X = [[0, 0], [1, 1]]
+    Y = [0, 1]
+    for i in range(len(X)):
+        if Y[i] == 0:
+            plt.scatter(X[i][0], X[i][1], color='red')
+        elif Y[i] == 1:
+            plt.scatter(X[i][0], X[i][1], color='blue')
+    plt.xlabel('X[0] Features')
+    plt.xticks(np.arange(-1, 3, 1))
+    plt.ylabel('X[1] Features')
+    plt.yticks(np.arange(-1, 3, 1))
+    plt.grid()
+    plt.show()
+
+    dtree= tree.DecisionTreeClassifier()
+    dtree = dtree.fit(X,Y)
+
+    tree.plot_tree(dtree)
+    plt.show()
+
+    test_X = [[2,2],[1,1],[0,0],[0,1]]
+    print(dtree.predict(test_X))
+
+
+    df = pd.read_csv("./salmon_bass_data.csv")
+    X = []
+    Y = []
+
+    for i in range(len(df)):
+        fish = [df.loc[i, "Length"], df.loc[i,"Lightness"]]
+        X.append(fish)  #물고기 특징 리스트
+        Y.append(df.loc[i, "Class"])    #생성 종류
+
+    dtree = tree.DecisionTreeClassifier()
+    dtree = dtree.fit(X,Y)
+
+    plt.figure(figsize=(20,10))
+    tree.plot_tree(dtree, fontsize=8, filled=True,
+                   class_names=['Salmon', 'Bass'],
+                   feature_names=['Length', 'Lightness'])
+    plt.show()
+
