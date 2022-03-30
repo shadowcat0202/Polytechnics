@@ -1,2 +1,4 @@
-package PACKAGE_NAME;public class function {
+import java.util.Arrays;
+public class function {
+
 }
