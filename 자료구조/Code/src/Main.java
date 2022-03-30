@@ -1,51 +1,45 @@
 import java.util.Arrays;
-import java.util.Collections;
 
 
 public class Main {
-
-    int add(int a, int b){
-        return a + b;
-    }
-
-
-    float avg(Integer[] arr){
-        float sum = 0.0f;
-        for(int i : arr){
-            sum += i;
+    public static int arr_max(int[] arr){
+        int max = arr[0];
+        for(int value : arr){
+            if(max < value) max = value;
         }
-        //return Arrays.stream(arr).sum() / arr.length;
-        return sum / arr.length;
+        return max;
     }
 
-    void test(Integer a, int[] b){
-        System.out.println("in test()");
-
-        System.out.println(++a);
-        System.out.println(++b[0]);
-    }
-    static void swap(Integer a, Integer b){
-        Integer tmp = a;
-        a = b;
-        b = tmp;
-        System.out.println("내부");
-        System.out.println(a + " " + b);
+    public static int arr_max_idx(int[] arr){
+        int idx = 0;
+        int max = arr[0];
+        for(int i = 1; i < arr.length; i++){
+            if(max < arr[i])    idx = i;
+        }
+        return idx;
     }
 
+    public static void sort_test(){
+        int [] score = new int[20];
+        for(int i = 0; i < score.length; i++){
+            score[i] = (int) (Math.random() * 100);
+        }
+        my_sort ms = new my_sort();
+        ms.Bubble_sort(score);
+        System.out.println(Arrays.toString(score));
+        System.out.printf("%f(s)",(float)ms.getRuntime()/1000);
+        System.out.println("종료~");
+    }
+    public static void stub(){
+        for(int i = 0; i < 20; i++){
+            System.out.print((int) (Math.random()*3) + ", ");
+        }
+    }
     public static void main(String[] args) {
-//        System.out.println(obj.add(3,5));
-//        Integer[] arr = {1,5,6,72,3,74,1,5,6,7,2,6,6,4,7,8,1,6,5};
-//        Arrays.sort(arr, Collections.reverseOrder());
-//        System.out.println(arr[0] + "," + arr[arr.length-1]);
-//        System.out.println(obj.avg(arr));
-        Integer a = 1;
-        Integer b = 2;
-        System.out.println("전");
-        System.out.println(a + " " + b);
-        swap(a,b);
-        System.out.println("후");
-        System.out.println(a + " " + b);
+//        stub();
+        sort_test();
     }
+
 
 
 }
