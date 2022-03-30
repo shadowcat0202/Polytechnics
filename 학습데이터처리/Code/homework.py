@@ -63,21 +63,21 @@ def hw4():
 
 
 def hw5():
-    # • 기존 파싱 코드에서 데이터를 어떻게 만들면 더욱 효율적으로? 리스트 없이?!?!?! 처리할 수 있는지 – Data 형식 변경 및 추가,
+    # • 기존 파싱 코드에서 데이터를 어떻게 만들면 더욱 효율적으로? 리스트 없이?!?!?! 처리할 수 있는지 –,
     # 코드 작성 결과 확인 (조건은 동일함, 크기가 100보다 크면 vehicle에서 truck으로
 
     result = ""
-    v = "vehicle 0 0 100 100 vehicle 50 50 200 100 vehicle 50 50 50 100 vehicle 50 50 101 100 vehicle 50 50 200 100 " \
-        "vehicle 50 50 150 100 "
+    v = "vehicle 0 0 100 100 vehicle 50 50 200 100 vehicle 2 564 99 2 vehicle 12 51 101 352"
     # " vehicle 0 0 100 100 vehicle 50 50 200 100"
     v = " " + v  # 각 묶음별로 동일한 과정을 주기 위해 앞쪽에 빈 공간을 추가
+
     i = 0
     while i >= 0:
         i = i + 1  # vehicle 시작 지점
         num_value_start_idx = v.find(" ", i) + 1  # 나중에 숫자 비교해서 V or T인지 추가후 숫자부분 넣을 index 위치 기억
 
         j = num_value_start_idx - 1
-        bf = 0
+        bf = 0  # 이전 인덱스 저장용
         for _ in range(3):  # 3번째 위치의 숫자를 특정하기 위해 3번 돈다 (bf=특정한 숫자 시작지점, j=특정한 숫자 끝나는 지점)
             bf = j + 1
             j = v.find(" ", j + 1)
@@ -87,9 +87,13 @@ def hw5():
         else:
             result += "vehicle "
 
-        j = v.find(" ", j + 1)
-        result += v[num_value_start_idx:j]  # 숫자부분 추가
-        i = j
+        i = j = v.find(" ", j + 1)
+        result += v[num_value_start_idx : j if j >= 0 else len(v)]    # 끝에 도착했을때 j가 find(" ")이기 때문에 마지막에는 -1이므로
+        # if j >= 0:
+        #     result += v[num_value_start_idx:j]  # 숫자부분 추가
+        # else:   # 결론은 끝부분 처리 해주기 위해서
+        #     result += v[num_value_start_idx:len(v)]  # j가 find(" ")를 했기 때문에 -1이 나올 가능성이 있다 = 예외처리
+
         if i != -1:  # 끝나는부분이 아니라면 " "로 이어 적을 준비 아니라면 안적고 끝내기
             result += " "
 
@@ -99,3 +103,18 @@ def hw5():
 def hw5_test():
     v = 'vehicle 0 0 100 100 vehicle 50 50 200 100 vehicle 50 50 50 100 vehicle 50 50 101 100 vehicle 50 50 200 100 ' \
         'vehicle 50 50 150 100'
+    v = " " + v
+    i = 0
+    while i >= 0:  # 문자열의 끝을 확인하는 부분
+        i = i + 1
+        blank = v.find(" ", i)
+        number_start_idx = blank + 1
+        number_end_idx = v.find("vehicle", number_start_idx) - 1
+
+        cmp_num_start_idx = number_start_idx
+        cmp_num_end_idx = cmp_num_start_idx
+        for _ in range():
+            cmp_num_start_idx = v.find(" ", cmp_num_end_idx + 1)
+
+        if int(v[cmp_num_start_idx:cmp_num_end_idx]) > 100:
+            print("비효율")

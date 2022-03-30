@@ -9,6 +9,6 @@ import data_frame_handling as dh
 
 
 if __name__ == "__main__":
-    # hw.학습데이터처리숙제_3월말까지()
-    dh.test2()
+    hw.hw5()
+    # dh.test2()
 
