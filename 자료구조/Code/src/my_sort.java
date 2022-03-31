@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public class my_sort {
     //https://yabmoons.tistory.com/250
     private boolean desc;   //내림차순으로 할것인가
@@ -59,13 +61,12 @@ public class my_sort {
         //장점:기준값(Pivot)에 의한 분할을 통해 구현하는 정렬법 분할과정에서 logN 이라는 시간이 걸림 전체적으로 준수한 시간
         //단점:기준값(Pivot)에 따라서 시간복잡도는 날뛴다
         //기본적으로 재귀를 통해서 작동한다
-        this.QS_pivot =(int) (Math.random()*3); //0~2사이의 정수 = pivot 기준 왼쪽? 중간? 오른쪽? 랜덤 선택
+//        this.QS_pivot =(int) (Math.random()*3); //0~2사이의 정수 = pivot 기준 왼쪽? 중간? 오른쪽? 랜덤 선택
+        this.QS_pivot = 0;
+        System.out.println(this.QS_pivot);
 
         long beforeTime = System.currentTimeMillis();
-        Quicksort(arr, 0, arr.length - 1);
-
-
-
+        Quicksort(arr, 0, arr.length - 1);  //sorting 시작
         long afterTime = System.currentTimeMillis();
         this.runtime = (afterTime - beforeTime);
         
@@ -102,86 +103,129 @@ public class my_sort {
     private int Partition(int[] arr, int left, int right){
         int l = left;
         int r = right;
-        int pivot_value = 0;
+        int pivot_v = arr[left];   //default = left
 
         switch (this.QS_pivot) {  //Pivot_value설정(와 향상된 스위치문 뭐지? 멋지네)
-            case 0 :
-                pivot_value = arr[left];
-                break;
-            case 1 :
-                pivot_value = arr[(left + right) / 2];
-                break;
-            case 2 :
-                pivot_value = arr[right];
-                break;
-        }
-
-        while(l < r) {
-            //왼쪽 피벗
-            if (this.desc) {
-                while (arr[r] <= pivot_value && l < r) r--;
-                while (arr[l] > pivot_value && l < r) l++;
-            } else {
-                while (arr[r] > pivot_value && l < r) r--;
-                while (arr[l] <= pivot_value && l < r) l++;
-            }
-            swap(arr, l, r);
-        }
-
-        switch(this.QS_pivot){
-            case 0 :
-                swap(arr, left, l);
-                return l;   //swap을 진행헀다면 피벗요소는 l에 위치한다
-            case 1 :
-                swap(arr, left, l);
-                return ;   //swap 진행헀다면 피벗요소는 l에 위치한다
-            case 2 :
-                swap(arr, right, r);
-                return r;   //swap을 진행헀다면 피벗요소는 l에 위치한다
-        //left와 right가 교차하기 전까지
-
-
-            while(this.desc)
-            //왼쪽피벗
-            while(a[hi] > pivot && lo < hi) {
-                hi--;
-            }
-            while(a[lo] <= pivot && lo < hi) {
-                lo++;
-            }
-
-            //오른쪽피벗
-            while(a[lo] < pivot && lo < hi) {
-                lo++;
-            }
-            while(a[hi] >= pivot && lo < hi) {
-                hi--;
-            }
-
-            //중간피벗
-            do {
-                lo++;
-            } while(a[lo] < pivot);
-
-            do {
-                hi--;
-            } while(a[hi] > pivot && lo <= hi);
-
-            if(lo >= hi) {
-                return hi;
-            }
-
+            case 0:    //왼쪽 피벗
+                pivot_v = arr[left];
+                if (!this.desc) { //오름차순(default)
+                    while (l < r) {
+                        while (arr[l] <= pivot_v && l < r) l++;
+                        while (arr[r] > pivot_v && l < r) r--;
+                        swap(arr, l, r);
+                    }
+                    swap(arr, left, l);
+                    return l;
+                } else {  //내림차순
+                    while (l < r) {
+                        while (arr[l] >= pivot_v && l < r) l++;
+                        while (arr[r] < pivot_v && l < r) r--;
+                        swap(arr, l, r);
+                    }
+                    swap(arr, left, r);
+                    return r;
+                }
+            case 1:    //중간 피벗
+                pivot_v = arr[(left + right) / 2] ;
+                if (!this.desc) { //오름차순(default)
+                    while(true){
+                        while(l < r && arr[l] < pivot_v)    l++;
+                        while(l < r && arr[r] >= pivot_v)     r--;
+                        swap(arr, l, r);
+                        if(l >= r)  return r;
+                    }
+                } else {    //내림차순
+                    while(true){
+                        while(l < r && arr[l] > pivot_v)    l++;
+                        while(l < r && arr[r] <= pivot_v)     r--;
+                        swap(arr, l, r);
+                        if(l >= r)  return r;
+                    }
+                }
+            case 2:    //오른쪽 피벗
+                pivot_v = arr[right];
+                if (!this.desc) { //오름차순(default)
+                    while (l < r) {
+                        while (arr[l] < pivot_v && l < r) l++;
+                        while (arr[r] >= pivot_v && l < r) r--;
+                        swap(arr, l, r);
+                    }
+                    swap(arr, right, l);
+                    return l;
+                } else {
+                    while (l < r) {
+                        while (arr[l] > pivot_v && l < r) l++;
+                        while (arr[r] <= pivot_v && l < r) r--;
+                        swap(arr, l, r);
+                    }
+                    swap(arr, right, r);
+                    return r;
+                }
         }
         return 0;
     }
+
+    public int[] Counting_sort(int[] arr){
+        //O(N), O(N), O(N)
+        //장점:압도적 속도 비교문도 필요 없다
+        //단점:숫자가 큰 경우 그것에 상응하는 인덱스 번호가 필요하기 때문에 낭비되는 배열 메모리가 존재한다
+        //stable 한가? => 개인적으로 생각한 결론은 counting한 결과로 배열을 재정립 하는 과정에 따라 달라진다
+        //= orignal배열을 앞에서부터 loop문을 돌게되면 반대로(unstable) 뒤에서 돌게 되면 stable하게 정렬된다
+
+        long beforeTime = System.currentTimeMillis();
+
+        int[] result = new int[arr.length]; //reslut.length = 100(0~99)
+        int[] mm = minmax(arr);     //최소 최대값 저장(최소값이 마이너스나 나올수도 있다)
+        int[] cnt_arr = new int[mm[1] - mm[0] + 1]; //최소가 0 최대가 100일경우 배열의 크기는 101개가 필요하다
+        for( int value : arr){
+            cnt_arr[value - mm[0]]++;
+        }
+        for (int i = 1; i < cnt_arr.length; i++){
+            cnt_arr[i] += cnt_arr[i-1];
+        }
+        for(int value : arr){
+            int idx = value - mm[0];
+            cnt_arr[idx]--;
+            result[cnt_arr[idx]] = value;
+        }
+
+        long afterTime = System.currentTimeMillis();
+        this.runtime = (afterTime - beforeTime);
+        return result;
+    }
+    public void Counting_sort(int[] arr, boolean desc){
+        this.desc = desc;
+        this.Counting_sort(arr);
+    }
+    private int[] minmax(int[] arr){
+        int[] res = new int[2];
+        for(int value : arr){
+            if (res[0] > value) res[0] = value;
+            if (res[1] < value) res[1] = value;
+        }
+        return res;
+    }
+
     
     private void swap(int[] arr, int i1, int i2){
         int temp = arr[i1];
         arr[i1] = arr[i2];
         arr[i2] = temp;
     }
-
     public long getRuntime(){
         return this.runtime;
+    }
+    public boolean isSort(int[] arr){
+        if(!this.desc){ //오름차순 확인
+            for(int i = 1; i < arr.length; i++){
+                if(arr[i] < arr[i-1])   return false;
+            }
+        }   
+        else{   //내림차순 확인
+            for(int i = 1; i < arr.length; i++){
+                if(arr[i] > arr[i-1])   return false;
+            }
+        }
+        return true;
     }
 }
