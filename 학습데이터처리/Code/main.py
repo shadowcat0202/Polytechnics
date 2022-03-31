@@ -8,7 +8,13 @@ from datetime import datetime
 import data_frame_handling as dh
 
 
+
 if __name__ == "__main__":
+    hw.hw1()
+    hw.hw2()
+    hw.hw3()
+    hw.hw4()
     hw.hw5()
+
     # dh.test2()
 
