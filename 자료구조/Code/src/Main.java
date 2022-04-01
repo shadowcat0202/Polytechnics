@@ -2,84 +2,49 @@ import java.util.Arrays;
 
 
 public class Main {
-    public static int arr_max(int[] arr){
-        int max = arr[0];
-        for(int value : arr){
-            if(max < value) max = value;
+    public static int[] make_iarr(int arr_size, int max_value){
+        int[] arr = new int[arr_size];
+        for(int i = 0; i < arr_size; i++){
+            arr[i] = (int)(Math.random() * max_value);
         }
-        return max;
+        return arr;
     }
 
-    public static int arr_max_idx(int[] arr){
-        int idx = 0;
-        int max = arr[0];
-        for(int i = 1; i < arr.length; i++){
-            if(max < arr[i])    idx = i;
-        }
-        return idx;
-    }
 
-    public static void sort_test(){
-        int [] arr = new int[500000000];
-        for(int i = 0; i < arr.length; i++){
-            arr[i] = (int) (Math.random() * 100);
-        }
-        int[] buf = arr;
-//        System.out.println(Arrays.toString(arr));
+    public static void quick_sort_test(){
+        int[] arr;  //오리지날 배열
+        int[] buf;  //동일한 측정을 위한 임시 배열
+        float[] time_sum = new float[3];    //좌우중간 시간측정
+        int Test_case = 1;
         my_sort ms = new my_sort();
-        arr = ms.Counting_sort(arr);
-        System.out.printf("C_sort:\t%f(s)\n",(float)ms.getRuntime()/ 1000);
-        System.out.println(ms.isSort(arr));
-//
-//        System.out.println(Arrays.toString(arr));
-    }
-
-    public static void Qick_sort(int[] arr, int left, int right){
-        int pivot = parition_stub(arr, left, right);
-        Qick_sort(arr, left, pivot - 1);
-        Qick_sort(arr, pivot + 1, right);
-    }
-
-    public static int parition_stub(int[] arr, int left, int right){
-        int l = left;
-        int r = right;
-        int pivot = (left + right) / 2;
-
-        while(l <= r){
-            while(arr[l] < arr[pivot]) l++;
-            while(arr[r] > arr[pivot]) r--;
-            if(l <= r){
-                swap(arr, l, r);
-                l++;
-                r--;
+        for(int i = 0; i < Test_case; i++){
+            arr = make_iarr(10, 100);  //새로운 랜덤 배열 생성
+//            System.out.println(Arrays.toString(arr)); //오리지날 배열
+            for(int j = 0; j < 3; j++){
+                buf = arr;  //동일한 랜덤 배열을 기반으로
+                ms.Quick_sort(buf, false, j);   //좌우중간 한번씩 돌아가면서 정렬
+//                System.out.print(j+":");  //어떤 피벗
+//                System.out.println(Arrays.toString(buf) );    //정렬 후 배열
+//                System.out.println(); 
+                time_sum[j] += (float)ms.getRuntime()/1000; //각 정렬마다 시간 측정값 더하기
+//                System.out.println(ms.isSort(arr));   //정렬 여부
             }
+//            System.out.println("\n");
+
         }
-        return l;
-    }
-    public static void swap(int[] arr, int i1, int i2){
-        int temp = arr[i1];
-        arr[i1] = arr[i2];
-        arr[i2] = temp;
-    }
-
-    public static void stub(){
-//        int[] arr = {1,2,3,4,5,6,7,8,9,10};
-        int[] arr = new int[20];
-        for(int i = 0; i < arr.length; i++){
-            arr[i] = (int) (Math.random() * 100);
+        System.out.println("왼쪽\t\t\t오른쪽\t\t중간\t");
+        for(float value : time_sum) {   //속도 평균 구하기
+            System.out.printf("%f(s)\t", value / (float) Test_case);
         }
-//        System.out.println(Arrays.toString(arr));
-//
-//        System.out.println(Arrays.toString(arr));
-//        System.out.println(res);
-
-
+        System.out.println();
 
     }
+
+
 
     public static void main(String[] args) {
 //        stub();
-        sort_test();
+//        quick_sort_test();
     }
 
 

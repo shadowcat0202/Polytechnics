@@ -4,7 +4,7 @@ public class my_sort {
     //https://yabmoons.tistory.com/250
     private boolean desc;   //내림차순으로 할것인가
     private long runtime = 0L;
-    private int QS_pivot = 0;   //0: 왼쪽 1:중간 2:오른쪽
+    private int QS_pivot = -1;   //0: 왼쪽 1:중간 2:오른쪽
 
     //O() = 최악, 평균, 최선
     public my_sort(){
@@ -56,14 +56,18 @@ public class my_sort {
         
     }
 
+
     public void Quick_sort(int[] arr){
         //N^2, NlogN, NlogN
         //장점:기준값(Pivot)에 의한 분할을 통해 구현하는 정렬법 분할과정에서 logN 이라는 시간이 걸림 전체적으로 준수한 시간
         //단점:기준값(Pivot)에 따라서 시간복잡도는 날뛴다
         //기본적으로 재귀를 통해서 작동한다
-//        this.QS_pivot =(int) (Math.random()*3); //0~2사이의 정수 = pivot 기준 왼쪽? 중간? 오른쪽? 랜덤 선택
-        this.QS_pivot = 0;
-        System.out.println(this.QS_pivot);
+        //테스트 결과: 전반적으로 속도는 중앙 < 왼쪽 ≒< 오른쪽 피벗 순으로 빠르다
+        //10000000개 정렬 결과   19.466000(s)	24.667999(s)	0.416000(s)
+
+
+        if(this.QS_pivot == -1) //값을 정해주지 않을 경우 랜덤으로 정한다
+            this.QS_pivot =(int) (Math.random()*3); //0~2사이의 정수 = pivot 기준 왼쪽? 중간? 오른쪽? 랜덤 선택
 
         long beforeTime = System.currentTimeMillis();
         Quicksort(arr, 0, arr.length - 1);  //sorting 시작
@@ -71,10 +75,24 @@ public class my_sort {
         this.runtime = (afterTime - beforeTime);
         
     }
+
     public void Quick_sort(int[] arr, boolean desc){
         this.desc = desc;
         this.Quick_sort(arr);
     }
+
+    public void Quick_sort(int[] arr, boolean desc, int pivot) {
+        try {
+            if(pivot < 0 || pivot > 2)
+                throw new Exception("pivot can't use " + pivot);
+        }catch (Exception e){
+            e.printStackTrace();
+            System.exit(0);
+        }
+        this.QS_pivot = pivot;
+        this.Quick_sort(arr, desc);
+    }
+
     private void Quicksort(int[] arr, int left, int right){
         /*
         피벗을 기준으로 요소들을 왼쪽과 오른쪽으로 정렬
@@ -96,10 +114,19 @@ public class my_sort {
          */
         if(left < right){   //Pivot을 기준으로 왼쪽과 오른쪽이 나누어진것을 판단
             int Pivot = Partition(arr, left, right);
-            Quicksort(arr, left, Pivot - 1);
+            //(left, right 피펏은 마지막 swap을 통해 피벗이 들어갈 위치를 최종 선정 하기 때문에
+            // 그 위치를 제외한 왼쪽(left ~ pivot_idx-1)과 오른쪽(pivot_idx+1 ~ right)으로 나누어 재귀를 해야하고
+            // middle 피벗은 숫자들을 피벗 숫자크기로 단순하게 좌우를 나누기 때문에 피벗 숫자의 위치를 선정하는 것이 아니다
+            // 따라서 리턴 받은 left ~ pivot_idx, pivot_idx+1 ~ right를 재귀호출 해야한다)
+            if (this.QS_pivot == 2) {   //중간 피벗
+                Quicksort(arr, left, Pivot);
+            } else {    //left right 피벗
+                Quicksort(arr, left, Pivot - 1);
+            }
             Quicksort(arr, Pivot + 1, right);
         }
     }
+
     private int Partition(int[] arr, int left, int right){
         int l = left;
         int r = right;
@@ -110,39 +137,21 @@ public class my_sort {
                 pivot_v = arr[left];
                 if (!this.desc) { //오름차순(default)
                     while (l < r) {
-                        while (arr[l] <= pivot_v && l < r) l++;
                         while (arr[r] > pivot_v && l < r) r--;
+                        while (arr[l] <= pivot_v && l < r) l++;
                         swap(arr, l, r);
                     }
-                    swap(arr, left, l);
-                    return l;
+
                 } else {  //내림차순
                     while (l < r) {
-                        while (arr[l] >= pivot_v && l < r) l++;
                         while (arr[r] < pivot_v && l < r) r--;
-                        swap(arr, l, r);
-                    }
-                    swap(arr, left, r);
-                    return r;
-                }
-            case 1:    //중간 피벗
-                pivot_v = arr[(left + right) / 2] ;
-                if (!this.desc) { //오름차순(default)
-                    while(true){
-                        while(l < r && arr[l] < pivot_v)    l++;
-                        while(l < r && arr[r] >= pivot_v)     r--;
-                        swap(arr, l, r);
-                        if(l >= r)  return r;
-                    }
-                } else {    //내림차순
-                    while(true){
-                        while(l < r && arr[l] > pivot_v)    l++;
-                        while(l < r && arr[r] <= pivot_v)     r--;
-                        swap(arr, l, r);
-                        if(l >= r)  return r;
+                        while (arr[l] >= pivot_v && l < r) l++;
+                        swap(arr, l, r);    
                     }
                 }
-            case 2:    //오른쪽 피벗
+                swap(arr, left, r); //피벗값을 좌우로 나누어진 중간에 이동
+                return r;
+            case 1:    //오른쪽 피벗
                 pivot_v = arr[right];
                 if (!this.desc) { //오름차순(default)
                     while (l < r) {
@@ -150,20 +159,44 @@ public class my_sort {
                         while (arr[r] >= pivot_v && l < r) r--;
                         swap(arr, l, r);
                     }
-                    swap(arr, right, l);
-                    return l;
                 } else {
                     while (l < r) {
                         while (arr[l] > pivot_v && l < r) l++;
                         while (arr[r] <= pivot_v && l < r) r--;
                         swap(arr, l, r);
                     }
-                    swap(arr, right, r);
-                    return r;
+                }
+                swap(arr, right, l);    //피벗값을 좌우로 나누어진 중간에 이동
+                return l;
+            case 2:    //중간 피벗
+                //l과 r은 각각 배열의 끝에서 1씩 벗어난 위치부터 시작한다
+                l = left - 1;
+                r = right + 1;
+                pivot_v = arr[(left + right) / 2] ;
+                if (!this.desc) { //오름차순(default)
+                    while(true){
+                        while(arr[++l] < pivot_v){}
+                        while(arr[--r] > pivot_v && l <= r){}   //가장 최신으로 갱신된 idx를 주의하라
+                        if(l >= r)  return r;
+                        swap(arr, l, r);
+                    }
+                } else {    //내림차순
+                    while(true){
+                        while(arr[++l] > pivot_v){}
+                        while(arr[--r] < pivot_v && l <= r){}   //가장 최신으로 갱신된 idx를 주의하라
+                        if(l >= r)  return r;
+                        swap(arr, l, r);
+                    }
                 }
         }
         return 0;
     }
+
+    //Heap Sort
+    //Merge Sort
+    //Insertion Sort
+    //Shell Sort
+    //Radix Sort
 
     public int[] Counting_sort(int[] arr){
         //O(N), O(N), O(N)
