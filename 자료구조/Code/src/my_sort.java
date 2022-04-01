@@ -10,7 +10,8 @@ public class my_sort {
     public my_sort(){
         this.desc = false;
     }
-
+    
+    //버블 소트
     public void Bubble_sort(int[] arr){
         //O(N^2), O(N^2), O(N^2)
         //장점:구현이 쉽다, 직관적이다
@@ -31,7 +32,8 @@ public class my_sort {
         this.desc = desc;
         this.Bubble_sort(arr);
     }
-
+    
+    //선택 소트
     public void Selection_sort(int[] arr){
         //O(N^2), O(N^2), O(N^2)
         //장점:정렬을 위한 비교횟수는 많지만 실제 교환 횟수는 적기때문에 많은 교환을 요구하는 자료 상태에서는 그나마 효율적이다
@@ -56,15 +58,14 @@ public class my_sort {
         
     }
 
+    //퀵 소트
     public void Quick_sort(int[] arr){
         //N^2, NlogN, NlogN
         //장점:기준값(Pivot)에 의한 분할을 통해 구현하는 정렬법 분할과정에서 logN 이라는 시간이 걸림 전체적으로 준수한 시간
         //단점:기준값(Pivot)에 따라서 시간복잡도는 날뛴다
         //기본적으로 재귀를 통해서 작동한다
 //        this.QS_pivot =(int) (Math.random()*3); //0~2사이의 정수 = pivot 기준 왼쪽? 중간? 오른쪽? 랜덤 선택
-        this.QS_pivot = 0;
-        System.out.println(this.QS_pivot);
-
+        this.QS_pivot = 2;
         long beforeTime = System.currentTimeMillis();
         Quicksort(arr, 0, arr.length - 1);  //sorting 시작
         long afterTime = System.currentTimeMillis();
@@ -94,77 +95,88 @@ public class my_sort {
         +----------------+         +--------------------+
         l          pivot-1         pivot+1              r
          */
-        if(left < right){   //Pivot을 기준으로 왼쪽과 오른쪽이 나누어진것을 판단
+        if(left < right){   //원소가 1개만 남은 여부?
             int Pivot = Partition(arr, left, right);
-            Quicksort(arr, left, Pivot - 1);
+            if(this.QS_pivot == 2)  Quicksort(arr, left, Pivot);
+            else    Quicksort(arr, left, Pivot-1);
             Quicksort(arr, Pivot + 1, right);
         }
     }
     private int Partition(int[] arr, int left, int right){
         int l = left;
         int r = right;
-        int pivot_v = arr[left];   //default = left
+        int pivot_v = 0;
 
-        switch (this.QS_pivot) {  //Pivot_value설정(와 향상된 스위치문 뭐지? 멋지네)
-            case 0:    //왼쪽 피벗
+        //Pivot_value설정(와 향상된 스위치문 뭐지? 멋지네)
+        //왼쪽 피벗
+        switch (this.QS_pivot) {
+            case 0 -> {
+                //왼쪽 피벗일때는 왼쪽(l)을 나중에 이동시켜 주어야 피벗이 정확한 위치(while문 종료 시점에 l이 무조건 작은 위치에 오게 된다)와 swap이 가능하다
                 pivot_v = arr[left];
-                if (!this.desc) { //오름차순(default)
+                if (!this.desc) {
                     while (l < r) {
-                        while (arr[l] <= pivot_v && l < r) l++;
                         while (arr[r] > pivot_v && l < r) r--;
+                        while (arr[l] <= pivot_v && l < r) l++; //후순위로 이동시켜야 조건문이 알맞게 떨어짐(left pivot일때는 r보다 l이 더 최신갱신이여야 한다)
                         swap(arr, l, r);
                     }
-                    swap(arr, left, l);
-                    return l;
-                } else {  //내림차순
+                }
+                else{
                     while (l < r) {
-                        while (arr[l] >= pivot_v && l < r) l++;
                         while (arr[r] < pivot_v && l < r) r--;
+                        while (arr[l] >= pivot_v && l < r) l++;
                         swap(arr, l, r);
-                    }
-                    swap(arr, left, r);
-                    return r;
-                }
-            case 1:    //중간 피벗
-                pivot_v = arr[(left + right) / 2] ;
-                if (!this.desc) { //오름차순(default)
-                    while(true){
-                        while(l < r && arr[l] < pivot_v)    l++;
-                        while(l < r && arr[r] >= pivot_v)     r--;
-                        swap(arr, l, r);
-                        if(l >= r)  return r;
-                    }
-                } else {    //내림차순
-                    while(true){
-                        while(l < r && arr[l] > pivot_v)    l++;
-                        while(l < r && arr[r] <= pivot_v)     r--;
-                        swap(arr, l, r);
-                        if(l >= r)  return r;
                     }
                 }
-            case 2:    //오른쪽 피벗
+                swap(arr, left, l);
+                return l;
+            }
+            case 1 -> { //오른쪽 피벗
                 pivot_v = arr[right];
-                if (!this.desc) { //오름차순(default)
-                    while (l < r) {
+                //오른쪽 피벗일때는 오른쪽(r) 나중에 이동시켜 주어야 피벗이 정확한 위치(while문 종료 시점에 l이 무조건 작은 위치에 오게 된다)와 swap이 가능하다
+                if(!this.desc){
+                    while(l < r){
                         while (arr[l] < pivot_v && l < r) l++;
-                        while (arr[r] >= pivot_v && l < r) r--;
+                        while (arr[r] >= pivot_v && l < r) r--; //후순위로 이동시켜야 조건문이 알맞게 떨어짐(Right pivot일때는 l보다 r이 더 최신갱신이여야 한다)
                         swap(arr, l, r);
                     }
-                    swap(arr, right, l);
-                    return l;
-                } else {
-                    while (l < r) {
+                }
+                else{
+                    while(l < r){
                         while (arr[l] > pivot_v && l < r) l++;
                         while (arr[r] <= pivot_v && l < r) r--;
                         swap(arr, l, r);
                     }
-                    swap(arr, right, r);
-                    return r;
                 }
+                swap(arr, right, r);
+                return r;
+            }
+            case 2 -> { //중앙 피벗
+                l = left - 1;
+                r = right + 1;
+                pivot_v = arr[(left + right) / 2];
+                if(!this.desc){
+                    while(true){
+                        while(arr[++l] < pivot_v){}
+                        while(arr[--r] > pivot_v && l <= r){}
+                        if(l >= r)  return r;   //엇갈린다면 r를 반환
+                        swap(arr, l, r);
+                    }
+                }
+                else{
+                    while(true){
+                        while(arr[++l] > pivot_v){}
+                        while(arr[--r] < pivot_v && l <= r){}
+                        if(l >= r)  return r;   //엇갈린다면 l를 반환
+                        swap(arr, l, r);
+                    }
+                }
+            }
         }
+
         return 0;
     }
 
+    //카운팅 소트
     public int[] Counting_sort(int[] arr){
         //O(N), O(N), O(N)
         //장점:압도적 속도 비교문도 필요 없다
