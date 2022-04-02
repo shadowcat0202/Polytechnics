@@ -40,12 +40,55 @@ public class Main {
 
     }
 
+    public static void merge_sort_test(){
+        int [] arr;
+        int test_case = 3;
+        int arr_size = 10;
+        my_sort ms = new my_sort();
+        for(int i = 0; i < test_case; i++){
+            StringBuilder sb = new StringBuilder();
+            sb.append("TestCase").append(i+1).append("\n");
+            arr = make_iarr(arr_size, 100);
+            sb.append(Arrays.toString(arr)).append("\n");
+            ms.Merge_sort(arr, false);
+            sb.append(Arrays.toString(arr)).append("\n");
+//            sb.append(ms.isSort(arr)).append(" ");
+            sb.append(String.format("%f(s)",(float)ms.getRuntime()/1000)).append("\n");
+
+            System.out.println(sb);
+
+        }
+    }
+
+    public static void insertion_sort_test(){
+        int[] arr;
+        int test_case =3;
+        int arr_size = 100000;
+        my_sort ms = new my_sort();
+        for(int i = 0; i < test_case; i++){
+            StringBuilder sb = new StringBuilder();
+            sb.append("TestCase").append(i+1).append("\n");
+            arr = make_iarr(arr_size, 100);
+//            sb.append(Arrays.toString(arr)).append("\n");
+            ms.Insertion_sort(arr);
+//            sb.append(Arrays.toString(arr)).append("\n");
+//            sb.append(ms.isSort(arr)).append(" ");
+            sb.append(String.format("%f(s)",(float)ms.getRuntime()/1000)).append("\n");
+
+            System.out.println(sb);
+        }
+    }
+
 
 
     public static void main(String[] args) {
 //        stub();
 //        quick_sort_test();
+//        merge_sort_test();
+//        insertion_sort_test();
+
     }
+
 
 
 

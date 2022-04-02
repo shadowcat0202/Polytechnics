@@ -2,15 +2,18 @@ import java.util.Arrays;
 
 public class my_sort {
     //https://yabmoons.tistory.com/250
+
     private boolean desc;   //내림차순으로 할것인가
     private long runtime = 0L;
-    private int QS_pivot = -1;   //0: 왼쪽 1:중간 2:오른쪽
+    private int QS_pivot = 2;   //0: 왼쪽 1:오른쪽 2:중간(default)
+    private int[] sorted;   //merge sort에 필요한 임시 배열
 
     //O() = 최악, 평균, 최선
+
     public my_sort(){
         this.desc = false;
     }
-
+    //Bubble_sort
     public void Bubble_sort(int[] arr){
         //O(N^2), O(N^2), O(N^2)
         //장점:구현이 쉽다, 직관적이다
@@ -32,6 +35,7 @@ public class my_sort {
         this.Bubble_sort(arr);
     }
 
+    //Selection_sort
     public void Selection_sort(int[] arr){
         //O(N^2), O(N^2), O(N^2)
         //장점:정렬을 위한 비교횟수는 많지만 실제 교환 횟수는 적기때문에 많은 교환을 요구하는 자료 상태에서는 그나마 효율적이다
@@ -56,7 +60,7 @@ public class my_sort {
         
     }
 
-
+    //Quick_sort
     public void Quick_sort(int[] arr){
         //N^2, NlogN, NlogN
         //장점:기준값(Pivot)에 의한 분할을 통해 구현하는 정렬법 분할과정에서 logN 이라는 시간이 걸림 전체적으로 준수한 시간
@@ -75,12 +79,10 @@ public class my_sort {
         this.runtime = (afterTime - beforeTime);
         
     }
-
     public void Quick_sort(int[] arr, boolean desc){
         this.desc = desc;
         this.Quick_sort(arr);
     }
-
     public void Quick_sort(int[] arr, boolean desc, int pivot) {
         try {
             if(pivot < 0 || pivot > 2)
@@ -116,7 +118,7 @@ public class my_sort {
             int Pivot = Partition(arr, left, right);
             //(left, right 피펏은 마지막 swap을 통해 피벗이 들어갈 위치를 최종 선정 하기 때문에
             // 그 위치를 제외한 왼쪽(left ~ pivot_idx-1)과 오른쪽(pivot_idx+1 ~ right)으로 나누어 재귀를 해야하고
-            // middle 피벗은 숫자들을 피벗 숫자크기로 단순하게 좌우를 나누기 때문에 피벗 숫자의 위치를 선정하는 것이 아니다
+            // middle 피벗은 제자리 정렬(in-place sort)가 아니기 때문에 신중하게 생각해야한다
             // 따라서 리턴 받은 left ~ pivot_idx, pivot_idx+1 ~ right를 재귀호출 해야한다)
             if (this.QS_pivot == 2) {   //중간 피벗
                 Quicksort(arr, left, Pivot);
@@ -193,12 +195,121 @@ public class my_sort {
     }
 
     //Heap Sort
+
+
     //Merge Sort
+    public void Merge_sort(int[] arr){
+        // O(NlogN), O(NlogN), O(NlogN)
+        // 장점:항상 두 부분의 리스트로 쪼개서 재귀하기 때문에 최악의 경우에도 O(NlogN)유지, stable sort
+        // 단점:정렬과정에서 추가적인 배열 공간 사용 메모리 사용량이 많다, 보조->원본 배열로 복사하는 과정에서 상대적으로 시간을 많이 소요
+        long beforeTime = System.currentTimeMillis();
+
+        this.sorted = new int[arr.length];
+        merge_sort(arr, 0, arr.length - 1);
+        this.sorted = null;
+
+        long afterTime = System.currentTimeMillis();
+        this.runtime = (afterTime - beforeTime);
+    }
+    public void Merge_sort(int[] arr, boolean desc){
+        this.desc = desc;
+        this.Merge_sort(arr);
+    }
+
+    private void merge_sort(int[] arr, int left, int right){
+        if(left == right)   return; //원소가 하나로 분할된 경우 종료
+        int mid = (left + right) / 2;   //중간 위치
+
+        merge_sort(arr, left, mid);         //왼쪽 부분 리스트
+        merge_sort(arr, mid+1, right);  //오른쪽 부분 리스트
+
+        merge(arr, left, mid, right);   //병합 작업
+    }
+    /**
+     * 
+     * @param arr   정렬할 배열
+     * @param left  배열의 시작점
+     * @param mid   배열의 중간점
+     * @param right 배열의 끝 점
+     */
+    private void merge(int[] arr, int left, int mid, int right){
+        int l = left;       //왼쪽 시작점
+        int r = mid + 1;    //오른쪽 시작점
+        int idx = left; //채워넣을 배열의 인덱스
+
+        if(!this.desc){
+            while (l <= mid && r <= right) {    //한쪽이라도 다 끝날때까지 임시 배열에 정렬 순으로 넣기
+                this.sorted[idx++] = (arr[l] <= arr[r]) ? arr[l++] : arr[r++];
+            }
+        }else{
+            while (l <= mid && r <= right) {    //한쪽이라도 다 끝날때까지 임시 배열에 정렬 순으로 넣기
+                this.sorted[idx++] = (arr[l] >= arr[r]) ? arr[l++] : arr[r++];
+            }
+        }
+
+
+        //남은 부분들을 다 옮기기
+        if(l > mid){
+            while(r <= right){
+                this.sorted[idx++] = arr[r++];
+            }
+        }else{
+            while(l <= mid){
+                this.sorted[idx++] = arr[l++];
+            }
+        }
+        // 정렬된 배열은 원본 배열에 복사해서 옮겨준다
+
+        /*
+        src - 원본 배열
+        srcPos - 원본 배열의 복사 시작 위치
+        dest - 복사할 배열
+        destPost - 복사할 배열의 복사 시작 위치
+        length - 복사할 요소의 개수
+         */
+        //System.arraycopy(src, srcPos, dest, destPos, length);
+        if (right + 1 - left >= 0) System.arraycopy(this.sorted, left, arr, left, right + 1 - left);
+//        for(int i = left; i <= right; i++){
+//            arr[i] = this.sorted[i];
+//        }
+    }
+
     //Insertion Sort
+    public void Insertion_sort(int[] arr){
+        //O(N^2), O(N^2), O(N)
+        //장점:최선의 경우 O(N)의 빠른 효율성
+        //단점:최학의 경우 O(N^2) 성능의 편차가 심하다
+        long beforeTime = System.currentTimeMillis();
+
+        for(int curr = 1; curr < arr.length; curr++){
+            int target = arr[curr];
+            int idx = curr - 1;
+
+            if(!this.desc){
+                while(idx >= 0 && arr[idx] > target){
+                    arr[idx + 1] = arr[idx--];
+                }
+            }else{
+                while(idx >= 0 && arr[idx] < target){
+                    arr[idx + 1] = arr[idx--];
+                }
+            }
+
+            arr[idx + 1] = target;
+        }
+
+        long afterTime = System.currentTimeMillis();
+        this.runtime = (afterTime - beforeTime);
+    }
+    public void Insertion_sort(int[] arr, boolean desc){
+        this.desc = desc;
+        this.Insertion_sort(arr);
+    }
     //Shell Sort
     //Radix Sort
 
-    public int[] Counting_sort(int[] arr){
+    //Counting_sort
+    public void Counting_sort(int[] arr){
         //O(N), O(N), O(N)
         //장점:압도적 속도 비교문도 필요 없다
         //단점:숫자가 큰 경우 그것에 상응하는 인덱스 번호가 필요하기 때문에 낭비되는 배열 메모리가 존재한다
@@ -221,15 +332,16 @@ public class my_sort {
             cnt_arr[idx]--;
             result[cnt_arr[idx]] = value;
         }
+        arr = result;
 
         long afterTime = System.currentTimeMillis();
         this.runtime = (afterTime - beforeTime);
-        return result;
     }
     public void Counting_sort(int[] arr, boolean desc){
         this.desc = desc;
         this.Counting_sort(arr);
     }
+
     private int[] minmax(int[] arr){
         int[] res = new int[2];
         for(int value : arr){
@@ -245,9 +357,11 @@ public class my_sort {
         arr[i1] = arr[i2];
         arr[i2] = temp;
     }
+
     public long getRuntime(){
         return this.runtime;
     }
+
     public boolean isSort(int[] arr){
         if(!this.desc){ //오름차순 확인
             for(int i = 1; i < arr.length; i++){
