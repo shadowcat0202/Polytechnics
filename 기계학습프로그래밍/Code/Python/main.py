@@ -3,7 +3,6 @@ import matplotlib.pyplot as plt
 from sklearn import tree
 import seaborn as sns
 import numpy as np
-from sklearn.datasets import load_iris
 
 
 def salmonbass():
@@ -136,16 +135,20 @@ def iris():
 
 
 def stub():
-    n = 6
-    X = [[1, 3], [3, 5], [5, 7], [3, 1], [5, 3], [7, 5]]
-    y = [1,1,1,0,0,0]
-    datapoint = [2,4]
-    import pandas as pd
-    from sklearn.linear_model import LogisticRegression
-    sns.regplot(x=X, y=y, data)
-    model = LogisticRegression()
-    model.fit(X, y)
-
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.datasets import load_iris
+    from sklearn import tree
+    iris = load_iris()
+    X, y = iris.data, iris.target
+    #n_estimators = 트리개수 max_depth=트리 깊이 random_state=0으로 하는게 좋다라고 sklearn에 나와있다
+    clf = RandomForestClassifier(n_estimators=200, max_depth=3, random_state=0)
+    clf = clf.fit(X, y)
+    print(clf.estimators_)
+    print(len(clf.estimators_))
+    result = clf.predict([[4.6, 3.1, 1.5, 0.2],
+                          [7.0, 3.2, 4.7, 1.4],
+                          [6.3, 3.3, 6.0, 2.5]])
+    print(result)
 
 
 if __name__ == '__main__':
@@ -160,4 +163,6 @@ if __name__ == '__main__':
     # tree.plot_tree(clf, fontsize=10, filled=True)
     # plt.show()
     # salmonbass()
-    iris()
+    import titan
+    titan.start()
+
