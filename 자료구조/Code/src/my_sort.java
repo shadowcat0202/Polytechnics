@@ -217,7 +217,7 @@ public class my_sort {
 
         this.sorted = new int[arr.length];
         merge_sort(arr, 0, arr.length - 1);
-        this.sorted = null;
+        this.sorted = null; //gc
 
         long afterTime = System.currentTimeMillis();
         this.runtime = (afterTime - beforeTime);
@@ -228,7 +228,7 @@ public class my_sort {
     }
 
     private void merge_sort(int[] arr, int left, int right){
-        if(left == right)   return; //원소가 하나로 분할된 경우 종료
+        if(left == right)   return; //더이상 분할 할 수 없을때까지
         int mid = (left + right) / 2;   //중간 위치
 
         merge_sort(arr, left, mid);         //왼쪽 부분 리스트

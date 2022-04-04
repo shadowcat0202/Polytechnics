@@ -2,21 +2,49 @@ import pandas as pd
 import basic.DataType.Dictionary as dic
 import basic.DataType.boolean as bol
 import basic.DataType.Set as Set
-
+import vending_machine as vm
 
 def stub():
-    card = True
+    tree = 0
+    while tree < 10:
+        tree += 1
+        print(f"나무를 {tree}번 찍었습니다")
+        if tree == 10:
+            print("넘어감")
 
-    if int(input("입력하세요")) > 3000 or card:
-        print("Take Taxi")
-    else:
-        print("nothing")
-        
-    list_var = [1,2,3,4,5,6,8]
-    if 8 in list_var:
-        print("8있음")
-    else:
-        print("8없음")
+    prompt = """
+    1.add
+    2.del
+    3.list
+    4.quit
+    enter number:
+    """
+    num = 0
+    while num < 4:
+        print(prompt)
+        num = int(input())
+        coff = 3
+        while True:
+            money = int(input("insert money"))
+            if not coff:
+                print("run out")
+                break
+            if money == 300:
+                print("coff")
+                coff -= 1
+            elif money > 300:
+                print(f"{money - 300}원 거스름 + 커피")
+            else:
+                print("돈 모자름")
+
+    a = 0
+    while a < 10:
+        a += 1
+        if a % 2 == 0: continue
+        print(a)  # 홀수
+
 
 if __name__ == '__main__':
-    stub()
+    vm.vendingMachine()
+
+
