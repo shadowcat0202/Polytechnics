@@ -7,7 +7,7 @@ from sklearn.datasets import load_iris
 
 
 def salmonbass():
-    df = pd.read_csv("./ai_score_data.csv")
+    df = pd.read_csv("dataset/ai_score_data.csv")
     # print(df.shape)
     # print(df.info())
     # print(df.describe())
@@ -29,7 +29,7 @@ def salmonbass():
     plt.show()
 
     # ==================================1개의 featuer를 가지고 scatter============================
-    df = pd.read_csv("salmon_bass_data.csv")
+    df = pd.read_csv("dataset/salmon_bass_data.csv")
     plt.hist(df["Length"], alpha=.2)
     # plt.show()  #이건 알아보기 어렵다
 
@@ -77,7 +77,7 @@ def salmonbass():
     test_X = [[2, 2], [1, 1], [0, 0], [0, 1]]
     print(dtree.predict(test_X))
 
-    df = pd.read_csv("./salmon_bass_data.csv")
+    df = pd.read_csv("dataset/salmon_bass_data.csv")
     X = []
     Y = []
 
@@ -102,7 +102,7 @@ def salmonbass():
 
 
 def iris():
-    data = pd.read_csv("./Iris.csv")
+    data = pd.read_csv("dataset/Iris.csv")
     # plt.figure(figsize=(15, 15))
     # sns.heatmap(data=data.corr(), annot=True,
     #             fmt='.2f', linewidths=.5, cmap='Blues')
@@ -116,22 +116,36 @@ def iris():
     X = data.drop(["Id", "Species"], axis=1)
     Y = data["Species"]
 
+    #
     dtree = tree.DecisionTreeClassifier()
     dtree = dtree.fit(X, Y)
 
-    pred = [
-        [5.7, 4.4, 1.5, 0.4],
-        [4.8, 3.1, 1.6, 0.2],
-        [5.0, 2.0, 3.5, 1.0],
-        [5.5, 2.6, 4.6, 1.2],
-        [6.5, 3.0, 5.8, 2.2],
-        [4.8, 3.0, 4.4, 0.3],
-        [6.6, 3.0, 4.4, 1.4],
-        [6.0, 2.2, 5.0, 1.5],
-        [6.1, 2.6, 5.6, 1.4],
-        [5.9, 3.0, 5.1, 1.8]
-    ]
-    print(dtree.predict([[5.1, 3.5, 1.4, 0.2], [6.1, 2.8, 4.0, 1.3]]))
+    # 테스트 데이터
+    # pred = [
+    #     [5.7, 4.4, 1.5, 0.4],
+    #     [4.8, 3.1, 1.6, 0.2],
+    #     [5.0, 2.0, 3.5, 1.0],
+    #     [5.5, 2.6, 4.6, 1.2],
+    #     [6.5, 3.0, 5.8, 2.2],
+    #     [4.8, 3.0, 4.4, 0.3],
+    #     [6.6, 3.0, 4.4, 1.4],
+    #     [6.0, 2.2, 5.0, 1.5],
+    #     [6.1, 2.6, 5.6, 1.4],
+    #     [5.9, 3.0, 5.1, 1.8]
+    # ]
+
+
+def stub():
+    n = 6
+    X = [[1, 3], [3, 5], [5, 7], [3, 1], [5, 3], [7, 5]]
+    y = [1,1,1,0,0,0]
+    datapoint = [2,4]
+    import pandas as pd
+    from sklearn.linear_model import LogisticRegression
+    sns.regplot(x=X, y=y, data)
+    model = LogisticRegression()
+    model.fit(X, y)
+
 
 
 if __name__ == '__main__':

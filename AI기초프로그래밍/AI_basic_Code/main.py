@@ -5,32 +5,18 @@ import basic.DataType.Set as Set
 
 
 def stub():
-    a, b = 1, "python"
-    a = [1, 2, 3]
-    b = a
+    card = True
 
-    print(a, b, a is b, id(a) == id(b))
-
+    if int(input("입력하세요")) > 3000 or card:
+        print("Take Taxi")
+    else:
+        print("nothing")
+        
+    list_var = [1,2,3,4,5,6,8]
+    if 8 in list_var:
+        print("8있음")
+    else:
+        print("8없음")
 
 if __name__ == '__main__':
-    # Set.test()
-    # bol.test()
-    # stub()
-    v = {
-        "vehicle": [
-            {'name': 'v0', 'x': 1, 'y': 2, 'z': 3, 'h': 4}
-        ]
-    }
-    for i in range(10):
-        buf = {
-            'name': 'v' + str(i+1),
-            'x': i + 1,
-            'y': i + 2,
-            'z': i + 3,
-            'h': i + 4
-        }
-        v['vehicle'].append(buf)
-
-    print(v)
-    for i in range(len(v['vehicle'])):
-        print(v['vehicle'][i]['name'])
+    stub()
