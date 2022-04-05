@@ -71,10 +71,10 @@ def test2():
     # 새로운 행 추가
     # DataFrame[새로운 열 이름] = [데이터,...]
     df_copy = df
-    df_copy["newcol"] = [50,84,63]
+    df_copy["newcol"] = [50, 84, 63]
     print(df_copy)
     # 새로운 열 추가
-    df_copy.loc["newrow"] = ["세종",22,54,6,87,52]
+    df_copy.loc["newrow"] = ["세종", 22, 54, 6, 87, 52]
     print(df_copy)
 
     print("====================리인덱스====================")
@@ -96,13 +96,14 @@ def test2():
     print("===================원소 변경=======================")
     df_copy = df.set_index("이름")
     print(df_copy.iloc[0][0])
-    df_copy.iloc[0,[1,2,3]] = [10,10,10]
+    df_copy.iloc[0, [1, 2, 3]] = [10, 10, 10]
     print(df_copy)
-    df_copy.iloc[[0,1],[1,2,3]] = [[100,100,100],[90,90,90]]
+    df_copy.iloc[[0, 1], [1, 2, 3]] = [[100, 100, 100], [90, 90, 90]]
     print(df_copy)
 
-    df_copy.loc[["세종", '정약용'],["자료", "자바", "기학프"]] = [[11,22,33],[44,55,66]]
+    df_copy.loc[["세종", '정약용'], ["자료", "자바", "기학프"]] = [[11, 22, 33], [44, 55, 66]]
     print(df_copy)
+
 
 def test3():
     df = pd.read_csv("./Data_set/read_my_sample.csv")
@@ -117,4 +118,52 @@ def test3():
 
 
 def test4():
-    dict_data = {'c'}
+    import pandas as pd
+    student1 = pd.Series({'국어': 100, '영어': 80, '수학': 90})
+    print(student1)
+
+    percentage = student1 / 100
+    print(percentage)
+    print(type(percentage))
+    student2 = pd.Series({'영어': 50, '수학': 90, '국어': 100})
+
+    #산술 연산 가능
+    result = pd.DataFrame([student1 + student2,
+                           student1 - student2,
+                           student1 * student2,
+                           student1 / student2],
+                          index=['add','sub','mul','div'])
+    print(result, "\n")
+
+    #NaN을 만들어보고, fill_value라는 옵션 사용
+    student1 = pd.Series({'국어': 100, '영어': 80, '수학': 90})
+    student2 = pd.Series({'수학': 90, '국어': 100})
+    print(student1.add(student2, fill_value=0))
+    result = pd.DataFrame([student1.add(student2,fill_value=0),
+                           student1.sub(student2,fill_value=0),
+                           student1.mul(student2,fill_value=0),
+                           student1.div(student2,fill_value=0)])
+    print(result)
+
+
+def test5():
+    # df = pd.read_json("./Data_set/read_json_sample.json")
+    # print(df)
+    # file_path = "./Data_set/read_csv_sample.csv"
+    #
+    # df1 = pd.read_csv(file_path)
+    # print(df1)
+    # print()
+    #
+    # df2 = pd.read_csv(file_path, header=None)
+    # print(df2)
+    # print()
+    #
+    # df3 = pd.read_csv(file_path, index_col=None)
+    # print(df3)
+    # print()
+
+    df_html = pd.read_html("./Data_set/sample.html")
+    for df in df_html:
+        df.to_csv("./html_to.csv")
+        print(df)

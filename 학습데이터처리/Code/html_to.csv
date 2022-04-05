@@ -1,0 +1,4 @@
+,name,year,developer,opensource
+0,NumPy,2006,Travis Oliphant,True
+1,matplotlib,2003,John D. Hunter,True
+2,pandas,2008,Wes Mckinneye,True
