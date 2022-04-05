@@ -124,5 +124,5 @@ def start():
     # show_survive_rate(df_train, "Parch")
     # show_survive_rate(df_train, "Embarked")
 
-    showSexServive(df_train)
-    # showPclassServived(df_train)
+    # showSexServive(df_train)
+    showPclassServived(df_train)
