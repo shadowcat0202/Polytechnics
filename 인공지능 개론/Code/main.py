@@ -1,16 +1,25 @@
-# This is a sample Python script.
-
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import numpy as np
+from matplotlib import pyplot as plt
 
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+def lifeGame():
+    start = int(input("초기 패턴 입력:"))
+    currentList = list(start)
+    while True:
+        print("현재 상태")
 
 
-# Press the green button in the gutter to run the script.
+def showGraph(function, arg):
+    x = arg
+    y = function(x)
+    plt.plot(x, y)
+    plt.show()
+
+
+
 if __name__ == '__main__':
-    print_hi('PyCharm')
-
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    print(np.array([1, 2, 3, 4]))
+    print(np.arange(10))
+    c = np.linspace(-3.14, 3.14, 1000)
+    # print(c)
+    showGraph(np.cos, c)
