@@ -24,8 +24,11 @@ public class my_sort {
         for(int i = 0; i < arr.length; i++){
             //배열의 크기만큼 0~N-1까지 탐색하면서 인접한 칸과 비교하여 swap하는 방식
             for(int j = 0; j < arr.length - 1; j++){
-                if(desc && (arr[j] > arr[j + 1]))    swap(arr, j, j + 1);
-                if(!desc && (arr[j] < arr[j+1]))     swap(arr, j, j + 1);
+                if(!desc){
+                    if(arr[j] > arr[j + 1]) swap(arr, j, j + 1);
+                }else{
+                    if(arr[j] < arr[j + 1]) swap(arr, j, j + 1);
+                }
             }
         }
         long afterTime = System.currentTimeMillis();
