@@ -41,12 +41,8 @@ public class Main {
 
 
     public static void main(String[] args){
-        Boss boss = new Boss();
-        for(int i = 0; i < 10; i++){
-            String s = "노예" + i;
-            boss.hire(new Employee(s, 20, Gender.Male,100));
-        }
-        boss.makeEmployWork();
+        list test = new list();
+        test.test();
 
 
     }

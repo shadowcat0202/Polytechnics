@@ -1,15 +1,37 @@
 import java.util.Scanner;
 
 public class Main {
+    public void dowhile(){
+        char c = 'a';
+        do{
+            System.out.print(c++ + ",");
+            }while(c <= 'z');
+        System.out.println();
+    }
+    public void arr2d(){
+        int[][] a2d = new int[2][]; //초기 공간이 없어서 해줘야 주소값이 나온다
+        a2d[0] = new int[3];
+        a2d[1] = new int[4];
+        System.out.println(a2d);
+        System.out.println(a2d[0] + ", " + a2d[1]);
+        int[][] arr = new int[2][];
+        arr[0] = new int[3];
+        arr[1] = new int[2];
+        arr = a2d;
+        System.out.println(arr);
 
-    public static int sum(int i, int j){
+
+    }
+
+    public int sum(int i, int j){
 
         System.out.println("변경전 =" + System.identityHashCode(i));
         System.out.println("함수 내에서의 i =" + ++i);
         System.out.println("변경전 ="+ System.identityHashCode(i));
         return i + j;
     }
-    public static void stub(){
+
+    public void stub(){
         char grade;
         int score;
         Scanner sc = new Scanner(System.in);
@@ -28,7 +50,9 @@ public class Main {
             System.out.println("성적은" + grade);
         }
     }
+
     public static void main(String[] args){
-        stub();
+        Main m = new Main();
+        m.arr2d();
     }
 }
