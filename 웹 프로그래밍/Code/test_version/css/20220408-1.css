@@ -1,0 +1,45 @@
+#container{
+    background-color: #fff;
+    width: 600;
+    margin: 20ox auto;
+    padding: 20px;
+}
+#bg1 {   
+    background-origin:padding-box;  /* 패딩까지 배경 이미지 표시 */
+}
+#bg2 { 
+    background-origin:border-box;  /* 테두리까지 배경 이미지 표시 */ 
+}
+#bg3 {    
+    background-origin:content-box;  /* 내용 영역만 배경 이미지 표시 */  
+}
+#bg4{
+    background-size: 50%;
+    background-position: right top;
+}
+
+
+div{
+    background-image: url("../html/img_collect/라이언.png");
+    background-repeat: no-repeat;
+    background-position: right top;
+   
+}
+
+[class ~= button]{
+    box-shadow: rgba(0,0,0,0.4) 4px 4px;
+    border-radius: 5px;
+}
+
+a[title |= us]{
+    background: url("../html/img_collect/us.png");
+}
+a[title |= jap]{
+    background: url("../html/img_collect/jp.png");
+}
+a[title |= chn]{
+    background: url("../html/img_collect/ch.png");
+}
+
+
+

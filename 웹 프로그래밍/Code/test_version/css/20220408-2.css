@@ -1,0 +1,10 @@
+<!--상위요소 하위요소-->
+
+section p {    
+    color: blue;
+}
+section > p + div > p {    
+    color: red;
+}
+
+
