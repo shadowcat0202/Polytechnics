@@ -1,11 +1,12 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn import tree
+import seaborn
+from sklearn import tree, svm
 import seaborn as sns
 import numpy as np
 
 
-def salmonbass():
+def ai_score():
     df = pd.read_csv("dataset/ai_score_data.csv")
     # print(df.shape)
     # print(df.info())
@@ -27,10 +28,12 @@ def salmonbass():
 
     plt.show()
 
+
+def salmonbasss():
     # ==================================1개의 featuer를 가지고 scatter============================
     df = pd.read_csv("dataset/salmon_bass_data.csv")
-    plt.hist(df["Length"], alpha=.2)
-    # plt.show()  #이건 알아보기 어렵다
+    # plt.hist(df["Length"], alpha=.2)
+    plt.show()  # 이건 알아보기 어렵다
 
     salmon = df.loc[df["Class"] == "Salmon"]  # Class feature가 Salmon인 row만 가져온다
     bass = df.loc[df["Class"] == "Bass"]  # Class feature가 Bass인 row만 가져온다
@@ -140,7 +143,7 @@ def stub():
     from sklearn import tree
     iris = load_iris()
     X, y = iris.data, iris.target
-    #n_estimators = 트리개수 max_depth=트리 깊이 random_state=0으로 하는게 좋다라고 sklearn에 나와있다
+    # n_estimators = 트리개수 max_depth=트리 깊이 random_state=0으로 하는게 좋다라고 sklearn에 나와있다
     clf = RandomForestClassifier(n_estimators=200, max_depth=3, random_state=0)
     clf = clf.fit(X, y)
     print(clf.estimators_)
@@ -151,18 +154,78 @@ def stub():
     print(result)
 
 
-if __name__ == '__main__':
-    # iris = load_iris()
-    # X, y = iris.data, iris.target
-    # clf = tree.DecisionTreeClassifier()
-    # clf = clf.fit(X, y)
-    #
-    # print(X)
-    # print(y)
-    # plt.figure(figsize=(10, 10))
-    # tree.plot_tree(clf, fontsize=10, filled=True)
-    # plt.show()
-    # salmonbass()
-    import titan
-    titan.start()
+
+df_train = pd.read_csv("./dataset/titanic/train.csv")
+# print(df_train.corr())
+df_train = df_train.drop(["Name", "PassengerId", "Ticket", "Fare", "Cabin"], axis=1)
+df_train["Age"].fillna(df_train["Age"].mean(), inplace=True)
+df_train["Embarked"] = df_train["Embarked"].fillna("S")  # 가장 많은 S로 통일
+df_train["Sex"] = df_train["Sex"].map({"male": 0, "female": 1})
+df_train["Embarked"] = df_train["Embarked"].map({"Q": 0, "C": 1, "S": 2})
+# print(df_train.isna().sum())
+# seaborn.countplot(data=df_train, x="SibSp", hue="Survived")
+# plt.show()
+# 가족 인원수 (혼자1, 핵가족2~3, 대가족4~)
+family = []
+for i in range(len(df_train)):
+    if df_train.loc[i, "SibSp"] >= 4:
+        family.append(2)
+    elif df_train.loc[i, "SibSp"] >= 2:
+        family.append(1)
+    else:
+        family.append(0)
+
+df_train["Family"] = family
+
+from sklearn.ensemble import RandomForestClassifier
+model = RandomForestClassifier(max_depth=4, n_estimators=600)
+# from sklearn.linear_model import LogisticRegression
+# model = LogisticRegression(solver='lbfgs')
+
+# model = svm.SVC(kernel='linear')
+
+
+X = df_train.drop(["Survived"], axis=1)
+y = df_train["Survived"]
+
+model.fit(X,y)
+
+df_test = pd.read_csv('./dataset/titanic/test.csv')
+pid = df_test["PassengerId"]  # [!!!]submit.csv 를 만들어줄 때 PassengerId가 필요하기 때문에 drop하기 전에 저장해둔다
+# predict하기 위한 test data도 columns를 동일하게 맞춰주어야 한다
+df_test = df_test.drop(["Name", "PassengerId", "Ticket", "Fare", "Cabin"], axis=1)
+df_test["Age"].fillna(df_test["Age"].mean(), inplace=True)
+df_test["Embarked"] = df_test["Embarked"].fillna("S")
+df_test["Sex"] = df_test["Sex"].map({"male": 0, "female": 1})
+df_test["Embarked"] = df_test["Embarked"].map({"Q": 0, "C": 1, "S": 2})
+family = []
+for i in range(len(df_test)):
+    if df_test.loc[i, "SibSp"] >= 4:
+        family.append(2)
+    elif df_test.loc[i, "SibSp"] >= 2:
+        family.append(1)
+    else:
+        family.append(0)
+
+df_test["Family"] = family
+
+test_result = model.predict(df_test)
+
+predic = pd.DataFrame({"PassengerId": pid, "Survived": test_result})
+# index=False를 안하면 csv파일 0번쨰 columns에 index를 붙여준다 즉 제출용에 맞게 설정해주어야 한다
+predic.to_csv("./dataset/titanic/my_test.csv", index=False)
+wow = pd.read_csv("./dataset/titanic/wow.csv")
+
+hit = 0
+miss = 0
+for i in range(len(test_result)):
+    if predic["Survived"][i] == wow["Survived"][i]:
+        hit += 1
+    else:
+        miss += 1
+
+print(hit, miss, round(hit / (hit + miss), 4))
+
+
+
 
