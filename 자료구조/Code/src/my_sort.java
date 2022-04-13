@@ -2,6 +2,7 @@ import java.util.Arrays;
 
 public class my_sort {
     //https://yabmoons.tistory.com/250
+    //https://st-lab.tistory.com/
 
     private boolean desc;   //내림차순으로 할것인가
     private long runtime = 0L;
@@ -195,6 +196,25 @@ public class my_sort {
     }
 
     //Heap Sort
+    public void Heap_sort(){
+
+    }
+
+    private void heapify(int[] arr, int parentIdx, int lastIdx){
+        int left_idx = 2 * parentIdx + 1;
+        int right_idx = 2 * parentIdx + 2;
+        int large_idx = parentIdx;  //초기 가장 큰 값을 부모 노드로 설정
+
+        //자식 노드중에 부모 노드보다 큰 값이 있으면 idx 변경(maxheap) 작은 값이 있으며 idx변경(minheap)
+        if(left_idx < lastIdx && arr[large_idx] < arr[left_idx])    large_idx = left_idx;
+        if(right_idx < lastIdx && arr[large_idx] < arr[right_idx])  large_idx = right_idx;
+
+        if(parentIdx != lastIdx){
+            swap(arr, parentIdx, large_idx);
+            heapify(arr, large_idx, lastIdx);
+        }
+    }
+
 
 
     //Merge Sort
@@ -356,6 +376,10 @@ public class my_sort {
         int temp = arr[i1];
         arr[i1] = arr[i2];
         arr[i2] = temp;
+    }
+
+    private int getParent(int child){
+        return (child - 1) / 2;
     }
 
     public long getRuntime(){
