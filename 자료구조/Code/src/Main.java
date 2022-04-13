@@ -41,8 +41,14 @@ public class Main {
 
 
     public static void main(String[] args){
-        list test = new list();
-        test.test();
+        list<Integer> arr = new list<>();
+        for(int i = 0; i < 20; i++){
+            arr.add(i);
+        }
+        System.out.println(arr.toString() + ", "+ arr.size());
+
+        arr.remove(3);
+        System.out.println(arr.toString());
 
 
     }

@@ -1,30 +1,122 @@
-import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.Arrays;
 
-public class list {
-    list(){};
+public class list<T> {
+    private int size;
+    private T[] array;
+    private static final int DEFAULT_CAPACITY = 10;
+    private static final Object[] EMPTY_ARRAY = {};
 
-    public void test(){
-        Boss b = new Boss();
-        Prof p1 = new Prof("교수1", 44, Gender.Male, 1000);
-        Student s1 = new Student("학생1", 28, Gender.Female, 2000);
-        Manager m1 = new Manager("매니저", 30, Gender.Male, 3000);
+    list(){
+        this.array = (T[]) EMPTY_ARRAY;
+        this.size = 0;
+    }
 
-        ArrayList<Employee> al = new ArrayList<>();
-        LinkedList<Employee> employees = new LinkedList<>();
-        employees.add(p1);
-        employees.add(s1);
-        employees.add(m1);
+    list(int capacity){
+        this.array = (T[]) new Object[capacity];
+        this.size = 0;
+    }
 
-        al.add(p1);
-        al.add(s1);
-        al.add(m1);
+    private void resize(){
+        int array_capacity = array.length;
 
-        for(Employee em : employees){
-            em.doWork();
-            em.doWork();
+        if(Arrays.equals(array,EMPTY_ARRAY)){
+            this.array =  (T[]) new Object[DEFAULT_CAPACITY];
+            return;
+        }
+
+        if(size == array_capacity){
+            int new_capacity = array_capacity * 2;
+            this.array = Arrays.copyOf(this.array, new_capacity);
+            return;
+        }
+
+        if(size < (array_capacity / 2)){
+            int new_capacity = array_capacity / 2;
+            this.array = Arrays.copyOf(this.array, Math.max(new_capacity, DEFAULT_CAPACITY));
+            return;
         }
     }
+    public boolean add(T value){
+        addLast(value);
+        return true;
+    }
+
+    private void addLast(T value) {
+        if(size == array.length)    resize();
+        array[size] = value;
+        size++;
+    }
+
+    //특정 위치에 추가
+    public void add(int index, T value){
+        if(index > size || index < 0)   throw new IndexOutOfBoundsException();
+        if(index == size)   addLast(value);
+        else{
+            if(size == array.length)    resize();
+
+            if (size - index >= 0) System.arraycopy(array, index, array, index + 1, size - index);
+//           for(int i = size; i > index; i--){
+//               array[i] = array[i - 1];
+//           }
+            array[index] = value;
+            size++;
+        }
+    }
+
+    public T get(int index){
+        return array[index];
+    }
+    public T remove(int index){
+        if(index >= this.size || index < 0) throw new IndexOutOfBoundsException();
+
+        T element = (T) this.array[index];
+        this.array[index] = null;
+
+        if(this.size - index >= 0){
+            System.arraycopy(this.array, index+1, this.array, index, this.size - index -1);
+            this.array[this.size-1] = null;
+        }
+        size--;
+        resize();
+        return element;
+    }
+
+    public boolean remove(T value){
+        int index = indexOf(value);
+
+        if(index == -1) return false;
+
+        remove(index);
+        return true;
+    }
+
+    private int indexOf(T value) {
+        for(int i = 0; i < this.size; i++){
+            if(this.array[i].equals(value)) return i;
+        }
+        return -1;
+    }
+
+
+    public void clear(){
+        this.array = (T[]) EMPTY_ARRAY;
+        this.size = 0;
+    }
+
+    public int size(){
+        return this.size;
+    }
+    public String toString(){
+        StringBuilder sb = new StringBuilder();
+        for(int i = 0; i < this.size; ++i){
+            sb.append(array[i]).append(" ");
+        }
+        sb.delete(sb.length()-1, sb.length());
+        return sb.toString();
+    }
+
+
+
 
 
 }
