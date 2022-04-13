@@ -17,6 +17,8 @@
           <option value="str.append" />
           <option value="list.loc" />
           <option value="list.appned" />
+          <option value="object.estimators_" />
+          <option value="str.value_counts" />
         </list>
       </option>
     </inspection_tool>

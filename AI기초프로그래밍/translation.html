@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Translate_example</title>
+</head>
+<body>
+    <script
+    src="https://code.jquery.com/jquery-3.5.1.js"
+    integrity="sha256-QWo7LDvxbWT2tbbQ97B53yJnYU3WhH/C8ycbRAkjPDc="
+    crossorigin="anonymous"></script>
+    <div>
+        <h3>Translation Example using OpenAPI</h3>
+        <form id="transExForm" name="transExForm">
+            번역 대상 언어<br>
+            <select id="src_lang" name="src_lang">
+                <option value="kr">한국어</option>
+                <option value="en">영어</option>
+                <option value="jp">일본어</option>
+                <option value="cn">중국어</option>
+            </select><br>
+            번역 결과 언어<br>
+            <select id="target_lang" name="target_lang">
+                <option value="kr">한국어</option>
+                <option value="en">영어</option>
+                <option value="jp">일본어</option>
+                <option value="cn">중국어</option>
+            </select>
+            <h3>번역할 내용 입력</h3>
+            <textarea id="query" name="query" cols="100" rows="10"></textarea>
+        </form>
+    </div>
+    <div>
+        <button onclick="process()">translation</button>
+        <h3>번역 결과</h3>
+        <textarea id="result_translation" cols="100" rows="10" readonly="true"></textarea>
+    </div>
+    <script>
+        function process()
+        {
+            var jsRandom = Math.random() * 2
+            $.ajax({
+                url: "https://dapi.kakao.com/v2/translation/translate",
+                type: "POST",                
+                contentType: "application/x-www-form-urlencoded",                
+                headers: {"Authorization": "KakaoAK 7d93dfa7d2ca5eca38b689763d76b879"},
+                data: $("#transExForm").serialize(),
+                success: function(data)
+                {
+                    //alert("Success");
+                    $("#result_translation").val(data.translated_text);
+                },
+                error: function(jqXHR, textStatus, errorThrown)
+                {
+                    var errorMsg = "ready Status: ";
+                    errorMsg += jqXHR.readyState + "\n";
+                    errorMsg += "status: ";
+                    errorMsg += jqXHR.status + "\n";
+                    errorMsg += "status Text: ";
+                    errorMsg += jqXHR.statusText + "\n";
+                    errorMsg += "textStatus: ";
+                    errorMsg += textStatus + "\n";
+                    alert(errorMsg);
+                }
+            })
+        };
+    </script>
+</body>
+</html>

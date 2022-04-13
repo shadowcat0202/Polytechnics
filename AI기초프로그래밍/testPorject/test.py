@@ -1,9 +1,23 @@
-import pandas as pd
+# def add(op="add", *args)  Err *매개변수는 뒤에 오지 못한다
 
-df = pd.read_csv('https://archive.ics.uci.edu/ml/' 'machine-learning-databases/iris/iris.data', header=None)
-print(df.head())
+def add(*args, op="add"):
+    print(type(args))
+    list(args)
 
-sepal_l = df.iloc[0:100, 0]
-sepal_w = df.iloc[0:100, 1]
-petal_l = df.iloc[0:100, 2]
-petal_w = df.iloc[0:100, 3]
+    result = 0
+    if op == "add":
+        result = 0
+        for i in args:
+            result += i
+    elif op == "mul":
+        result = 1
+        for i in args:
+            result *= i
+    return result
+
+
+array = [1, 2, 3, 4, 5]
+print(add(1, 2, 3, 4, 5, 6, 4, 8, 9, 41, 89, 6, op="mul"))
+
+add_v = lambda a, b: a + b
+print(add_v(3, 4))

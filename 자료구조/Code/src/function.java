@@ -8,6 +8,7 @@ public class function {
         return max;
     }
 
+
     public static int arr_max_idx(int[] arr){
         int idx = 0;
         int max = arr[0];
