@@ -1,8 +1,6 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import seaborn
 from sklearn import tree, svm
-import seaborn as sns
 import numpy as np
 
 

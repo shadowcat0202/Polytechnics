@@ -42,12 +42,13 @@ public class Main {
 
     public static void main(String[] args){
         list<Integer> arr = new list<>();
-        for(int i = 0; i < 20; i++){
+        for(int i = 0; i < 3; i++){
             arr.add(i);
         }
-        System.out.println(arr.toString() + ", "+ arr.size());
+        System.out.println(arr.toString());
 
-        arr.remove(3);
+
+        arr.add(3, 3);
         System.out.println(arr.toString());
 
 
