@@ -3,48 +3,35 @@ import basic.DataType.Dictionary as dic
 import basic.DataType.boolean as bol
 import basic.DataType.Set as Set
 import vending_machine as vm
+from basic import function as fn
+from basic.myClass import fourCal
 
-def stub():
-    tree = 0
-    while tree < 10:
-        tree += 1
-        print(f"나무를 {tree}번 찍었습니다")
-        if tree == 10:
-            print("넘어감")
 
-    prompt = """
-    1.add
-    2.del
-    3.list
-    4.quit
-    enter number:
-    """
-    num = 0
-    while num < 4:
-        print(prompt)
-        num = int(input())
-        coff = 3
-        while True:
-            money = int(input("insert money"))
-            if not coff:
-                print("run out")
-                break
-            if money == 300:
-                print("coff")
-                coff -= 1
-            elif money > 300:
-                print(f"{money - 300}원 거스름 + 커피")
-            else:
-                print("돈 모자름")
+def d20220218():
+    fn.func_kwargs(a=1, b=3)
+    fn.kwfunc(x=100, y=200, z="abc")
+    print(fn.mult_input(1, 2, 3, 4, 5))
+    var_list = [1, 2, 3, 4, 5, 6]
+    var_tuple_list = tuple(var_list)
+    print(fn.mult_input(*var_list))
+    print(fn.mult_input(*var_tuple_list))
+    print(fn.mult_input_v2(1, *var_list))
+    a = fn.mult_return(1, 2)
+    print(f"result={a[0]},{a[1]}")
+    print(fn.init_fun("이름이다", 22))
+    print("파이썬 어렵다!!!")
+    a = 1
+    fn.test(1)
+    print(f"out function {a}")
 
-    a = 0
-    while a < 10:
-        a += 1
-        if a % 2 == 0: continue
-        print(a)  # 홀수
+    add = lambda *args: [i for i in args]
+
+    print(add(1, 2, 3))
+    c1 = fourCal()
+    c1.setData(100,2, *[1,2,3,4,5])
+    c1.info()
+    print(c1.addAll())
 
 
 if __name__ == '__main__':
-    vm.vendingMachine()
-
-
+    d20220218()

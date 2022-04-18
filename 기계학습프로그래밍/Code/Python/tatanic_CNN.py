@@ -225,7 +225,7 @@ def score(comp_df):
         else:
             miss += 1
     # print(hit, miss)
-    return round(hit / (hit + miss), 2)
+    return round(hit / (hit + miss), 5)
 
 # Importing Classifier Modules# Import
 from sklearn.model_selection import KFold, cross_val_score
