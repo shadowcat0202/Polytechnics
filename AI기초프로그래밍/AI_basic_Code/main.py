@@ -35,3 +35,6 @@ def d20220218():
 
 if __name__ == '__main__':
     d20220218()
+    a = fourCal()
+    fourCal.setData(a, 2, 3)
+    a.info()

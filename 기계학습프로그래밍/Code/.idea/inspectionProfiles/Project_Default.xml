@@ -19,6 +19,7 @@
           <option value="list.appned" />
           <option value="object.estimators_" />
           <option value="str.value_counts" />
+          <option value="list.T" />
         </list>
       </option>
     </inspection_tool>
