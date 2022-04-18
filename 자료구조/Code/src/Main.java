@@ -41,15 +41,15 @@ public class Main {
 
 
     public static void main(String[] args){
-        list<Integer> arr = new list<>();
-        for(int i = 0; i < 3; i++){
-            arr.add(i);
-        }
+        SLlist<Integer> arr = new SLlist<>();
+        arr.add(3);
+        arr.add(6);
+        arr.add(32);
+        arr.add(387);
+        System.out.println(arr.toString());
+        arr.remove(1);
         System.out.println(arr.toString());
 
-
-        arr.add(3, 3);
-        System.out.println(arr.toString());
 
 
     }
