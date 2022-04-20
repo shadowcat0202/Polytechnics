@@ -4,8 +4,11 @@ public class SLlist<T> {
         Node next;
 
         Node(T data){
+            this(data, null);
+        }
+        Node(T data, Node next){
             this.data = data;
-            this.next = null;
+            this.next = next;
         }
     }
 
@@ -19,7 +22,7 @@ public class SLlist<T> {
         this.size = 0;
     }
 
-    private Node search(int index){
+    private Node getNode(int index){
         //인덱스를 가지고 왔으니 판단을 해야한다
         if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
 
@@ -65,13 +68,16 @@ public class SLlist<T> {
             return;
         }
 
-        Node prev_Node = search(index-1);
-        Node next_Node= prev_Node.next;
-        Node newNode = new Node(value);
+//        Node prev_Node = getNode(index-1);
+//        Node next_Node= prev_Node.next;
+//        Node newNode = new Node(value);
+//
+//        prev_Node.next = null;
+//        prev_Node.next = next_Node;
+//        newNode.next = next_Node;
+        Node prev_Node = getNode(index - 1);
+        prev_Node.next = new Node(value, prev_Node.next);
 
-        prev_Node.next = null;
-        prev_Node.next = next_Node;
-        newNode.next = next_Node;
         size++;
     }
 
@@ -89,16 +95,19 @@ public class SLlist<T> {
         return element;
     }
     public T remove(int index){
-        if(index == 0)  return remove();
         if(index < 0 || index >= size)  throw new IndexOutOfBoundsException();
+        if(index == 0)  return remove();
 
-        Node prev_Node = search(index -1);
+//        Node prev_Node = getNode(index -1);
+//        Node remove_Node = prev_Node.next;
+//        Node next_Node = remove_Node.next;
+        Node prev_Node = getNode(index -1);
         Node remove_Node = prev_Node.next;
-        Node next_Node = remove_Node.next;
+        prev_Node.next = prev_Node.next.next;
 
         T element = remove_Node.data;
 
-        prev_Node.next = next_Node;
+//        prev_Node.next = next_Node;
 
         if(prev_Node.next == null)  tail = prev_Node;
 
@@ -110,7 +119,7 @@ public class SLlist<T> {
 
 
     public T get(int index){
-        return search(index).data;
+        return getNode(index).data;
     }
 
     public boolean contains(T value){return indexOf(value) >= 0;}

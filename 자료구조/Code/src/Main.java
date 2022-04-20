@@ -51,6 +51,8 @@ public class Main {
         sl.add(m2);
         sl.add(m3);
         sl.add(0,m4);
+        sl.remove(2);
+
 
         for(int i = 0; i < sl.size(); i++){
             sl.get(i).showinfo();
