@@ -2,3 +2,4 @@
 *.pyc
 강의자료/
 dataset/
+*.h5

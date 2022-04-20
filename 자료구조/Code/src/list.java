@@ -1,93 +1,130 @@
 import java.util.Arrays;
 
 public class list<T>{
-    private static final int DEFAULT_CAPACITY = 10;
-    private static final Object[] EMPTY_ARRAY = {};
     private T[] array;
+    private static final int DEFAULT_SIZE = 3;
+    private static final Object[] EMPTY_ARRAY = {};
     private int size;
-
     list(){
-        array = (T[]) new Object[DEFAULT_CAPACITY];
-        this.size = 0;
+        array = (T[]) new Object[DEFAULT_SIZE];
+        size = 0;
+    }
+
+    list(int make_size){
+        array = (T[]) new Object[make_size];
+        size = 0;
     }
 
     private void resize(){
         int array_capacity = this.array.length;
-
-        if(array.equals((T[]) EMPTY_ARRAY)){
+        if(this.array.equals(EMPTY_ARRAY)){
             array = (T[]) EMPTY_ARRAY;
+            size = 0;
             return;
         }
 
-        if(array_capacity == this.size){
-            this.array = Arrays.copyOf(this.array, array_capacity * 2);
+        if(this.size == array_capacity){
+            int new_capacity = array_capacity * 2;
+
+            //방법1. 노가다
+            T[] temp = (T[]) new Object[new_capacity];
+            for(int i = 0; i < size; i++){
+                temp[i] =this.array[i];
+            }
+            this.array = temp;
+
+            //방법2. 깔쌈하게 메서드 쓰기 Arrays.copyOf(array, array_capacity)
+            Arrays.copyOf(array, new_capacity);
             return;
         }
-        if(size < array_capacity / 2){
-            this.array = Arrays.copyOf(this.array, Math.max(array_capacity / 2, DEFAULT_CAPACITY));
-            return;
+
+        if(this.size < array_capacity / 2){
+            int new_capacity = array_capacity / 2;
+
+            //방법1. 노가다
+            T[] temp = (T[]) new Object[new_capacity];
+            for(int i = 0; i < size; i++){
+                temp[i] = this.array[i];
+            }
+            this.array = temp;
+
+            //방법2. 깔쌈하게 메서드 쓰기 Arrays.copyOf(array, array_capacity)
+//            Arrays.copyOf((T[])array, new_capacity);
         }
     }
 
-
-    T get(int index){
-        return this.array[index];
-    }
     private void addLast(T value){
-        if(array.length == this.size)   resize();
-        this.array[size++] = value;
-
+        if(size == this.array.length)    resize();
+        this.array[size] = value;
+        size++;
     }
+
     public boolean add(T value){
         addLast(value);
         return true;
     }
 
-    public void add(int index, T value){
-        if(index < 0 || index > size) throw new IndexOutOfBoundsException();
-        if(index == size)   addLast(value);
+    public boolean add(int index, T value){
+        //방법1. 무식하고 정직하게 집어넣기
+        if(index < 0 || index >= this.array.length) throw new IndexOutOfBoundsException();
+        if(size == index)
+            addLast(value);
         else{
-            if(this.size == this.array.length)    resize();
-            for(int i = size-1; i <= index; i--){
-                this.array[i+1] = this.array[i];
+            if(this.size == array.length)   resize();
+
+            //방법1. 노가다
+            for(int i = size; i > index; i--){
+                this.array[i] = this.array[i-1];
             }
-//            if(this.size - index >= 0)   System.arraycopy(this.array, index, this.array, index+1, this.size-index);
+
+            //방법2. 함수 쓰자(물리적으로 시프트 시키기 때문에 빠르다)
+//            if (size - 1 - index >= 0) System.arraycopy(this.array, index, this.array, index + 1, size - 1 - index);
+
             this.array[index] = value;
             size++;
         }
-    }
-
-    public T remove(int index){
-        if(index < 0 || index >= size)  throw new IndexOutOfBoundsException();
-        T element = this.array[index];
-
-        for(int i = index; i < size-1; i++){
-            this.array[i] = this.array[i+1];
-        }
-        size--;
-        this.array[size] = null;
-//        if(size - index >= 0){
-//            System.arraycopy(array, index +1, array, index, size - index - 1);
-//            this.array[size-1] = null;
-//        }
-        resize();
-        return element;
-    }
-    boolean clear(){
-        this.array = (T[]) this.EMPTY_ARRAY;
         return true;
     }
 
-    int size(){
+
+    public T remove(int index){
+        if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
+
+        T element =(T) this.array[index];   //지울 요소 반환 준비
+
+        //방법1. 노가다
+
+        for(int i = index; i < this.size-1; i++){
+            this.array[i] = this.array[i+1];
+        }
+
+        //방법2. 함수 쓰자(물리적으로 시프트 시키기 때문에 빠르다)
+//        if (this.size - 1 - index >= 0)   System.arraycopy(this.array, index + 1, this.array, index, this.size - 1 - index);
+
+        this.array[size-1] = null;
+        size--;
+        return element;
+    }
+    
+    public int size(){
         return this.size;
+    }
+    public void clear(){
+        this.array = (T[]) EMPTY_ARRAY;
+        this.size = 0;
     }
 
     public String toString(){
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < this.size; ++i){
-            sb.append(array[i]).append(" ");
+        sb.append("[");
+        if(this.size > 0){
+            for(int i = 0; i < this.size; ++i){
+                sb.append(this.array[i]).append(" ");
+            }
+            sb.delete(sb.length()-1, sb.length());
         }
-        sb.delete(sb.length()-1, sb.length());
+        sb.append("]");
+
         return sb.toString();
     }
 

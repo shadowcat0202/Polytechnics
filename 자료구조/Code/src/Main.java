@@ -41,15 +41,23 @@ public class Main {
 
 
     public static void main(String[] args){
-        list<Integer> arr = new list<>();
-        for(int i = 0; i < 3; i++){
-            arr.add(i);
+        MATZIP m1 = new MATZIP("이름1", "주소1");
+        MATZIP m2 = new MATZIP("이름2", "주소2");
+        MATZIP m3 = new MATZIP("이름3", "주소3");
+        MATZIP m4 = new MATZIP("이름4", "주소4");
+
+        SLlist<MATZIP> sl = new SLlist<>();
+        sl.add(m1);
+        sl.add(m2);
+        sl.add(m3);
+        sl.add(0,m4);
+        sl.remove(2);
+
+
+        for(int i = 0; i < sl.size(); i++){
+            sl.get(i).showinfo();
         }
-        System.out.println(arr.toString());
 
-
-        arr.add(3, 3);
-        System.out.println(arr.toString());
 
 
     }
