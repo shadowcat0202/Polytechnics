@@ -48,47 +48,55 @@ import seaborn as sns
 # plt.show()
 
 # 구분선==========================================================================================================
+#
+# plt.style.use('ggplot')
+# df = pd.read_excel("./dataset/시도별 전출입 인구수.xlsx")
+# df = df.fillna(method="ffill")
+#
+# Seoul_to = df.iloc[19:37,:]
+# print(Seoul_to)
+# mask = (df["전출지별"] == "서울특별시") #& (df["전입지별"] == "경기도")
+# Seoul_to = df[mask]
+# Seoul_to.drop(["전출지별"], axis=1, inplace=True)
+# Seoul_to.rename({"전입지별":"전입지"}, axis=1, inplace=True)
+# Seoul_to.set_index("전입지", inplace=True)
+# print(Seoul_to)
+#
+# s_to_g = Seoul_to.loc["경기도"]
+#
+# plt.subplot(1,2,1)
+# plt.plot(s_to_g)
+# plt.title("Seoul_to_Gyeonggi")
+# plt.xlabel("year",)
+# plt.xticks(rotation=90)
+# plt.ylabel("number")
+#
+#
+#
+# s_to_d = Seoul_to.loc["대구광역시"]
+#
+# s_to_d.fillna(0)
+# s_to_d.replace("-", 0, inplace=True)
+# s_to_d.replace(0, s_to_d.mean(), inplace=True)
+# # s_to_d.replace(0, s_to_d.mean(), inplace=True)
+# print(s_to_d)
+#
+# plt.subplot(1,2,2)
+# plt.plot(s_to_d)
+# plt.title("Seoul_to_Daegu")
+# plt.xlabel("year",)
+# plt.xticks(rotation=90)
+# plt.ylabel("number")
+# plt.show()
+
 
 plt.style.use('ggplot')
 df = pd.read_excel("./dataset/시도별 전출입 인구수.xlsx")
 df = df.fillna(method="ffill")
 
-Seoul_to = df.iloc[19:37,:]
-print(Seoul_to)
-mask = (df["전출지별"] == "서울특별시") #& (df["전입지별"] == "경기도")
-Seoul_to = df[mask]
-Seoul_to.drop(["전출지별"], axis=1, inplace=True)
-Seoul_to.rename({"전입지별":"전입지"}, axis=1, inplace=True)
-Seoul_to.set_index("전입지", inplace=True)
-print(Seoul_to)
 
-s_to_g = Seoul_to.loc["경기도"]
-
-plt.subplot(1,2,1)
-plt.plot(s_to_g)
-plt.title("Seoul_to_Gyeonggi")
-plt.xlabel("year",)
-plt.xticks(rotation=90)
-plt.ylabel("number")
-
-
-
-s_to_d = Seoul_to.loc["대구광역시"]
-
-s_to_d.fillna(0)
-s_to_d.replace("-", 0, inplace=True)
-s_to_d.replace(0, s_to_d.mean(), inplace=True)
-# s_to_d.replace(0, s_to_d.mean(), inplace=True)
-print(s_to_d)
-
-plt.subplot(1,2,2)
-plt.plot(s_to_d)
-plt.title("Seoul_to_Daegu")
-plt.xlabel("year",)
-plt.xticks(rotation=90)
-plt.ylabel("number")
-plt.show()
-
-
-
-
+mask1 = (df["전출지별"] == "서울특별시") & (df["전입지별"] != "서울특별시")
+seoul = df[mask1]
+print(seoul)
+daegu = seoul[seoul["전입지별"] == "대구광역시"]
+print(daegu)
