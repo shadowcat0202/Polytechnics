@@ -1,15 +1,16 @@
-class Node<T>{
-    T data;
-    Node<T> next;
-
-    Node(T data){
-        this.data = data;
-        this.next = null;
-    }
-}
 public class SLlist<T> {
-    private Node<T> head;
-    private Node<T> tail;
+    private class Node{
+        T data;
+        Node next;
+
+        Node(T data){
+            this.data = data;
+            this.next = null;
+        }
+    }
+
+    private Node head;
+    private Node tail;
     private int size;
 
     public SLlist(){
@@ -17,23 +18,20 @@ public class SLlist<T> {
         this.tail = null;
         this.size = 0;
     }
-    private Node<T> search(int index){
+
+    private Node search(int index){
         //인덱스를 가지고 왔으니 판단을 해야한다
         if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
 
-        Node<T> temp = head;
-        while(index-- > 0){
+        Node temp = head;
+        for(int i = 0; i < index; i++){
             temp = temp.next;
         }
-        //같은 코드
-//        for(int i = 0; i < index; i++){
-//            temp = temp.next;
-//        }
         return temp;
     }
 
     public void addFirst(T value){
-        Node<T> newNode = new Node<>(value);
+        Node newNode = new Node(value);
         newNode.next = this.head;
         this.head = newNode;
         this.size++;
@@ -45,7 +43,7 @@ public class SLlist<T> {
             addFirst(value);
             return;
         }
-        Node<T> newNode = new Node<>(value);
+        Node newNode = new Node(value);
 
         tail.next = newNode;
         tail = newNode;
@@ -58,12 +56,18 @@ public class SLlist<T> {
     }
     public void add(int index, T value){
         if(index < 0 || index > size)   throw new IndexOutOfBoundsException();
-        if(index == 0)  addFirst(value);
-        if(index == size)   addLast(value);
+        if(index == 0)  {
+            addFirst(value);
+            return;
+        }
+        if(index == size)   {
+            addLast(value);
+            return;
+        }
 
-        Node<T> prev_Node = search(index-1);
-        Node<T> next_Node= prev_Node.next;
-        Node<T> newNode = new Node<>(value);
+        Node prev_Node = search(index-1);
+        Node next_Node= prev_Node.next;
+        Node newNode = new Node(value);
 
         prev_Node.next = null;
         prev_Node.next = next_Node;
@@ -76,7 +80,7 @@ public class SLlist<T> {
         if(this.head == null)   throw new IndexOutOfBoundsException();
 
         T element = head.data;
-        Node<T> nextNode = head.next;
+        Node nextNode = head.next;
         head.data = null;
         head.next = null;
         size--;
@@ -88,9 +92,9 @@ public class SLlist<T> {
         if(index == 0)  return remove();
         if(index < 0 || index >= size)  throw new IndexOutOfBoundsException();
 
-        Node<T> prev_Node = search(index -1);
-        Node<T> remove_Node = prev_Node.next;
-        Node<T> next_Node = remove_Node.next;
+        Node prev_Node = search(index -1);
+        Node remove_Node = prev_Node.next;
+        Node next_Node = remove_Node.next;
 
         T element = remove_Node.data;
 
@@ -113,15 +117,17 @@ public class SLlist<T> {
 
     public int indexOf(T value){
         int index = 0;
-        for(Node<T> x = head; x != null; x = x.next, index++){
+        for(Node x = head; x != null; x = x.next, index++){
             if(value.equals(x.data))    return index;
         }
         return -1;
     }
-
+    public int size(){
+        return this.size;
+    }
     public void clear(){
-        for(Node<T> x = head; x != null;){
-            Node<T> nextNode = x.next;
+        for(Node x = head; x != null;){
+            Node nextNode = x.next;
             x.data = null;
             x.next = null;
             x = nextNode;
@@ -129,20 +135,20 @@ public class SLlist<T> {
         head = tail = null;
         size = 0;
     }
-    public String toString(){
-        StringBuilder sb = new StringBuilder();
-        if(this.size > 0){
-            sb.append("[");
-            for(Node<T> x = head; x != null; x = x.next){
-                sb.append(x.data).append(" ");
-            }
-            sb.delete(sb.length()-1, sb.length());
-            sb.append("]");
-        }else{
-            sb.append("[]");
-        }
-        return sb.toString();
-    }
+//    public String toString(){
+//        StringBuilder sb = new StringBuilder();
+//        if(this.size > 0){
+//            sb.append("[");
+//            for(Node x = head; x != null; x = x.next){
+//                sb.append(x.data).append(" ");
+//            }
+//            sb.delete(sb.length()-1, sb.length());
+//            sb.append("]");
+//        }else{
+//            sb.append("[]");
+//        }
+//        return sb.toString();
+//    }
 
 
 
