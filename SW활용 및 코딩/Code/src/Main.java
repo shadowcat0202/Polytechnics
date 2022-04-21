@@ -1,5 +1,24 @@
 import java.util.Scanner;
+import package1.*;
+import package2.*;
 
+class pizza{
+    private int r = 0;
+    private String name = "";
+
+    pizza(String name, int r){
+        this.name = name;
+        this.r = r;
+    }
+    private double get_round(){
+        return 3.14 * 2 * r;
+    }
+    public void show(){
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.name).append("의 둘레는 ").append(String.format("%.2f", get_round())).append("cm");
+        System.out.println(sb);
+    }
+}
 public class Main {
     public void dowhile(){
         char c = 'a';
@@ -20,7 +39,12 @@ public class Main {
         arr = a2d;
         System.out.println(arr);
 
-
+    }
+    public void show(){
+        System.out.println("wow");
+    }
+    public static void show_1(){
+        System.out.println("wowo2");
     }
 
     public int sum(int i, int j){
@@ -44,9 +68,12 @@ public class Main {
 
 
     }
-
     public static void main(String[] args){
-        Main m = new Main();
-        m.stub();
+        pizza g = new pizza("맛있는 피자", 10);
+        pizza b = new pizza("맛없는 피자", 2);
+        g.show();
+        b.show();
+
     }
+
 }
