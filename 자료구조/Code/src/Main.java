@@ -1,5 +1,13 @@
 import java.util.Arrays;
-
+class test{
+    private int data;
+    test(int i){
+        this.data = i;
+    }
+    public int getData(){
+        return this.data;
+    }
+}
 public class Main {
     public static int[] make_iarr(int arr_size, int max_value){
         int[] arr = new int[arr_size];
@@ -41,23 +49,15 @@ public class Main {
 
 
     public static void main(String[] args){
-        MATZIP m1 = new MATZIP("이름1", "주소1");
-        MATZIP m2 = new MATZIP("이름2", "주소2");
-        MATZIP m3 = new MATZIP("이름3", "주소3");
-        MATZIP m4 = new MATZIP("이름4", "주소4");
-
-        SLlist<MATZIP> sl = new SLlist<>();
-        sl.add(m1);
-        sl.add(m2);
-        sl.add(m3);
-        sl.add(0,m4);
-        sl.remove(2);
-
-
-        for(int i = 0; i < sl.size(); i++){
-            sl.get(i).showinfo();
+        SLlist<test> ls = new SLlist<>();
+        for(int i = 0; i < 5; i++){
+            ls.add(new test(i));
         }
 
+        for(int i = 0; i < 5; i++){
+            System.out.println(ls.get(i).getData());
+        }
+        ls.
 
 
     }
