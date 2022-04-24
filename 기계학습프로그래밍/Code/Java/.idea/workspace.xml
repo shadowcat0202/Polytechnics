@@ -2,20 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="97de327e-3475-4661-abf0-8410644337af" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/../../../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../../.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Midterm_exam.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Python/MidtermExam.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Iris.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/uiDesigner.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../Code.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/2022인구추계(중위).csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/salmon_bass_data.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Java/salmon_bass_data.csv" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Salmon_Bass.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/my_sort.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/my_sort.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/SLlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/SLlist.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/list.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/list.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,7 +41,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../자료구조/Code" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />

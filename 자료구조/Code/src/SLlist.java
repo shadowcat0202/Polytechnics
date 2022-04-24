@@ -1,13 +1,18 @@
 public class SLlist<T>{
-    Node head, tail;
-    int size;
+    private Node head;
+    private Node tail;
+    private int size;
 
-    class Node{
+    private class Node{
         T data;
         Node next;
+
         Node(T data){
+            this(data, null);
+        }
+        Node(T data, Node next){
             this.data = data;
-            this.next = null;
+            this.next = next;
         }
     }
 
@@ -18,81 +23,82 @@ public class SLlist<T>{
     }
 
     private Node getNode(int index){
-        if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();  //out of bounds
+        if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
         if(index == 0)  return this.head;
-        if(index == this.size-1)  return this.tail;
 
-        Node node = head;
-        for(int i= 0; i < index; i++){
-            node = node.next;
+        Node x = head;
+        while(--index >= 0){
+            x = x.next;
         }
-
-        return node;
+        return x;
     }
+    //뒤에 추가
     public boolean add(T data){
-        if(this.head == null)   addFirst(data); //리스트가 비어있을때 앞에 넣는다
-        else addLast(data);
+        this.tail.next = new Node(data);
+        this.tail = this.tail.next;
+        this.size++;
+        if(this.size == 0)  this.tail = this.head;
+        return true;
+    }
+
+    public boolean add(T data, int index){
+        if(index < 0 || index > this.size)  throw new IndexOutOfBoundsException();
+        if(index == this.size)  return add(data);
+        if(index == 0){
+            head = new Node(data, head.next);
+            if(this.size == 0)  this.tail = this.head;
+            this.size++;
+            return true;
+        }
+        Node prevNode = getNode(index);
+        prevNode.next = new Node(data, prevNode.next);
         this.size++;
         return true;
     }
-    public void addFirst(T data){
-        Node newNode = new Node(data);
-        head = newNode;
-
-        if(this.size == 0)  this.tail = head;
-    }
-
-    public void addLast(T data){
-        Node newNode = new Node(data);
-        tail.next = newNode;
-        tail = newNode;
-    }
-
+    
+    //뒤에삭제?
     public T remove(){
-
+        if(this.head == null){}
     }
     public T remove(int index){
         if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
-        if(index == 0)  removeFirst();
-        else if(index == this.size-1)   removeLast();
-        else{
-            Node prevNode = getNode(index);
-            Node removeNode = prevNode.next;
-            prevNode.next = prevNode.next.next;
-            return removeNode.data;
+        if(index == this.size-1){
+            Node rmNode = this.tail;
+            this.tail.data = null;
+            this.tail.next = null;
+            this.tail = getNode(index-1);
+            return rmNode.data;
+
         }
     }
-
+    
+    //index위치 반환
     public T get(int index){
         if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
+        if(index == 0)  return this.head.data;
+        if(index == this.size-1)    return this.tail.data;
         return getNode(index).data;
     }
-    private Node removeFirst(){
-        Node removeNode = head;
-        head.data = null;
-        head.next = null;
-        return removeNode;
-    }
-    private T removeLast(){
-
-    }
-
 
 
     public int size(){
         return this.size;
     }
     public void clear(){
-        Node x = head;
-        while(x != null){
+        for(Node x = head; x != null;){
             Node nextNode = x.next;
             x.data = null;
             x.next = null;
             x = nextNode;
         }
+        this.head = this.tail = null;
+        this.size = 0;
     }
+
 }
+
 /*
+public class SLlist<T>
 public Node getNode(int index)
 public void add()
 public void addFirst(T value)
