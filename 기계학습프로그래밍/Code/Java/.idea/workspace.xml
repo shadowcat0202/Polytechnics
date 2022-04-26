@@ -5,7 +5,7 @@
       <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/AI기초프로그래밍.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/AI기초프로그래밍.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Java.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/Midterm_exam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Midterm_exam.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,7 +47,7 @@
       <recent name="D:\mystudy\폴리텍\기계학습프로그래밍\Code\Java\src" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Application.Midterm_exam">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Java" />
@@ -56,8 +56,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Midterm_exam" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="Midterm_exam" />
+      <module name="Java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Midterm_exam" />
         <item itemvalue="Application.Main" />
       </list>
     </recent_temporary>
