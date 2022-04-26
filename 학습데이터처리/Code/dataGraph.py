@@ -1,6 +1,16 @@
 import pandas as pd
 import matplotlib.pyplot as plt
+import matplotlib.font_manager as fm  # 매트플랏라이브러리 도움으로 폰트매니저 사용
+import matplotlib
+
+font_location = 'C:/Windows/Fonts/HMKMMAG.TTF'
+
+font_name = fm.FontProperties(fname=font_location).get_name()
+
+matplotlib.rc('font', family=font_name)
+
 import seaborn as sns
+
 # print(plt.style.available)
 # df = pd.read_excel("./dataset/남북한발전전력량.xlsx")
 # # print(df.info())
@@ -89,14 +99,105 @@ import seaborn as sns
 # plt.ylabel("number")
 # plt.show()
 
-
+# ======================================마스크 컨트롤 그래프 그리기============================================
 plt.style.use('ggplot')
 df = pd.read_excel("./dataset/시도별 전출입 인구수.xlsx")
 df = df.fillna(method="ffill")
 
+# tmp = df.iloc[19:37, 1:]
+# print(tmp.head())
+##=============그래프 그리기=====================
+# mask = (df["전출지별"] == "서울특별시") & (df["전입지별"] == "경기도")
+# data = df[mask]
+# data = data.drop(["전출지별", "전입지별"], axis=1)
+# data = data.replace("-", 0)
+# data = data.iloc[0, :]
+# print(data)
+# plt.xticks(rotation=90)
+# plt.plot(data, markersize=6, color="red", marker="o")
+# plt.ylim(5000, 800000)
+# plt.annotate("",  # 표시할 문자
+#              xy=(20, 620000),  # 화살표 머리부분
+#              xytext=(2, 250000),  # 화살표의 끝부분
+#              arrowprops=dict(arrowstyle="->", color="red", lw=5)
+#              )
+# plt.annotate("",  # 표시할 문자
+#              xy=(45, 450000),  # 화살표 머리부분
+#              xytext=(30, 620000),  # 화살표의 끝부분
+#              arrowprops=dict(arrowstyle="->", color="blue", lw=5)
+#              )
+# plt.annotate("인구 이동 증가 1970~1995",  # 표시할 문자
+#              xy=(10, 400000),  # 화살표 머리부분
+#              rotation=42,
+#              va="baseline",
+#              ha="center",
+#              fontsize=10
+#              )
+# plt.annotate("인구 이동 감소 1995~2017",  # 표시할 문자
+#              xy=(40, 500000),  # 화살표 머리부분
+#              rotation=-25,
+#              va="baseline",
+#              ha="center",
+#              fontsize=10
+#              )
 
-mask1 = (df["전출지별"] == "서울특별시") & (df["전입지별"] != "서울특별시")
-seoul = df[mask1]
-print(seoul)
-daegu = seoul[seoul["전입지별"] == "대구광역시"]
-print(daegu)
+# ============================여러개=================================================
+# to_list = [["충청남도", "red"], ["경상북도", "blue"], ["강원도", "olive"]]
+# # to_list = [["경기도", "olive"]]
+# fig = plt.figure(figsize=(16, 8))  # 캔버스 생성
+# ax = fig.add_subplot()  # 그림 프레임 생성
+# for to in to_list:
+#     mask = (df["전출지별"] == "서울특별시") & (df["전입지별"] == to[0])
+#     data = df[mask]
+#     data = data.drop(["전출지별", "전입지별"], axis=1)
+#     data = data.replace("-", 0)
+#     data = data.iloc[0, :]
+#     print(data)
+#     # sr_deagu = seoul_to_deagu.lic[22,:] #해당 상황에서는 행 번호을 따로 변경한게 아니기 때문에 22라는 숫자가 행 이름이다
+#     # ax.xticks(rotation=90)경상북도
+#     # ax.xticks(rotation="vertical")
+#     plt.xticks(rotation=90)
+#     ax.plot(data, markersize=6, color=to[1], marker="o")
+#
+# plt.legend([to[0] for to in to_list])
+# plt.show()
+
+# ===========================map(함수, 리스트)==================================
+# map: 리스트 요소를 지정된 함수로 처리해주는 함수
+# map(function, iterable)
+var_list = list(map(str, range(1970, 1980)))
+print(var_list)
+mask = (df["전출지별"] == "서울특별시") & (df["전입지별"] != "서울특별시")
+df_seoul = df[mask]
+df_seoul = df_seoul.drop(["전출지별"], axis=1)
+df_seoul = df_seoul.set_index("전입지별")
+print(df_seoul.head())
+
+col_year = list(map(str, range(1970, 2018)))
+
+locals = [["강원도","red"], ["충청북도","blue"], ["충청남도","olive"]]
+local_name = [name[0] for name in locals]
+df_3 = df_seoul.loc[local_name, col_year]
+print(df_3.head())
+
+fig = plt.figure(figsize=(20, 10))
+ax = fig.add_subplot(1, 1, 1)
+
+# 각각의 위치에 그리기
+# ax_list = []
+# for i in range(1, 5):
+#     ax_list.append(fig.add_subplot(2, 2, i))
+
+for name in locals:
+    ax.plot(col_year, df_3.loc[name[0], :],markersize=6, color=name[1], marker="o")
+
+# ax.set_facecolor("w")
+ax.grid(True)
+plt.legend(local_name)
+plt.title("서울->강원도,충청북도,충청남도")
+plt.xlabel("년도")
+plt.ylabel("인구수")
+
+
+plt.xticks(rotation=90)
+plt.show()
