@@ -74,6 +74,33 @@ public class Main {
         g.show();
         b.show();
 
+        Circle c1 = new Circle(1);
+        Circle c2 = new Circle(2);
+        Circle c3 = new Circle(3);
+
+        c1.set(4);
+        c2.set(5);
+        c3.set(6);
+
+        System.out.println(c1.r);
+        System.out.println(c2.r);
+        System.out.println(c3.r);
+
+        Circle c4 = new Circle(10, "가나다라");
+        c1.info();
+        c2.info();
+        c3.info();
+        c4.info();
+
+        Circle[] c_arr = new Circle[3];
+        for(int i = 0; i < c_arr.length; i++){
+            c_arr[i] = new Circle(i+1, "c_"+i);
+        }
+        for(int i = 0; i < c_arr.length; i++){
+            c_arr[i].info();
+        }
+
+
     }
 
 }
