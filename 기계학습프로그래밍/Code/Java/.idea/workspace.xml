@@ -1,13 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="97de327e-3475-4661-abf0-8410644337af" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/AI기초프로그래밍.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/AI기초프로그래밍.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Java.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Java.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Midterm_exam.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Midterm_exam.java" afterDir="false" />
-    </list>
+    <list default="true" id="97de327e-3475-4661-abf0-8410644337af" name="Changes" comment="Changes" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />

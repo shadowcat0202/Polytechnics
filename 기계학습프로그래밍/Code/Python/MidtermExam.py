@@ -155,7 +155,7 @@ def DecisionTree_data_Visualization():
 def IRIS_DecisionTreeClassifier():
     from sklearn import tree
     import matplotlib.pyplot as plt
-    iris_df = pd.read_csv("../dataset/Iris.csv")
+    iris_df = pd.read_csv("./dataset/Iris.csv")
     # print(iris_df.info())
     # print(iris_df["Species"].unique())
 
@@ -178,9 +178,9 @@ def IRIS_DecisionTreeClassifier():
     pred_y = clf.predict(pred_x)
     print(pred_y)
 
-    plt.figure(figsize=(15, 15))
-    tree.plot_tree(clf, fontsize=10, filled=True)
-    plt.show()
+    # plt.figure(figsize=(15, 15))
+    # tree.plot_tree(clf, fontsize=10, filled=True)
+    # plt.show()
 
 def IRIS_RandomForestClassifier():
     from sklearn.ensemble import RandomForestClassifier
@@ -195,5 +195,5 @@ def IRIS_RandomForestClassifier():
 
 
 # DecisionTree_data_Visualization()
-# IRIS_DecisionTreeClassifier()
+IRIS_DecisionTreeClassifier()
 # IRIS_RandomForestClassifier()

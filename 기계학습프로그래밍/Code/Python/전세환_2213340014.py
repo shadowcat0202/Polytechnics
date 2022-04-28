@@ -45,8 +45,8 @@ def solution4(original):
 if __name__ == "__main__":
     param1 = ["XS", "S", "L","L","XL","S","XS"]
     param2 = [1, 4, 2, 3]
-    param3 = 5
-    param4 = [1, 3, 3, 1, 3, 3, 3, 2, 1]
+    param3 = 4
+    param4 = [1, 3, 3, 1, 3, 3, 2, 1, 999]
 
     print(solution1(param1))
     print(solution2(param2))
