@@ -22,7 +22,7 @@
             <li>항목2</li>
             <li>항목3</li>
         </ol>
-        <ul>
+        <ul style="list-style: none;">
             <li>항목1</li>
             <li>항목2</li>
             <li>항목3</li>
@@ -41,18 +41,28 @@
         </table>
 
         <table>
-            <thead>
+            <colgroup>
+            <col style="background-color: aqua;">
+            </colgroup>            
+            <thead style="color: red;">
                 <tr>
+                    <th>머리</th>
                     <td>행</td>
                     <td>열</td>
                 </tr>
             </thead>
-            <tbody>
+            <tbody style="color: blueviolet;">
                 <tr>
+                    <th>몸통</th>
                     <td>1행1열</td>
                     <td>1행2열</td>
                 </tr>
             </tbody>
+            <tfoot style="color: blue;">
+                <th>다리</th>
+                <td>dfadsjf</td>
+                <td>dfadsjf</td>
+            </tfoot>
         </table>
 
         <img src="../../html/img_collect/라이언.png" alt="이미지 없음" width="20%">

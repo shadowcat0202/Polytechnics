@@ -25,6 +25,10 @@
             .finish_2 legend {
                 font-weight: bold;
             }
+            .finish_2 > div:nth-child(2) > label{
+                width: 60px;
+                float: left;
+            }
             .finish_2 ul {
                 list-style-type: none;
             }
@@ -50,10 +54,10 @@
             <fieldset>
                 <legend>fieldset 그룹2</legend>
                 <label><input type="radio" name="radio" value="1">name="radio", value 1</label>
-                <label><input type="radio" name="radio" value="1">name="radio", value 2</label>
-                <br>
+                <label><input type="radio" name="radio" value="2">name="radio", value 2</label>
+                <hr>
                 <label><input type="radio" name="d1" value="1">name="d1", value 1</label>
-                <label><input type="radio" name="d2" value="1">name="d2", value 2</label>
+                <label><input type="radio" name="d2" value="2">name="d2", value 2</label>
             </fieldset>
             <fieldset>
                 <legend>fieldset 그룹3</legend>
@@ -125,17 +129,20 @@
                     <div>html 블라블라</div>
                     <hr>
                     <form>
-                        <h4>개인정보</h4>
-                        <ul>
-                            <li>
-                                <label for="r-name">이름</label>
-                                <input type="text" id="r-name" placeholder="공백 없이 입력하세요">
-                            </li>
-                            <li>
-                                <label for="r-phone">연락처</label>
-                                <input type="tel" id="r-phone">
-                            </li>
-                        </ul>
+                        <div>
+                            <h4>개인정보</h4>
+                            <ul>
+                                <li>
+                                    <label for="r-name">이름</label>
+                                    <input type="text" id="r-name" placeholder="공백 없이 입력하세요">
+                                </li>
+                                <li>
+                                    <label for="r-phone">연락처</label>
+                                    <input type="tel" id="r-phone">
+                                </li>
+                            </ul>
+                        </div>
+                        
                         <h4>지원분야</h4>
                         <ul>
                             <li><label><input type="radio" name="Support Areas" value="1">웹 퍼블리싱</label></li>
@@ -152,7 +159,12 @@
                         </div>
                     </form>
                 </div>
-                
+                <div>
+                    <select>
+                        <option value="값1">ㄴㅇㅁㄻㅇㄴㄹ</option>
+                        <option value="값1">ㄴㅇㅁㄻㅇㄴㄹ</option>
+                    </select>
+                </div>
             </fieldset>
         </form>
     </body>
