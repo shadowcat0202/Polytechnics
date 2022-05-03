@@ -57,20 +57,20 @@ public class SLlist<T>{
     }
     
     //뒤에삭제?
-    public T remove(){
-        if(this.head == null){}
+    public void remove(){
     }
-    public T remove(int index){
-        if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
-        if(index == this.size-1){
-            Node rmNode = this.tail;
-            this.tail.data = null;
-            this.tail.next = null;
-            this.tail = getNode(index-1);
-            return rmNode.data;
-
-        }
-    }
+//    public T remove(int index){
+//        if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
+//        if(index == this.size-1){
+//            Node rmNode = this.tail;
+//            this.tail.data = null;
+//            this.tail.next = null;
+//            this.tail = getNode(index-1);
+//            return rmNode.data;
+//
+//        }
+//        return T;
+//    }
     
     //index위치 반환
     public T get(int index){

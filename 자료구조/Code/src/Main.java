@@ -49,15 +49,16 @@ public class Main {
 
 
     public static void main(String[] args){
-        SLlist<test> ls = new SLlist<>();
-        for(int i = 0; i < 5; i++){
-            ls.add(new test(i));
-        }
+        LinkedListStack<String> ms = new LinkedListStack<>();
+        ms.push("테스트1");
+        ms.push("테스트2");
+        ms.push("테스트3");
+        ms.push("테스트4");
 
-        for(int i = 0; i < 5; i++){
-            System.out.println(ls.get(i).getData());
-        }
-        ls.
+        System.out.println(ms.pop());
+        System.out.println(ms.pop());
+        ms.del();
+        System.out.println(ms.pop());
 
 
     }
