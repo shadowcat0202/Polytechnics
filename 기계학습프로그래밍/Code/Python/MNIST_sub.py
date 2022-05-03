@@ -99,14 +99,14 @@ RF_train(train_set.reshape(len(train_set), train_set.shape[1] * train_set.shape[
 
 
 # confusion_matrix 그래프 출력==========================================================================
-# from sklearn.metrics import confusion_matrix, plot_confusion_matrix
-# 
-# label = [i for i in range(10)]
-# plot = plot_confusion_matrix(joblib.load("./model/rf-mnist.plk"),
-#                       test_set.reshape(len(test_set), test_set.shape[1] * test_set.shape[2]),
-#                       test_label,
-#                       display_labels=label, normalize="true")
-# plot.ax_.set_title("Confusion Matrix")
-# plt.show()
+from sklearn.metrics import confusion_matrix, plot_confusion_matrix
 
-
+label = [i for i in range(10)]
+plot = plot_confusion_matrix(joblib.load("./model/rf-mnist.plk"),
+                             test_set.reshape(len(test_set), test_set.shape[1] * test_set.shape[2]),
+                             test_label,
+                             display_labels=label,
+                             cmap=plt.cm.Blues,
+                             normalize="true")
+plot.ax_.set_title("Confusion Matrix")
+plt.show()
