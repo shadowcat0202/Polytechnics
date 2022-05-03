@@ -1,0 +1,82 @@
+<!--
+    Hyper Text Markup Languge
+    HTML  요소(Element) 기본 구조
+    
+    <tag> Content </tag>
+
+
+    <!DOCTYPE html>
+    <html [lang = "ko"]>
+        <head>
+                해당 문서에 대한 정보 입력 tag:meta를 사용
+        </head>
+
+        <body>
+            실질적으로 보이는 부분
+        </body>
+
+
+    </html>    
+-->
+
+<!DOCTYPE html> <!--현재 문서가  HTML5 언어로 작성한 웹 문서라는 뜻-->
+<html lang = "ko">  <!--웹 문서의 시작과 끝을 나타내는 태그-->
+    <head>
+        <!--<meta> 요소는 <base>, <link>, <script>, <style>, <title> 요소와 같은 다른 메타데이터 관련 요소들이 
+            나타낼 수 없는 다양한 종류의 메타데이터를 제공할 때 사용되며, 이렇게 제공된 정보는 브라우저나 검색 엔진, 
+            다른 웹 서비스에서 사용하게 됩니다.-->
+        <meta charset="UTF-8">  <!--한글로된 내용을 표시하기 위해서 UTF-8 문자 세트 사용-->
+        <title>웹문서 만들기</title>    <!--tag:title 상단 탭에 표시되는 글자-->
+    </head>
+    
+    <body>
+        
+        <!--tag:h[1,2,3,4,5,6] = 해당 내용의 중요도를 의미하기도 한다-->   
+        <h1>웹 개발 기초</h1>
+        <hr>
+        <h3>새로운 글자다!!</h3>
+        <p>HTML</p>
+        <p>CSS</p>
+        <p>자바 스크립트</p>
+        <p>WOWOWOWOWOW</p>
+        <hr>    <!--구분선-->
+
+
+        <!--
+            tag
+            inline tag  : 해당 태그의 영역만 차지한다
+            block tag   : 한줄의 모든 영역을 차지한다(빈공간이 있더라도 한줄 영역을 전부 먹어버린다)
+        -->
+        <span>인라인테그</span><span>:웹기초1</span><span>웹기초2</span>
+        <p>블록테그:</p><p>웹기초3</P><p>웹기초4</p>
+        <hr>
+
+        
+    <!--테이블
+        <tr>        //행
+            <td>    //열
+            </td>
+        </tr>
+    -->
+    <table>
+        <tr>
+            <td>[1,1]</td>
+            <td>[1,2]</td>
+        </tr>
+        <tr>
+            <td>[2,1]</td>
+            <td>[2,2]</td>
+        </tr>
+        <tr>
+            <td>[3,1]</td>
+            <td>[3,2]</td>
+        </tr>
+    </table>
+
+        <h1>아스키코드로 작성했다 [&#87;&#79;&#87;]</h1>
+
+        
+            <hr>
+    </body>
+
+</html>

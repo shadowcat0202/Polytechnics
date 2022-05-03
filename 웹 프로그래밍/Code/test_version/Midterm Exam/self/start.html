@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            table,
+            td,
+            th {
+                border: 1px solid #ccc;
+            }
+            td,
+            th {
+                padding: 10px 20px;
+            }
+            td:last-child {
+                width: 200px;
+            }
+        </style>
+    </head>
+    <body>
+        <ol>
+            <li>항목1</li>
+            <li>항목2</li>
+            <li>항목3</li>
+        </ol>
+        <ul style="list-style: none;">
+            <li>항목1</li>
+            <li>항목2</li>
+            <li>항목3</li>
+        </ul>
+        <table>
+            <caption>표 제목</caption>
+            <tr>
+                <td rowspan="2">rowspan</td>
+                <td>(1,1)</td>
+                <td>(1,2)</td>
+            </tr>
+            <tr>
+                <td>(2,1)</td>
+                <td>(2,2)</td>
+            </tr>
+        </table>
+
+        <table>
+            <colgroup>
+            <col style="background-color: aqua;">
+            </colgroup>            
+            <thead style="color: red;">
+                <tr>
+                    <th>머리</th>
+                    <td>행</td>
+                    <td>열</td>
+                </tr>
+            </thead>
+            <tbody style="color: blueviolet;">
+                <tr>
+                    <th>몸통</th>
+                    <td>1행1열</td>
+                    <td>1행2열</td>
+                </tr>
+            </tbody>
+            <tfoot style="color: blue;">
+                <th>다리</th>
+                <td>dfadsjf</td>
+                <td>dfadsjf</td>
+            </tfoot>
+        </table>
+
+        <img src="../../html/img_collect/라이언.png" alt="이미지 없음" width="20%">
+        <p>
+            <a href="./outerlink.html" target="">외부 링크 현재창</a>
+        </p>
+        <p>
+            <a href="./outerlink.html" target="_blank">외부 링크 새창</a>
+        </p>
+        <b>굵은 글씨</b>
+
+        <table>
+            <tr>
+                <th rowspan="3">개인정보</th>
+                <th>이름</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>학과/번</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>연락처</th>
+                <td></td>
+            </tr>
+            <tr>
+                <th>지원분야</th>
+                <td colspan="2"></td>
+            </tr>
+
+        </table>
+    </body>
+</html>

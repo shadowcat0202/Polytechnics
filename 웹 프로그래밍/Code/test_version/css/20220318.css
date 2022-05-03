@@ -1,0 +1,13 @@
+@charse 'utf-8';
+
+body{
+    background-color: white;
+}
+h1{
+    color: blue;
+}
+
+p{
+    text-align: center;
+    color: red;
+}
