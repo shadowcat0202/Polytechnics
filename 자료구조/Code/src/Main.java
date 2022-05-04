@@ -54,6 +54,7 @@ public class Main {
         }
         return false;
     }
+
     public static boolean solution2(String str){
         Stack<Character> st = new Stack<>();
         char[] open = {'[', '{', '('};
@@ -71,6 +72,7 @@ public class Main {
 
         return true;
     }
+    //괄호문제 초안?
     public static int solution1_v1(int n, String str){
         class pair{
             char c;
@@ -95,6 +97,7 @@ public class Main {
 
         return res+1;
     }
+    //괄호 문제 개선안
     public static int solution1_v2(int n, String str){
         int open_cnt = 0;
         int res = 0;

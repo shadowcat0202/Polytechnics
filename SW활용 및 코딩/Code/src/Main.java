@@ -19,6 +19,16 @@ class pizza{
         System.out.println(sb);
     }
 }
+class AA{
+    AA(){
+        System.out.println("Class AA");
+    }
+}
+class BB extends AA{
+    BB(){
+        System.out.println("Class BB");
+    }
+}
 public class Main {
     public void dowhile(){
         char c = 'a';
@@ -68,6 +78,7 @@ public class Main {
 
 
     }
+
     public static void main(String[] args){
         pizza g = new pizza("맛있는 피자", 10);
         pizza b = new pizza("맛없는 피자", 2);
@@ -100,6 +111,9 @@ public class Main {
             c_arr[i].info();
         }
 
+        AA cc = new AA();
+        AA aa = new BB();
+        BB bb = new BB();
 
     }
 

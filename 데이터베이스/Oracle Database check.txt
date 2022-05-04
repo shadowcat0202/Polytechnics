@@ -1,0 +1,44 @@
+1. 실행 파일 찾기!
+C:\app\oracle\product\18c\bin\sqlplus.exe 실행
+
+2.
+터미널 뙇!
+$ /as sysdba
+
+다음에 접속됨:
+Oracle Database 18c Standard Edition 2 Release 18.0.0.0.0 - Production
+Version 18.3.0.0.0
+
+$ SQL> show user
+USER은 "SYS"입니다
+
+$ drop user test01 cascade;
+사용자가 삭제되었습니다
+
+3-1. 명령어를 직접 입력하기
+$ SQL> 
+create user test01 identified by test01
+default tablespace users
+temporary tablespace temp;
+
+3-2. 작성한 명령어 파일을 실행하기
+$ SQL> @c:\app\cr_user.sql
+
+4. 사용자 변경?
+$ SQL> alter user test01 default tablespace users quota unlimited on users;
+ 
+
+$ SQL> @c:\app\summit.sql
+여러 줄이 나올것이다(테이블 생성중)
+
+#데이터 추출하기============================================================
+1. DESCRIBE
+$ SQL> <describe | desc> table_name
+단순 칼럼들이 NOT NULL을 확인하기 위한 명령어
+
+2. SELECT [DISTINCT] [* | colom_name] FROM table_name;
+DISTINCT = 중복된 row제거 후 출력
+$ SQL> SELECT DISTINCT title FROM s_emp;
+
+
+
