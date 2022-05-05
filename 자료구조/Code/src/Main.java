@@ -1,4 +1,9 @@
 import java.util.Arrays;
+<<<<<<< HEAD
+=======
+import java.util.Stack;
+
+>>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
 class test{
     private int data;
     test(int i){
@@ -46,6 +51,7 @@ public class Main {
         System.out.println();
 
     }
+<<<<<<< HEAD
 
 
     public static void main(String[] args){
@@ -58,6 +64,93 @@ public class Main {
             System.out.println(ls.get(i).getData());
         }
         ls.
+=======
+    public static boolean contains(char[] arr, char find){
+        for(char c : arr){
+            if(c == find)   return true;
+        }
+        return false;
+    }
+
+    public static boolean solution2(String str){
+        Stack<Character> st = new Stack<>();
+        char[] open = {'[', '{', '('};
+        char[] close = {']', '}', ')'};
+
+        for(int i = 0; i < str.length(); i++){
+            if(contains(open, str.charAt(i))){
+                st.push(str.charAt(i));
+            }
+            else if(contains(close, str.charAt(i))){
+                if(st.peek() != str.charAt(i))  return false;
+            }
+        }
+        if(!st.isEmpty())   return false;
+
+        return true;
+    }
+    //괄호문제 초안?
+    public static int solution1_v1(int n, String str){
+        class pair{
+            char c;
+            int num;
+            pair(char c, int num){
+                this.c = c;
+                this.num = num;
+            }
+        }
+        Stack<pair> st = new Stack<pair>();
+        int open_count = 0;
+        int res = 0;
+        for(int i = 0; i < str.length();i++){
+            if(str.charAt(i) == '('){
+                st.push(new pair('(', ++open_count));
+            }else if(str.charAt(i) == ')'){
+                if(st.isEmpty())    return 0;
+                if(st.pop().num == n)  res = i;
+            }
+        }
+        if(!st.isEmpty())   return 0;
+
+        return res+1;
+    }
+    //괄호 문제 개선안
+    public static int solution1_v2(int n, String str){
+        int open_cnt = 0;
+        int res = 0;
+        Stack<Integer> st = new Stack<>();
+        for(int i= 0; i < str.length(); i++){
+            if(str.charAt(i) == '('){
+                st.push(++open_cnt);
+            }
+            else{
+                if(st.isEmpty())    return 0;
+                if(st.pop() == n)  res = i;
+            }
+        }
+        if(!st.isEmpty())   return 0;
+
+        return res+1;
+    }
+
+    public static void main(String[] args){
+        int[] input_int = {3,2,6,4};
+        String[] input_str = {
+                "()((()()))",
+                "))()(())",
+                "((())((()))(()))",
+                "(((((((())))))))"
+        };
+        for(int i = 0; i < input_str.length; i++){
+            System.out.println(solution1_v2(input_int[i], input_str[i]));
+        }
+//        System.out.println(solution1_v2(input_int[0], input_str[0]));
+
+
+//        String input = "{(A+B)-3}*5 + [{cos(x+y)+7}-1]*4";
+//
+//        System.out.println(solution2(input));
+>>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
 
 
     }

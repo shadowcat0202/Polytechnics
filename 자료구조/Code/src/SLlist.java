@@ -57,6 +57,7 @@ public class SLlist<T>{
     }
     
     //뒤에삭제?
+<<<<<<< HEAD
     public T remove(){
         if(this.head == null){}
     }
@@ -71,6 +72,22 @@ public class SLlist<T>{
 
         }
     }
+=======
+    public void remove(){
+    }
+//    public T remove(int index){
+//        if(index < 0 || index >= this.size) throw new IndexOutOfBoundsException();
+//        if(index == this.size-1){
+//            Node rmNode = this.tail;
+//            this.tail.data = null;
+//            this.tail.next = null;
+//            this.tail = getNode(index-1);
+//            return rmNode.data;
+//
+//        }
+//        return T;
+//    }
+>>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
     
     //index위치 반환
     public T get(int index){

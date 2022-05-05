@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
     <head>
@@ -296,4 +297,304 @@
             </div>
         </details>
     </body>
+=======
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8">
+        <title>lalalalala</title>
+        <style>
+            ul{list-style: none;}
+            li{line-height: 30px;}
+            label{
+                width: 100px;
+                float:left;
+            }
+        </style>
+    </head>
+    <body>
+        <details>
+            <summary>순서 리스트</summary>
+            <h1>레드향</h1>
+            <p>껍질에 붉은 빛이 돌아 레드향이라 불린다.</p>
+            <p>레드향은 한라봉과 귤을 교배한 것으로 <br>일반 귤보다 2~3배 크고, 과육이 붉고 통통하다.</p>
+            <p>비타민 C와 비타민 P가 풍부해<br> 혈액순환, 감기예방 등에 좋은 것으로 알려져 있다.</p>
+            <h2>레드향 샐러드 레시피</h2>
+            <h2>상품 구성</h2>
+            <hr>
+            <blockquote>인용 내용 다른 텍스트보다 안으로 들여 써짐</blockquote>
+            
+            <p>기본형: <strong>중요한 내용1</strong>, <b>중요한 내용2</b></p>   <!--strong은 강조 b는 그냥 굵게-->
+    
+            <hr>
+            <h2>레드향 샐러드 레시피</h2>
+            <p><b>재료:</b>레드향 1개, 아보카도 1개, 토마토 1개, 샐러드 채소 30g</p>
+            <p><b>드레싱:</b>올리브유 1큰술, 레몬즙 2큰술, 꿀 1큰술, 소금 약간</p>
+            <hr>
+            <ol>
+                <li>샐러드 채소를 씻고 물기를 제거한 후 준비합니다.</li>
+                <li>레드향과 아보카도, 토마토를 먹기 좋은 크기를 썰어둡니다.</li>
+                <li>드레싱 재료를 믹서에 갈아줍니다.</li>
+                <li>볼에 샐러드 채소와 썰어 둔 레드향, 아보카도, 토마토를 넣고 드레싱을 뿌리면 끝!</li>
+            </ol>
+            <ul>
+                <li>샐러드 채소를 씻고 물기를 제거한 후 준비합니다.</li>
+                <li>레드향과 아보카도, 토마토를 먹기 좋은 크기를 썰어둡니다.</li>
+                <li>드레싱 재료를 믹서에 갈아줍니다.</li>
+                <li>볼에 샐러드 채소와 썰어 둔 레드향, 아보카도, 토마토를 넣고 드레싱을 뿌리면 끝!</li>
+            </ul>
+        </details>
+        
+        <hr>
+        <details>
+            <summary>목록 만들기</summary>
+        <dl>
+            <dt>이름(제목)1</dt>
+            <dd>값(설명)1</dd>
+            <dt>이름(제목)2</dt>
+            <dd>값(설명)2_1</dd>
+            <dd>값(설명)2_2</dd>
+        </dl>
+        </details>
+        
+
+        <hr>
+        <details>
+            <summary>테이블 만들기</summary>
+            <table border="1">
+                <caption>선물용 가정용 상품 구성</caption>            
+                <tr>    <!--row-->
+                    <th>용도</th>   <!--colum-->
+                    <th>중량</th>
+                    <th>갯수</th>
+                    <th>가격</th>
+                </tr>
+    
+                <tr>    <!--row-->
+                    <th rowspan="2">선물용</th>   <!--colum 병합-->  
+                    <th>3kg</th>
+                    <th>11~16과</th>
+                    <th>35,000원</th>
+                </tr>
+                <tr>
+                    <th colspan="3">5kg</th>
+                    <th>18~26과</th>
+                    <th>52,000원</th>
+                </tr>
+                <tr>
+                    <th rowspan="2">가정용</th>   <!--colum-->
+                    <th>3kg</th>
+                    <th>11~16과</th>
+                    <th>30,000원</th>
+                </tr>
+                <tr>
+                    <th>5kg</th>
+                    <th>18~26과</th>
+                    <th>47,000원</th>
+                </tr>
+            </table>
+        </details>
+        
+        <hr>
+        <details>
+            <summary>이미지 삽입하기</summary>
+            <p><h1><b>쓰다듬어 볼텐가? 나를 눌러보게나</b></p></h1>
+        <a href="../img_collect/시바.jpg" alt="시바 없다">
+            <img src="./웃는 시바.jpg" alt="시바 없다">
+        </a>
+        
+        <!--
+        <p><b>img_collect 경로 안에 있는 50% 큰 시바</b></p>
+        <img src="../img_collect/시바.jpg" alt="시바 없다" width="50%">
+        -->
+        </details>
+        <hr>
+        <details>
+            <summary>웹 문서에 PDF 노래 삽입하기</summary>
+            <object width="500" height="400" data="../PDF_collect/기계학습_1.Introduction.pdf"></object>
+        <p><embed width="500" height="80" src="../MP3_collect/y2mate.com - Sia  Snowman 한국어 가사해석자막.mp3" controls></p>
+              
+        </details>
+        <hr>
+       <details>
+            <summary>로그인 폼</summary>
+            <form name="로그인">
+                <fieldset>
+                    <legend>로그인</legend>
+                    <input type="hidden" value="사이트를 통한 직접 로그인">
+                    <ul>
+                        <li>
+                            <label for="user-id">아이디:</label>
+                            <input type="text" id="user-id" size="10" >
+                        </li>
+                        <li>
+                            <label for="user-password">비밀번호:</label>
+                            <input type="password" id="user-password" size="10" >
+                        </li>
+                        <li>
+                            <input type="submit" value="확인" style="float:right">
+                        </li>
+                    </ul>
+                    
+                    
+                    
+                </fieldset>
+            </form>
+                            
+       </details>
+
+       <details>
+            <summary>배송정보 입력</summary>
+
+            <form name="배송정보">
+                <fieldset>
+                    <legend>배송정보</legend>
+                    <ul id="shipping_info">
+                        <li>
+                            <label for="user-name">이름</label>
+                            <input type="text" id="user-name" autofocus>
+                        </li>
+                        <li>
+                            <label for="address">배송주소</label>
+                            <input type="text" id="address" autofocus>
+                        </li>
+                        <li>
+                            <label for="email">이메일</label>
+                            <input type="email" id="email" autofocus>
+                        </li>
+                        <li>
+                            <label for="phone">연락처</label>
+                            <input type="text" id="phone" autofocus>
+                        </li>
+                        <li>
+                            <label for="calendar">배송 지정</label>
+                            <input type="date">
+                        </li>
+                        <li>
+                            <label for="memo">메모</label>
+                            <textarea id="memo" cols="40" rows="4"></textarea>
+                        </li>
+                        
+                    </ul>
+                    <div style="float:right">                    
+                        <input type="reset" value="취소하기">
+                        <input type="submit" value="주문하기">
+                    </div>    
+                </fieldset>    
+                                          
+           </form>           
+       </details>
+
+       <details>
+           <summary>상품정보 입력</summary>
+           <form>
+               <fieldset>
+                <legend>상품 선택</legend>
+                <p><b>주문할 상품을 선택해 주세요</b></p>      
+                <ul>
+                    <lo>
+                        <!--이렇게 쓰면 체크박스와 텍스트의 순서가 바뀐다
+                            <input type="checkbox" id="s3">
+                        <label for="s3">선물용3kg</label>
+                        -->
+                        <li>
+                            <input  type="checkbox"
+                                    name="purpose"
+                                    value="선물용"
+                                    onclick="checkOnlyOne(this)"/>선물용3kg
+                            <input  type="checkbox"
+                                    name="purpose"
+                                    value="선물용"
+                                    onclick="checkOnlyOne(this)"/>선물용3kg        
+                            <input  type="checkbox"
+                                    name="purpose"
+                                    value="선물용"
+                                    onclick="checkOnlyOne(this)"/>가정용3kg     
+                            <input  type="checkbox"
+                                    name="purpose"
+                                    value="선물용"
+                                    onclick="checkOnlyOne(this)"/>가정용5kg
+                            <script>
+                                function checkOnlyOne(element){
+                                    const checkbox = document.getElementsByName("purpose");
+                                    checkbox.forEach((cb) => {
+                                        cb.checked = false;
+                                    })
+                                    element.checked = true;    
+                                }                               
+                            </script>
+                        </li>                       
+                    </lo>
+                </ul>
+                <ul>
+                    <li>
+                        <span id="number_tag" style="visibility: hidden"><input type="number" min="1" max="10">개 (최대 10개)</span>
+                    </li>
+                    <li>
+
+                    </li>
+                </ul>
+                <br>
+                    <div id="package" style="visibility: visible">
+                        <p><b>포장 선택</b></p>
+                        <ul>                            
+                            <lo>
+                                <label><input type="radio" name="gift" value="yes">선물포장</label>
+                            </lo>
+                            <lo>
+                                <label><input type="radio" name="gift" value="no">선물포장 안함</label>
+                            </lo>                    
+                        </ul>       
+                    </div>
+                
+               </fieldset> 
+               <fieldset>
+                    <legend>달력</legend>
+                    <h1>날짜 정하기</h1>
+                    <div>
+                        <p><h2>type="date"</h2></p>
+                        <input type="date">
+                    </div>
+                    <div>
+                        <p><h2>type="month"</h2></p>
+                        <input type="month">
+                    </div>
+                    <div>
+                        <p><h2>type="week"</h2></p>
+                        <input type="week">
+                    </div>                   
+               </fieldset>              
+           </form>
+        </details>
+        <details>
+            <legend>세부정보 창 열기</legend>
+            <form>
+                <input type="button" value="공지확인 창 열기" onclick="window.open('notice.html')">
+            </form>
+        </details>
+
+        <details>
+            <summary>자바스크립트 사용</summary>
+            <div>
+                <p><h1 id="heading1">자바스크립트(외부)</h1></p>
+                <p id="text">위 텍스트를 클릭해 보세요</p>
+                <script src="../javascript/change-color.js"></script>
+            </div>
+            <div>
+                <p><h1 id="heading2">자바스크립트(내부)</h1></p>
+                <p id="text">위 텍스트를 클릭해 보세요</p>
+                <script>
+                    var heading1 = document.querySelector('#heading2');
+                    heading1.onclick = function(){
+                        if (heading1.style.color == "blue"){
+                            heading1.style.color = "black"
+                        }else{
+                            heading1.style.color = "blue"
+                        };
+                    };
+                </script>
+            </div>
+        </details>
+    </body>
+>>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
 </html>
