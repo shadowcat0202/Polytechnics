@@ -1,4 +1,16 @@
 Active shape models
-스팩부터 다시 잡아야한다
+부주의에 대한 명확한 판단 기준 결정하기
+알림 빈도 최적화(너무 과하게 알림을 보내지 않도록 최소한의 알림만)(요구사항 중 한개)
 
-B9
+1. 모델 제작
+고병철 교수님 lab. https://cvpr.kmu.ac.kr/
+얼굴 랜드마크 https://cvpr.kmu.ac.kr/FADID.htm
+Download FADID Test Database(Daytime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Test_daytime.zip]
+Download FADID Training Database(Daytime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Train_daytime.zip]
+Download FADID Test Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Test_nighttime.zip]
+Download FADID Training Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Train_nighttime.zip]
+ 
+
+2. 후처리
+
+3. 임베딩
