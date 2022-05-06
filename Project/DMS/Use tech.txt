@@ -10,6 +10,13 @@ Download FADID Training Database(Daytime) [https://cvpr.kmu.ac.kr/Dataset_Facial
 Download FADID Test Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Test_nighttime.zip]
 Download FADID Training Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Train_nighttime.zip]
  
+opencv 설치 pip install opencv-python
+
+dilb설치 
+pip install cmake
+pip install opencv-contrib-python dlib
+한국인이 참기 힘든 기다림이 기다린닷
+
 
 2. 후처리
 
