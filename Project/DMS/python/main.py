@@ -39,9 +39,9 @@ def calculate_EAR(eye):
 
 
 def blinked(EAR):
-    if EAR > 0.28:
+    if EAR > 0.25:
         return 2
-    elif 0.25 < EAR <= 0.28:
+    elif 0.21 < EAR <= 0.25:
         return 1
     else:
         return 0
@@ -75,21 +75,20 @@ def eyeStatusCheck(left, right, st):
         status["sleep"] += 1
         status["drowsy"] = 0
         status["active"] = 0
-        if status["sleep"] > 4.0:
+        if status["sleep"] > 6.0:
             st = "Sleeping"
     elif left == 1 or right == 1:
         status["sleep"] = 0
         status["drowsy"] += 1
         status["active"] = 0
-        if status["drowsy"] > 4.0:
+        if status["drowsy"] > 6.0:
             st = "Drowsy"
     else:
         status["sleep"] = 0
         status["drowsy"] = 0
         status["active"] += 1
-        if status["active"] > 5.0:
+        if status["active"] > 6.0:
             st = "Active"
-
     cv2.putText(img_frame, st, (face.left(), face.top()), cv2.FONT_HERSHEY_SIMPLEX, 1.2, RED, 2)
 
 
@@ -100,8 +99,8 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')
 
 # 동영상 or 카메라
-video = cv2.VideoCapture('./dataset/close_test1.mp4')
-# cam = cv2.VideoCapture(0)   # 나중에 카메라로 셋팅하고 싶다면 이렇게
+# video = cv2.VideoCapture('./dataset/close_test2.mp4')
+video = cv2.VideoCapture(0)   # 나중에 카메라로 셋팅하고 싶다면 이렇게
 
 # 영상 크기 변환 -> 작동이 안됨
 # print(f"bf{video.get(cv2.CAP_PROP_FRAME_WIDTH)}X{video.get(cv2.CAP_PROP_FRAME_HEIGHT)}")
@@ -136,7 +135,7 @@ while True:
     ret, img_frame = video.read()  # 동영상 or 웹캠을 프레임 단위로 자름
     # 읽을 프레임이 없는 경우 종료
     if not ret: break
-
+    # cv2.imshow("test", img_frame)
     # 입력받은 영상으로부터 gray 스케일로 변환
     img_gray = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY)
 
@@ -153,7 +152,8 @@ while True:
     # img_gray = cv2.resize(img_gray, (720, 720), interpolation=cv2.INTER_CUBIC)
 
     # 업 셈플링 횟수(이미지를 증가?)
-    faces = detector(img_gray)  # detector(img_gray) 도 사용 가능
+    # dlib.get_frontal_face_detector(처리할 video_frame [, n]) # n 만큼 업셈플링-> 영상의 길이를 늘린다(추가한다)
+    faces = detector(img_gray, 0)  # detector(img_gray) 도 사용 가능
 
     # 검출된 얼굴 갯수만큼 반복
     for face in faces:
@@ -211,7 +211,7 @@ while True:
         # 점 찍어주기
         for i, pt in enumerate(list_points[index]):
             pt_pos = (pt[0], pt[1])
-            cv2.circle(img_frame, pt_pos, 1, GREEN, -1)
+            cv2.circle(img_frame, pt_pos, 2, GREEN, -1)
 
         # 얼굴 네모
         cv2.rectangle(img_frame, (face.left(), face.top()), (face.right(), face.bottom()), GREEN, 1)
