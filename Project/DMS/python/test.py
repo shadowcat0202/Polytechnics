@@ -5,7 +5,6 @@ import functools
 import cv2, dlib
 import numpy as np
 import time  # 시간 측정
-
 now_status = "Active"
 status = {"sleep": 0, "drowsy": 0, "active": 0}
 RED = (0, 0, 255)
@@ -24,6 +23,8 @@ FACE_OUTLINE = list(range(0, 17))
 NOTHING = list(range(0, 0))
 
 
+
+
 # (두 점 사이의 유클리드 거리 계산)
 def distance(p1, p2):
     return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** (1 / 2)
@@ -38,13 +39,14 @@ def calculate_EAR(eye):
     return (A + B) / (2.0 * C)
 
 
-def blinked(EAR):
-    if EAR > 0.28:
-        return 2
-    elif 0.25 < EAR <= 0.28:
-        return 1
-    else:
-        return 0
+def light_removing(frame) :
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    lab = cv2.cvtColor(frame, cv2.COLOR_BGR2LAB)
+    L = lab[:, :, 0]
+    med_L = cv2.medianBlur(L, 99)   # median filter
+    invert_L = cv2.bitwise_not(med_L)   # invert lightness
+    composed = cv2.addWeighted(gray, 0.75, invert_L, 0.25, 0)
+    return L, composed
 
 
 def counter(func):
@@ -75,24 +77,24 @@ def eyeStatusCheck(left, right, st):
         status["sleep"] += 1
         status["drowsy"] = 0
         status["active"] = 0
-        if status["sleep"] > 4.0:
+        if status["sleep"] > 5.0:
             st = "Sleeping"
     elif left == 1 or right == 1:
         status["sleep"] = 0
         status["drowsy"] += 1
         status["active"] = 0
-        if status["drowsy"] > 4.0:
+        if status["drowsy"] > 5.0:
             st = "Drowsy"
     else:
         status["sleep"] = 0
         status["drowsy"] = 0
         status["active"] += 1
-        if status["active"] > 5.0:
-            st = "Active"
+        if status["active"] > 2.0:
+            st= "Active"
 
     cv2.putText(img_frame, st, (face.left(), face.top()), cv2.FONT_HERSHEY_SIMPLEX, 1.2, RED, 2)
 
-
+# start ==================================================================================
 print("loading facial landmark predictor...")
 # dlib에서 기본적으로 제공하는 face_object_detector 객체 생성
 detector = dlib.get_frontal_face_detector()
@@ -100,7 +102,7 @@ detector = dlib.get_frontal_face_detector()
 predictor = dlib.shape_predictor('./shape_predictor_68_face_landmarks.dat')
 
 # 동영상 or 카메라
-video = cv2.VideoCapture('./dataset/close_test1.mp4')
+video = cv2.VideoCapture('./dataset/move_close_test.mp4')
 # cam = cv2.VideoCapture(0)   # 나중에 카메라로 셋팅하고 싶다면 이렇게
 
 # 영상 크기 변환 -> 작동이 안됨
@@ -130,7 +132,7 @@ video = cv2.VideoCapture('./dataset/close_test1.mp4')
 #     if cv2.waitKey(1) == 'q':
 #         break
 
-index = ALL  # 초기값
+index = ALL    # 초기값
 # https://github.com/woorimlee/drowsiness-detection # 좀더 자세한 부분
 while True:
     ret, img_frame = video.read()  # 동영상 or 웹캠을 프레임 단위로 자름
@@ -138,7 +140,8 @@ while True:
     if not ret: break
 
     # 입력받은 영상으로부터 gray 스케일로 변환
-    img_gray = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY)
+    # img_gray = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY)
+    L, gray = light_removing(img_frame)
 
     # resize : 이미지 크기 변환
     # 1) 변환할 이미지
@@ -152,12 +155,13 @@ while True:
     #   - cv2.INTER_AREA : 픽셀 영역 관계를 이용한 resampling 방법으로 이미지 축소시 효과적
     # img_gray = cv2.resize(img_gray, (720, 720), interpolation=cv2.INTER_CUBIC)
 
+
     # 업 셈플링 횟수(이미지를 증가?)
-    faces = detector(img_gray)  # detector(img_gray) 도 사용 가능
+    faces = detector(gray, 0)  # detector(img_gray) 도 사용 가능
 
     # 검출된 얼굴 갯수만큼 반복
     for face in faces:
-        shape = predictor(img_gray, face)  # 얼굴에서 68개 점 찾기
+        shape = predictor(gray, face)  # 얼굴에서 68개 점 찾기
 
         # 검출된 랜드마크를 리스트에 저장
         list_points = []
@@ -171,6 +175,7 @@ while True:
         left_EAR = calculate_EAR(list_points[LEFT_EYE])
         right_EAR = calculate_EAR(list_points[RIGHT_EYE])
 
+
         # version 1==================================================
         # EAR = (left_EAR + right_EAR) / 2
         # EAR = round(EAR, 2)
@@ -183,7 +188,7 @@ while True:
 
         # version 2==================================================
         # print(f"{left_EAR}, {right_EAR}")
-        eyeStatusCheck(blinked(left_EAR), blinked(right_EAR), now_status)
+        eyeStatusCheck(left_EAR, right_EAR, now_status)
 
         key = cv2.waitKey(1)
         if key == ord('q'):

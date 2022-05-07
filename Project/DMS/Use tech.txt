@@ -10,6 +10,8 @@ Download FADID Training Database(Daytime) [https://cvpr.kmu.ac.kr/Dataset_Facial
 Download FADID Test Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Test_nighttime.zip]
 Download FADID Training Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Train_nighttime.zip]
  
+ https://ys-cs17.tistory.com/24	졸음 감지 학습
+ 
 opencv 설치 pip install opencv-python
 
 dilb설치 
@@ -19,6 +21,7 @@ pip install opencv-contrib-python dlib
 
 
 2. 후처리
+
 eye close 판단 로직 베이스 작성 (완료)
 
 
