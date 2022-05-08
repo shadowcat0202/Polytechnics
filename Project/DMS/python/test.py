@@ -1,13 +1,15 @@
-# 학습 모델 다운로드
-# http://dlib.net/files/shape_predictor_68_face_landmarks.dat.bz2   반디집으로 풀 수 있다
-
-import functools
 import cv2, dlib
 import numpy as np
+import time
 
 RED = (0, 0, 255)
 GREEN = (0, 255, 0)
 BLUE = (255, 0, 0)
+YELLOW = (0, 255, 255)
+SKYBLUE = (255, 255, 0)
+PURPLE = (255, 0, 255)
+WHITE = (255, 255, 255)
+BLACK = (0, 0, 0)
 
 ALL = list(range(0, 68))
 RIGHT_EYEBROW = list(range(17, 22))
@@ -19,6 +21,18 @@ MOUTH_OUTLINE = list(range(48, 61))
 MOUTH_INLINE = list(range(51, 68))
 FACE_OUTLINE = list(range(0, 17))
 NOTHING = list(range(0, 0))
+
+# 100프레임을 미리 저장해서 눈의 비율의 최대치등을 계산
+ER_array_ready = False
+ER_array_ready_size = 100
+left_eye_ER_array = []
+right_eye_ER_array = []
+MAX_ER_left = 0
+MAX_ER_right = 0
+eye_ratio_limit = 0.00
+
+count_time = [0, 0]
+program_switch = False
 
 
 # (두 점 사이의 유클리드 거리 계산)
@@ -35,7 +49,7 @@ def ER_ratio(eye_point):
     return (A + B) / (2.0 * C)
 
 
-# 얼굴이 돌아갔을때 인식불가 방지
+# 얼굴이 기울었을때 인식률을 높이기 위한 detection_img의 재 정렬을 위한 좌표 계산 함수
 def rotate(brx, bry):
     crx = brx - midx
     cry = bry - midy
@@ -43,7 +57,7 @@ def rotate(brx, bry):
     ary = np.sin(-angle) * crx + np.cos(-angle) * cry
     rx = int(arx + midx)
     ry = int(ary + midy)
-    return (rx, ry)
+    return rx, ry
 
 
 # 눈 비율 계산
@@ -57,138 +71,167 @@ def calculate_EAR(eye):
 
 face_detector = dlib.get_frontal_face_detector()
 shape_predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
-print("loading facial landmark predictor...")
+print("stub loading facial landmark predictor...")
 video_capture = cv2.VideoCapture(0)  # 카메라
-# video_capture = cv2.VideoCapture("./dataset/close_test2.mp4") # 동영상
+index = NOTHING
 
-# http://www.ntrexgo.com/archives/36038
-# main start ==================================================================
 if video_capture.isOpened():
-    print("video_capture is ready")
+    print("camera is ready")
     while True:
-        ret, frame = video_capture.read()  # 동영상 or 웹캠을 프레임 단위로 자름
+        ret, frame = video_capture.read()
         if not ret: break
-        if cv2.waitKey(1) and 0xFF == ord('q'): break  # cv2.watiKey(1) 없으면(종료 하는 부분 없으면) cv2.imshow() 안나옴
 
-        # frame = cv2.flip(frame, 1)  # cv2.flip(frame, [1(좌우) | 0(상하)])   # 지금은 딱히 필요 없으니 패스
-        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # 흑백 전환
-        # createCLAHE를 사용함으로서 정확한 명도 변환
+        key = cv2.waitKey(1)
+        if key == ord('q'):
+            break
+        elif key == ord("1"):
+            index = ALL
+        elif key == ord("2"):
+            index = LEFT_EYEBROW + RIGHT_EYEBROW
+        elif key == ord("3"):
+            index = LEFT_EYE + RIGHT_EYE
+        elif key == ord("4"):
+            index = NOSE
+        elif key == ord("5"):
+            index = MOUTH_OUTLINE + MOUTH_INLINE
+        elif key == ord("6"):
+            index = FACE_OUTLINE
+        elif key == ord("7"):
+            index = NOTHING
+
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(clipLimit=2.0,
-                                tileGridSize=(8, 8))  # CLAHE 객체 생성 # https://m.blog.naver.com/samsjang/220543360864
-        clahe_image = clahe.apply(gray)  # 밝기가(0~255)를 균등하게 분포하도록 변경 후 적용
+                                tileGridSize=(8, 8))
+        clahe_image = clahe.apply(gray)
         detection = face_detector(clahe_image)
 
-        for d in detection:
-            shape = shape_predictor(clahe_image, d)  # 가공된 프레임에서 얼굴 랜드마크 작성
-            # 랜드마크 추출
-            # landmarks = []
-            # for p in shape.parts():
-            #     landmarks.append([p.x, p.y])
-            # landmarks = np.array(landmarks)
+        if detection:  # 얼굴을 detection 했을때
+            for d in detection:
+                shape = shape_predictor(clahe_image, d)
+                landmarks = np.array(list([p.x, p.y] for p in shape.parts()))
 
-            # 랜드마크 점 그리기
-            # for pt in landmarks:
-            #     landmark = (pt[0], pt[1])
-            #     cv2.circle(frame, landmark, 2, GREEN, -1)
+                # 점 or (선 그어주기 미완선)
+                # for i, pt in enumerate(landmarks[index]):
+                #     cv2.circle(frame, (pt[0], pt[1]), 1, GREEN, -1)
+                #     # 선으로 하고 싶은데 모르겠다
+                #     # bf = i % len(landmarks[index])
+                #     # af = (i + 1) % len(landmarks[index])
+                #     # cv2.line(frame,
+                #     #          (pt[bf][0], pt[bf][1]),
+                #     #          (pt[af][0], pt[af][1]),
+                #     #          GREEN, 1)
+                # 점 찍어주기
+                for pos in landmarks[index]:
+                    cv2.circle(frame, (pos[0], pos[1]), 1, GREEN, -1)
 
-            # cv2.rectangle(원하는frame, (p1.x, p1.y), (p2.x, p2.y), 색상, 두께)
-            # cv2.rectangle(frame, (d.left(), d.top()), (d.right(), d.bottom()), GREEN, 1)
-            # cv2.imshow("frame", frame)
+                left_eye_landmark = landmarks[LEFT_EYE]
+                right_eye_landmark = landmarks[RIGHT_EYE]
 
-            # left_eye = landmarks[LEFT_EYE]
-            # right_eye = landmarks[RIGHT_EYE]
-            #
-            # left_eye_ER = ER_ratio(left_eye)
-            # right_eye_ER = ER_ratio(right_eye)
+                # ER_array, eye_ratio_limit 갱신
+                left_eye_ER_array.append(ER_ratio(left_eye_landmark))
+                right_eye_ER_array.append(ER_ratio(right_eye_landmark))
+                if ER_array_ready:
+                    if left_eye_ER_array[0] == MAX_ER_left:
+                        del left_eye_ER_array[0]
+                        MAX_ER_left = max(left_eye_ER_array)
+                    else:
+                        del left_eye_ER_array[0]
+                        if left_eye_ER_array[-1] > MAX_ER_left:
+                            MAX_ER_left = left_eye_ER_array[-1]
 
-            # 얼굴을 인식한 사각형의 테두리 좌표
-            x = d.left()
-            y = d.top()
-            x1 = d.right()
-            y1 = d.bottom()
+                    if right_eye_ER_array[0] == MAX_ER_right:
+                        del right_eye_ER_array[0]
+                        MAX_ER_right = max(right_eye_ER_array)
+                    else:
+                        del right_eye_ER_array[0]
+                        if right_eye_ER_array[-1] > MAX_ER_right:
+                            MAX_ER_right = right_eye_ER_array[-1]
+                    eye_ratio_limit = (MAX_ER_left + MAX_ER_right) / 2 * 0.65  # 이 수치는 어떤식으로 구했는지는 모름
 
-            # 얼굴 박스보다 더 넓은 박스
-            bdx = x - (x1 - x) / 2
-            bdy = y - (y1 - y) / 2
-            bdx1 = x1 + (x1 - x) / 2
-            bdy1 = y1 + (y1 - y) / 2
+                else:
+                    if len(left_eye_ER_array) == ER_array_ready_size:
+                        ER_array_ready = True
+                        print("ER data ready!")
 
-            # 박스에서 가운데 점
-            midx = (x + x1) / 2
-            midy = (y + y1) / 2
+                # face detection square 값 저장
+                x = d.left()
+                y = d.top()
+                x1 = d.right()
+                y1 = d.bottom()
+                # face detection square border 값 저장(여유 공간 좌표)
+                bdx = x - (x1 - x) / 2
+                bdy = y - (y1 - y) / 2
+                bdx1 = x1 + (x1 - x) / 2
+                bdy1 = y1 + (y1 - y) / 2
+                # face detection square의 가운데 값
+                midx = (x + x1) / 2
+                midy = (y + y1) / 2
 
-            # cv2.rectangle(frame, (int(bdx), int(bdy)), (int(bdx1), int(bdy1)), RED, 1)
-            # cv2.imshow("big", frame)
-            # 눈 양 끝점 좌표
-            left_eye_x = shape.part(36).x
-            left_eye_y = shape.part(36).y
-            right_eye_x = shape.part(45).x
-            right_eye_y = shape.part(45).y
+                rex = shape.part(45).x
+                rey = shape.part(45).y
+                lex = shape.part(36).x
+                ley = shape.part(36).y
 
-            # 양 끝점 선 긋기(영상을 보고 싶을때 하는 라인)
-            # cv2.line(frame, (left_eye_x, left_eye_y),(right_eye_x, right_eye_y), RED, 2)
-            # cv2.imshow("line", frame)
+                # 눈의 양끝점 좌표 설정 및 눈 사이 가운데 점 설정
+                mex = int(lex + (rex - lex) / 2)
+                mey = int(ley + (rey - ley) / 2)
+                # tan 값 계산
+                tan = (ley - mey) / (mex - lex)
+                # 각도 계산
+                angle = np.arctan(tan)
+                degree = np.degrees(angle)
 
-            # 눈 양 끝점 중앙값
-            min_eye_x = int(left_eye_x + (right_eye_x - left_eye_x) / 2)
-            min_eye_y = int(left_eye_y + (right_eye_y - left_eye_y) / 2)
+                # detection 좌표 회전
+                rsd_1 = rotate(x, y)
+                rsd_2 = rotate(x1, y)
+                rsd_3 = rotate(x, y1)
+                rsd_4 = rotate(x1, y1)
+                # border 좌표 회전
+                d2_1 = rotate(bdx, bdy)
+                d2_2 = rotate(bdx1, bdy)
+                d2_3 = rotate(bdx, bdy1)
+                d2_4 = rotate(bdx1, bdy1)
 
-            # tan 값 계산
-            tan_x = min_eye_x - left_eye_x
-            tan_y = left_eye_y - min_eye_y
-            # 각도 계산
-            angle = np.arctan(tan_y / tan_x)
-            degree = np.degrees(angle)
+                # 수치 보고 싶을때
+                cv2.putText(frame, "left:{:.2f}".format(MAX_ER_left), (450, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
+                cv2.putText(frame, "right:{:.2f}".format(MAX_ER_right), (450, 60), cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
+                cv2.putText(frame, "limit:{:.2f}".format(eye_ratio_limit), (450, 90), cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
+                cv2.putText(frame, "limit:{:.2f}".format(degree), (10, 430), cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
+                # 기존 좌표를 회전된 좌표에 매칭, 새로운 창으로 프린트
+                pts1 = np.float32([[d2_1[0], d2_1[1]], [d2_2[0], d2_2[1]], [d2_3[0], d2_3[1]], [d2_4[0], d2_4[1]]])
+                pts2 = np.float32([[0, 0], [400, 0], [0, 400], [400, 400]])
+                M = cv2.getPerspectiveTransform(pts1, pts2)
+                # 원근 변환 cv2.warpPerspective(origin_frame, 변환 프레임, (width, height))
+                dst_frame = cv2.warpPerspective(frame, M, (400, 400))
 
-            # 좌표 회전(앞에서 구한 각도 만큼 회전)
-            rsd_1 = rotate(x, y)
-            rsd_2 = rotate(x1, y)
-            rsd_3 = rotate(x, y1)
-            rsd_4 = rotate(x1, y1)
-            d2_1 = rotate(bdx, bdy)
-            d2_2 = rotate(bdx1, bdy)
-            d2_3 = rotate(bdx, bdy1)
-            d2_4 = rotate(bdx1, bdy1)
+                d2gray = cv2.cvtColor(dst_frame, cv2.COLOR_RGB2GRAY)
+                d2clahe_image = clahe.apply(d2gray)
+                d2detection = face_detector(d2clahe_image)
 
-            # 회전된 좌표를 이용하여 새로운 창으로 프린트
-            pts1 = np.float32([[d2_1[0], d2_1[1]], [d2_2[0], d2_2[1]], [d2_3[0], d2_3[1]], [d2_4[0], d2_4[1]]])
-            pts2 = np.float32([[0, 0], [400, 0], [0, 400], [400, 400]])
-            M = cv2.getPerspectiveTransform(pts1, pts2)  # 기하학적 변환
-            # 원근 변환 cv2.warpPerspective(origin_frame, 변환 프레임, (width, height))
-            dst_frame = cv2.warpPerspective(frame, M, (400, 400))
-            d2gray = cv2.cvtColor(dst_frame, cv2.COLOR_BGR2GRAY)
-            d2clahe_image = clahe.apply(d2gray)
-            d2detections = face_detector(d2clahe_image)
+                # 재 정렬한 img에서 판단
+                if d2detection:
+                    for d2 in d2detection:
+                        xx = d2.left()
+                        yy = d2.top()
+                        xx1 = d2.right()
+                        yy1 = d2.bottom()
 
-            # 회전시킨 d2에서 얼굴 인식 진행
-            for d2 in d2detections:
-                xx = d2.left()
-                yy = d2.top()
-                xx1 = d2.right()
-                yy1 = d2.bottom()
-                d2shape = shape_predictor(d2clahe_image, d2)
+                        # 얼굴 랜드마크 찾기
+                        d2shape = shape_predictor(d2clahe_image, d2)
+                        cv2.rectangle(dst_frame, (xx, yy), (xx1, yy1), GREEN, 1)
+                        cv2.putText(dst_frame, "content", (xx, yy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                    cv2.imshow("dst_frame", dst_frame)
 
-                cv2.rectangle(dst_frame, (xx, yy), (xx1, yy1), GREEN, 1)
-                # 눈 선따라 이어주기
-                # for i in range(36, 41):
-                #     cv2.line(dst_frame, (d2shape.part(i).x, d2shape.part(i).y),
-                #              (d2shape.part(i + 1).x, d2shape.part(i + 1).y),
-                #              GREEN, 1)
-                # for i in range(42, 47):
-                #     cv2.line(dst_frame, (d2shape.part(i).x, d2shape.part(i).y),
-                #              (d2shape.part(i + 1).x, d2shape.part(i + 1).y),
-                #              GREEN, 1)
-                landmarks = []
-                for p in d2shape.parts():
-                    landmarks.append([p.x, p.y])
-                landmarks = np.array(landmarks)
 
-                left_eye = landmarks[LEFT_EYE]
-                right_eye = landmarks[RIGHT_EYE]
-                left_ER = ER_ratio(left_eye)
-                right_ER = ER_ratio(right_eye)
+        else:  # 얼굴을 detection 못했을때
+            pass
+        # 점 찍어주기
 
-            cv2.imshow("dst_frame", dst_frame)
+        cv2.imshow("test", frame)
 
-    video_capture.release()
-    cv2.destroyAllWindows()
+cv2.destroyAllWindows()
+video_capture.release()
