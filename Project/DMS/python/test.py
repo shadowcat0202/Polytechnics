@@ -1,3 +1,6 @@
+# http://www.ntrexgo.com/archives/36038
+import random
+
 import cv2, dlib
 import numpy as np
 import time
@@ -33,6 +36,10 @@ eye_ratio_limit = 0.00
 
 count_time = [0, 0]
 program_switch = False
+
+open_eye = False
+eye_close_count = 0
+driving_state_step = [15, 35]
 
 
 # (두 점 사이의 유클리드 거리 계산)
@@ -80,7 +87,8 @@ if video_capture.isOpened():
     while True:
         ret, frame = video_capture.read()
         if not ret: break
-
+        
+        # 얼굴 랜드마크 종류별로 변경
         key = cv2.waitKey(1)
         if key == ord('q'):
             break
@@ -99,11 +107,12 @@ if video_capture.isOpened():
         elif key == ord("7"):
             index = NOTHING
 
+        frame = cv2.flip(frame, 1)  # cv2.flip(frame, [0 | 1]) 0 상하, 1 좌우 반전
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(clipLimit=2.0,
                                 tileGridSize=(8, 8))
         clahe_image = clahe.apply(gray)
-        detection = face_detector(clahe_image)
+        detection = face_detector(clahe_image, 0)
 
         if detection:  # 얼굴을 detection 했을때
             for d in detection:
@@ -131,21 +140,27 @@ if video_capture.isOpened():
                 left_eye_ER_array.append(ER_ratio(left_eye_landmark))
                 right_eye_ER_array.append(ER_ratio(right_eye_landmark))
                 if ER_array_ready:
-                    if left_eye_ER_array[0] == MAX_ER_left:
-                        del left_eye_ER_array[0]
-                        MAX_ER_left = max(left_eye_ER_array)
-                    else:
-                        del left_eye_ER_array[0]
-                        if left_eye_ER_array[-1] > MAX_ER_left:
-                            MAX_ER_left = left_eye_ER_array[-1]
-
-                    if right_eye_ER_array[0] == MAX_ER_right:
-                        del right_eye_ER_array[0]
-                        MAX_ER_right = max(right_eye_ER_array)
-                    else:
-                        del right_eye_ER_array[0]
-                        if right_eye_ER_array[-1] > MAX_ER_right:
-                            MAX_ER_right = right_eye_ER_array[-1]
+                    # 갱신하는 방법1. 머리좀 굴려본다
+                    # if left_eye_ER_array[0] == MAX_ER_left:
+                    #     del left_eye_ER_array[0]
+                    #     MAX_ER_left = max(left_eye_ER_array)
+                    # else:
+                    #     del left_eye_ER_array[0]
+                    #     if left_eye_ER_array[-1] > MAX_ER_left:
+                    #         MAX_ER_left = left_eye_ER_array[-1]
+                    #
+                    # if right_eye_ER_array[0] == MAX_ER_right:
+                    #     del right_eye_ER_array[0]
+                    #     MAX_ER_right = max(right_eye_ER_array)
+                    # else:
+                    #     del right_eye_ER_array[0]
+                    #     if right_eye_ER_array[-1] > MAX_ER_right:
+                    #         MAX_ER_right = right_eye_ER_array[-1]
+                    # 갱신하는 방법2. 막해본다
+                    del left_eye_ER_array[0]
+                    del right_eye_ER_array[0]
+                    MAX_ER_left = max(left_eye_ER_array)
+                    MAX_ER_right = max(right_eye_ER_array)
                     eye_ratio_limit = (MAX_ER_left + MAX_ER_right) / 2 * 0.65  # 이 수치는 어떤식으로 구했는지는 모름
 
                 else:
@@ -167,6 +182,7 @@ if video_capture.isOpened():
                 midx = (x + x1) / 2
                 midy = (y + y1) / 2
 
+                # 눈의 양 끝점
                 rex = shape.part(45).x
                 rey = shape.part(45).y
                 lex = shape.part(36).x
@@ -192,15 +208,6 @@ if video_capture.isOpened():
                 d2_3 = rotate(bdx, bdy1)
                 d2_4 = rotate(bdx1, bdy1)
 
-                # 수치 보고 싶을때
-                cv2.putText(frame, "left:{:.2f}".format(MAX_ER_left), (450, 30), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.7, RED, 2)
-                cv2.putText(frame, "right:{:.2f}".format(MAX_ER_right), (450, 60), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.7, RED, 2)
-                cv2.putText(frame, "limit:{:.2f}".format(eye_ratio_limit), (450, 90), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.7, RED, 2)
-                cv2.putText(frame, "limit:{:.2f}".format(degree), (10, 430), cv2.FONT_HERSHEY_SIMPLEX,
-                            0.7, RED, 2)
                 # 기존 좌표를 회전된 좌표에 매칭, 새로운 창으로 프린트
                 pts1 = np.float32([[d2_1[0], d2_1[1]], [d2_2[0], d2_2[1]], [d2_3[0], d2_3[1]], [d2_4[0], d2_4[1]]])
                 pts2 = np.float32([[0, 0], [400, 0], [0, 400], [400, 400]])
@@ -212,7 +219,7 @@ if video_capture.isOpened():
                 d2clahe_image = clahe.apply(d2gray)
                 d2detection = face_detector(d2clahe_image)
 
-                # 재 정렬한 img에서 판단
+                # 재 정렬한 이미지에서 판단
                 if d2detection:
                     for d2 in d2detection:
                         xx = d2.left()
@@ -223,9 +230,53 @@ if video_capture.isOpened():
                         # 얼굴 랜드마크 찾기
                         d2shape = shape_predictor(d2clahe_image, d2)
                         cv2.rectangle(dst_frame, (xx, yy), (xx1, yy1), GREEN, 1)
-                        cv2.putText(dst_frame, "content", (xx, yy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        d2landmarks = np.array(list([p.x, p.y] for p in d2shape.parts()))
+
+                        ER_left = ER_ratio(d2landmarks[LEFT_EYE])
+                        ER_right = ER_ratio(d2landmarks[RIGHT_EYE])
+                        # limit 비율로 측정 눈감으면 open_eye = False 뜨면 True
+                        if ER_left <= eye_ratio_limit and ER_right <= eye_ratio_limit:
+                            open_eye = False
+                        if ER_left > eye_ratio_limit and ER_right > eye_ratio_limit:
+                            open_eye = True
+
+                        # 1. time()을 가지고 비교 하는 방법
+                        # if open_eye:
+                        #     count_time[0] = time.time()
+                        # if time.time() - count_time[0] > 2.5:
+                        #     cv2.putText(dst_frame, "SLEEP!!", (xx, yy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+
+                        # 2. 빈도수(eye_close_count)를 가지고 비율을 계산하는 방법
+                        if ER_array_ready:
+                            if open_eye:
+                                if eye_close_count > 0:
+                                    eye_close_count -= 1
+                            else:
+                                if eye_close_count <= 50:
+                                    eye_close_count += 1
+                                    cv2.putText(dst_frame, "close", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                            # print(f"close_count:{eye_close_count}")
+                        
+                        # 졸음의 정도를  driving_state_step 수치를 조정해야한다 [0]활성화 임계점 [1]자는임계점
+                        if eye_close_count >= driving_state_step[1]:
+                            cv2.putText(dst_frame, "SLEEP!!", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        elif driving_state_step[0] < eye_close_count < driving_state_step[1]:
+                            cv2.putText(dst_frame, "DROWSY", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        else:
+                            cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+
                     cv2.imshow("dst_frame", dst_frame)
 
+                # 수치 보고 싶을때
+                cv2.putText(frame, "left:{:.2f}".format(MAX_ER_left), (450, 30), cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
+                cv2.putText(frame, "right:{:.2f}".format(MAX_ER_right), (450, 60), cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
+                cv2.putText(frame, "limit:{:.2f}".format(eye_ratio_limit), (450, 90),
+                            cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
+                # cv2.putText(frame, "degree:{:.2f}".format(degree), (10, 430), cv2.FONT_HERSHEY_SIMPLEX,
+                #             0.7, RED, 2)
 
         else:  # 얼굴을 detection 못했을때
             pass
