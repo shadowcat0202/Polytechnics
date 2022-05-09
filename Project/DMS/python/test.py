@@ -107,7 +107,7 @@ if video_capture.isOpened():
         elif key == ord("7"):
             index = NOTHING
 
-        frame = cv2.flip(frame, 1)  # cv2.flip(frame, [0 | 1]) 0 상하, 1 좌우 반전
+        # frame = cv2.flip(frame, 1)  # cv2.flip(frame, [0 | 1]) 0 상하, 1 좌우 반전
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(clipLimit=2.0,
                                 tileGridSize=(8, 8))
@@ -140,7 +140,8 @@ if video_capture.isOpened():
                 left_eye_ER_array.append(ER_ratio(left_eye_landmark))
                 right_eye_ER_array.append(ER_ratio(right_eye_landmark))
                 if ER_array_ready:
-                    # 갱신하는 방법1. 머리좀 굴려본다
+                    # 수치 갱신(ER의 최대값 갱신에 대한 아이디어 다시 생각 필요)
+                    # 갱신하는 방법1. 머리좀 굴려본다 ===============================================
                     # if left_eye_ER_array[0] == MAX_ER_left:
                     #     del left_eye_ER_array[0]
                     #     MAX_ER_left = max(left_eye_ER_array)
@@ -156,12 +157,13 @@ if video_capture.isOpened():
                     #     del right_eye_ER_array[0]
                     #     if right_eye_ER_array[-1] > MAX_ER_right:
                     #         MAX_ER_right = right_eye_ER_array[-1]
-                    # 갱신하는 방법2. 막해본다
+
+                    # 갱신하는 방법2. 막 해본다 # ===============================================
                     del left_eye_ER_array[0]
                     del right_eye_ER_array[0]
                     MAX_ER_left = max(left_eye_ER_array)
                     MAX_ER_right = max(right_eye_ER_array)
-                    eye_ratio_limit = (MAX_ER_left + MAX_ER_right) / 2 * 0.65  # 이 수치는 어떤식으로 구했는지는 모름
+                    eye_ratio_limit = ((MAX_ER_left + MAX_ER_right) / 2) * 0.65  # 이 수치는 어떤식으로 구했는지는 모름
 
                 else:
                     if len(left_eye_ER_array) == ER_array_ready_size:
@@ -197,12 +199,12 @@ if video_capture.isOpened():
                 angle = np.arctan(tan)
                 degree = np.degrees(angle)
 
-                # detection 좌표 회전
+                # detection 네모 회전된 좌표
                 rsd_1 = rotate(x, y)
                 rsd_2 = rotate(x1, y)
                 rsd_3 = rotate(x, y1)
                 rsd_4 = rotate(x1, y1)
-                # border 좌표 회전
+                # border 회전된 좌표
                 d2_1 = rotate(bdx, bdy)
                 d2_2 = rotate(bdx1, bdy)
                 d2_3 = rotate(bdx, bdy1)
@@ -240,30 +242,31 @@ if video_capture.isOpened():
                         if ER_left > eye_ratio_limit and ER_right > eye_ratio_limit:
                             open_eye = True
 
-                        # 1. time()을 가지고 비교 하는 방법
-                        # if open_eye:
-                        #     count_time[0] = time.time()
-                        # if time.time() - count_time[0] > 2.5:
-                        #     cv2.putText(dst_frame, "SLEEP!!", (xx, yy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-
-                        # 2. 빈도수(eye_close_count)를 가지고 비율을 계산하는 방법
-                        if ER_array_ready:
-                            if open_eye:
-                                if eye_close_count > 0:
-                                    eye_close_count -= 1
-                            else:
-                                if eye_close_count <= 50:
-                                    eye_close_count += 1
-                                    cv2.putText(dst_frame, "close", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                            # print(f"close_count:{eye_close_count}")
-                        
-                        # 졸음의 정도를  driving_state_step 수치를 조정해야한다 [0]활성화 임계점 [1]자는임계점
-                        if eye_close_count >= driving_state_step[1]:
-                            cv2.putText(dst_frame, "SLEEP!!", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                        elif driving_state_step[0] < eye_close_count < driving_state_step[1]:
-                            cv2.putText(dst_frame, "DROWSY", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # 1. time()을 가지고 비교 하는 방법 =======================================================
+                        if open_eye:
+                            count_time[0] = time.time()     # count_time[n] =n+1번째 경고
                         else:
-                            cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                            cv2.putText(dst_frame, "close", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        if time.time() - count_time[0] > 2.5:
+                            cv2.putText(dst_frame, "SLEEP!!", (xx, yy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+
+                        # # 2. 빈도수(eye_close_count)를 가지고 비율을 계산하는 방법 =================================
+                        # if ER_array_ready:
+                        #     if open_eye:
+                        #         if eye_close_count > 0:
+                        #             eye_close_count -= 1
+                        #     else:
+                        #         if eye_close_count <= ER_array_ready_size:
+                        #             eye_close_count += 1
+                        #             cv2.putText(dst_frame, "close", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        #     print(f"close_count:{eye_close_count}")
+                        # # 졸음의 정도를  driving_state_step 수치를 조정해야한다 [0]활성화 임계점 [1]자는임계점
+                        # if eye_close_count >= driving_state_step[1]:
+                        #     cv2.putText(dst_frame, "SLEEP!!", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # elif driving_state_step[0] < eye_close_count < driving_state_step[1]:
+                        #     cv2.putText(dst_frame, "DROWSY", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # else:
+                        #     cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
 
                     cv2.imshow("dst_frame", dst_frame)
 
@@ -275,8 +278,8 @@ if video_capture.isOpened():
                 cv2.putText(frame, "limit:{:.2f}".format(eye_ratio_limit), (450, 90),
                             cv2.FONT_HERSHEY_SIMPLEX,
                             0.7, RED, 2)
-                # cv2.putText(frame, "degree:{:.2f}".format(degree), (10, 430), cv2.FONT_HERSHEY_SIMPLEX,
-                #             0.7, RED, 2)
+                cv2.putText(frame, "degree:{:.2f}".format(degree), (10, 430), cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
 
         else:  # 얼굴을 detection 못했을때
             pass

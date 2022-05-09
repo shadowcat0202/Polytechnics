@@ -1,0 +1,42 @@
+Active shape models
+부주의에 대한 명확한 판단 기준 결정하기
+알림 빈도 최적화(너무 과하게 알림을 보내지 않도록 최소한의 알림만)(요구사항 중 한개)
+0. 카메라 스마트폰으로 대신하기
+https://droidcam.softonic.kr/ 다운로드 당근 스마트폰 앱(DroidCam)도 설치 해야합니다
+설정 - 개발자 옵션 - USB 디버깅 허용 ON을 해야 사용이 가능합니다
+1. 모델 제작(opencv, Dlib을 사용한다면 좋겠다만 최악의 경우 사람 얼굴 + 랜드마크 모두 model 학습을 시켜야 하는 상황 존재)
+고병철 교수님 lab. https://cvpr.kmu.ac.kr/
+얼굴 랜드마크 관련 자료 https://cvpr.kmu.ac.kr/FADID.htm
+Download FADID Test Database(Daytime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Test_daytime.zip]
+Download FADID Training Database(Daytime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Train_daytime.zip]
+Download FADID Test Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Test_nighttime.zip]
+Download FADID Training Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_FacialAlignment/Train_nighttime.zip]
+ 
+얼굴에서 랜드마크 뽑아내는 모델 학습 방법
+https://ballentain.tistory.com/33
+
+
+https://ys-cs17.tistory.com/24	졸음 감지 학습 
+opencv 설치 pip install opencv-python
+
+dilb설치 
+pip install cmake
+pip install opencv-contrib-python dlib
+pip install dlib
+(dlib설치 오류시) conda install -c conda-forge dlib
+한국인이 참기 힘든 기다림
+
+
+
+2. 후처리
+
+eye close 판단 로직 베이스 작성 (완료)
+
+
+3. 임베딩
+https://www.ti.com/product/TDA4VM	(data sheet)
+https://training.ti.com/deep-learning-jacinto-tda4x-processors	(TDA4x 시리즈로 딥러닝 하는 방법)
+이건 답도 없네 ㅋ
+
+openvx
+OpenVX는 컴퓨터 비전 애플리케이션의 크로스 플랫폼 가속화를위한 로열티가없는 공개 표준입니다. Khronos Group은 비전 알고리즘을위한 휴대용, 최적화 및 전력 효율적인 분석법 처리를 용이하게하도록 설계되었습니다. (꺼무위키)
