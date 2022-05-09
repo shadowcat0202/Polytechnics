@@ -1,9 +1,7 @@
+import java.util.ArrayList;
 import java.util.Arrays;
-<<<<<<< HEAD
-=======
-import java.util.Stack;
 
->>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
+import java.util.Stack;
 class test{
     private int data;
     test(int i){
@@ -51,20 +49,7 @@ public class Main {
         System.out.println();
 
     }
-<<<<<<< HEAD
 
-
-    public static void main(String[] args){
-        SLlist<test> ls = new SLlist<>();
-        for(int i = 0; i < 5; i++){
-            ls.add(new test(i));
-        }
-
-        for(int i = 0; i < 5; i++){
-            System.out.println(ls.get(i).getData());
-        }
-        ls.
-=======
     public static boolean contains(char[] arr, char find){
         for(char c : arr){
             if(c == find)   return true;
@@ -141,17 +126,20 @@ public class Main {
                 "((())((()))(()))",
                 "(((((((())))))))"
         };
-        for(int i = 0; i < input_str.length; i++){
-            System.out.println(solution1_v2(input_int[i], input_str[i]));
-        }
+//        for(int i = 0; i < input_str.length; i++){
+//            System.out.println(solution1_v2(input_int[i], input_str[i]));
+//        }
 //        System.out.println(solution1_v2(input_int[0], input_str[0]));
 
 
 //        String input = "{(A+B)-3}*5 + [{cos(x+y)+7}-1]*4";
 //
 //        System.out.println(solution2(input));
->>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
 
-
+        ArrayList<String> arr = new ArrayList<>();
+        arr.add("dsf");
+        arr.add("hhjj");
+        arr.add("dfhew");
+        System.out.println(arr.toString());
     }
 }
