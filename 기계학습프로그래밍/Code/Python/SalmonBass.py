@@ -2,7 +2,7 @@ import pandas as pd
 
 from matplotlib.animation import adjusted_figsize
 
-df = pd.read_csv("./salmon_bass_data.csv")
+df = pd.read_csv("dataset/salmon_bass_data.csv")
 
 X = []
 y = []
