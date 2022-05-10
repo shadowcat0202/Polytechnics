@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import java.util.EmptyStackException;
 import java.util.Stack;
 class test{
     private int data;
@@ -12,7 +13,7 @@ class test{
     }
 }
 public class Main {
-    public static int[] make_iarr(int arr_size, int max_value){
+    public int[] make_iarr(int arr_size, int max_value){
         int[] arr = new int[arr_size];
         for(int i = 0; i < arr_size; i++){
             arr[i] = (int)(Math.random() * max_value);
@@ -21,7 +22,7 @@ public class Main {
     }
 
 
-    public static void quick_sort_test(){
+    public void quick_sort_test(){
         int[] arr;  //오리지날 배열
         int[] buf;  //동일한 측정을 위한 임시 배열
         float[] time_sum = new float[3];    //좌우중간 시간측정
@@ -50,14 +51,14 @@ public class Main {
 
     }
 
-    public static boolean contains(char[] arr, char find){
+    public boolean contains(char[] arr, char find){
         for(char c : arr){
             if(c == find)   return true;
         }
         return false;
     }
 
-    public static boolean solution2(String str){
+    public boolean solution2(String str){
         Stack<Character> st = new Stack<>();
         char[] open = {'[', '{', '('};
         char[] close = {']', '}', ')'};
@@ -75,7 +76,7 @@ public class Main {
         return true;
     }
     //괄호문제 초안?
-    public static int solution1_v1(int n, String str){
+    public int solution1_v1(int n, String str){
         class pair{
             char c;
             int num;
@@ -100,7 +101,7 @@ public class Main {
         return res+1;
     }
     //괄호 문제 개선안
-    public static int solution1_v2(int n, String str){
+    public int solution1_v2(int n, String str){
         int open_cnt = 0;
         int res = 0;
         Stack<Integer> st = new Stack<>();
@@ -118,28 +119,40 @@ public class Main {
         return res+1;
     }
 
+    public void solution1_v3(){
+        String inputString = "((()))";
+        int n = 2;
+        int ans = 0;
+        int cnt = 0;
+        Stack<Integer> st = new Stack<>();
+        char[] inputchar = inputString.toCharArray();
+        try{
+            for(int i = 0; i < inputchar.length; i++){
+                if(inputchar[i] == '('){
+                    st.push(++cnt);
+                }
+                else{
+                    if(st.pop() == n)  ans = i+1;
+                }
+            }
+        }
+        catch(EmptyStackException e){
+            ans = 0;
+        }
+        finally {
+            if(!st.isEmpty())   ans = 0;
+        }
+        System.out.println(ans);
+    }
+
     public static void main(String[] args){
-        int[] input_int = {3,2,6,4};
-        String[] input_str = {
-                "()((()()))",
-                "))()(())",
-                "((())((()))(()))",
-                "(((((((())))))))"
-        };
-//        for(int i = 0; i < input_str.length; i++){
-//            System.out.println(solution1_v2(input_int[i], input_str[i]));
-//        }
-//        System.out.println(solution1_v2(input_int[0], input_str[0]));
-
-
-//        String input = "{(A+B)-3}*5 + [{cos(x+y)+7}-1]*4";
-//
-//        System.out.println(solution2(input));
-
-        ArrayList<String> arr = new ArrayList<>();
-        arr.add("dsf");
-        arr.add("hhjj");
-        arr.add("dfhew");
-        System.out.println(arr.toString());
+        myLinkedQueue<Integer> q = new myLinkedQueue<>();
+        for(int i = 0; i < 10; i++){
+            q.push(i);
+        }
+        for(int i = 0 ; i < 5; i++){
+            System.out.println(q.pop());
+        }
+        System.out.println(q.isEmpty());
     }
 }
