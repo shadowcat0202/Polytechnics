@@ -5,90 +5,24 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b80eb5ed-9bef-4cff-9da7-d04655a3aca6" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/MNIST_CNN.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/AI기초프로그래밍.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/.idea/AI_basic_Code.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/DataType/Dictionary.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/DataType/Privitive/Number.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/DataType/Set.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/DataType/String/indexing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/DataType/String/slicing.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/DataType/boolean.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/Iteration.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/List.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/String.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/Tuple.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/condition.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/data_type.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/function.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/myClass.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/object.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/operat.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/pandas_data_struct.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/peristalsis.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/prime.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/temp.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/basic/valuable.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI_basic_Code/vending_machine.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/AI기초프로그래밍.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/.idea/pythonProject1.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/Perceptron.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/how_to_use_numpy.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/testPorject/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/Use tech.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/Use tech.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/.idea/python.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/Report.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../Project/DMS/python/make_face_landmark_dataset.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../딥러닝 수학/Code/my_Linear_Regression_file.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/myLinkedQueue.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/myQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/Perceptron.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/Perceptron.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/how_to_use_numpy.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/how_to_use_numpy.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/function_stub.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/function_stub.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/Python.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/MNIST_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/MNIST.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SalmonBass.py" beforeDir="false" afterPath="$PROJECT_DIR$/SalmonBass.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/test" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/.idea/inspectionProfiles/profiles_settings.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/.idea/pythonProject.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/SalmonBass.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../pythonProject/salmon_bass_data.csv" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/.idea/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/.idea/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/Training.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/Training.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/references/Use tech.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/references/Use tech.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../딥러닝 수학/Code/Linear_Regression_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../딥러닝 수학/Code/Linear_Regression_file.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/SLlist.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/SLlist.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/array.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/array.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/function.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/function.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../학습데이터처리/Code/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../학습데이터처리/Code/.idea/modules.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../학습데이터처리/Code/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../학습데이터처리/Code/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../학습데이터처리/Code/dataGraph.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../학습데이터처리/Code/dataGraph.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../학습데이터처리/Code/data_frame_handling.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../학습데이터처리/Code/data_frame_handling.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
