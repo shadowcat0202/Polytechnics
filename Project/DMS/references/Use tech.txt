@@ -30,7 +30,8 @@ pip install dlib
 
 2. 후처리
 
-eye close 판단 로직 베이스 작성 (완료)
+eye close 판단 로직 베이스 작성
+solvepnp	특징점을 이용한 2d 좌표를 3d로 변환
 
 
 3. 임베딩
