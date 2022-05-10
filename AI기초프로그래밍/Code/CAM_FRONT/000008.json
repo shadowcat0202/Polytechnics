@@ -1,0 +1,81 @@
+{
+  "Image": {
+    "size": "1920x1208",
+    "scene": "Highway",
+    "weather": "Overcast",
+    "timeofday": "Daytime",
+    "nation": "Vietnam"
+  },
+  "Object": [
+    {
+      "class": "Car",
+      "box2d": {
+        "x1": 924,
+        "y1": 409,
+        "x2": 1012,
+        "y2": 482
+      },
+      "level": 0
+    },
+    {
+      "class": "Cyclist",
+      "box2d": {
+        "x1": 1018,
+        "y1": 405,
+        "x2": 1033,
+        "y2": 438
+      },
+      "level": 0
+    },
+    {
+      "class": "Cyclist",
+      "box2d": {
+        "x1": 1146,
+        "y1": 407,
+        "x2": 1175,
+        "y2": 456
+      },
+      "level": 1
+    },
+    {
+      "class": "Cyclist",
+      "box2d": {
+        "x1": 1062,
+        "y1": 402,
+        "x2": 1085,
+        "y2": 459
+      },
+      "level": 0
+    },
+    {
+      "class": "Car",
+      "box2d": {
+        "x1": 811,
+        "y1": 402,
+        "x2": 843,
+        "y2": 432
+      },
+      "level": 0
+    },
+    {
+      "class": "Truck",
+      "box2d": {
+        "x1": 1520,
+        "y1": 170,
+        "x2": 1919,
+        "y2": 548
+      },
+      "level": 0
+    },
+    {
+      "class": "Cyclist",
+      "box2d": {
+        "x1": 1119,
+        "y1": 401,
+        "x2": 1163,
+        "y2": 485
+      },
+      "level": 0
+    }
+  ]
+}
