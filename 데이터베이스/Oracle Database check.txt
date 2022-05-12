@@ -30,7 +30,18 @@ $ SQL> alter user test01 default tablespace users quota unlimited on users;
 
 $ SQL> @c:\app\summit.sql
 여러 줄이 나올것이다(테이블 생성중)
-
+s_customer
+s_dept
+s_emp
+s_image
+s_inventory
+s_item
+s_longtext
+s_ord
+s_product
+s_region
+s_title
+s_warehouse
 #데이터 추출하기============================================================
 1. DESCRIBE
 $ SQL> <describe | desc> table_name
@@ -40,5 +51,14 @@ $ SQL> <describe | desc> table_name
 DISTINCT = 중복된 row제거 후 출력
 $ SQL> SELECT DISTINCT title FROM s_emp;
 
+#데이터 가져오기 ==========================================================
+특정 데이터 가져오기
+1.
+SELECT { * | column_name [, column_name…] }
+FROM table_name
+WHERE condition
+$  SELECT dept_id, first_name, last_name FROM s_emp WHERE dept_id = 41;
 
-
+value는  대소문자를 구분해야한다
+2. WHERE colunm = value;
+$ SELECT first_name, last_name, title FROM s_emp WHERE last_name = 'Magee';

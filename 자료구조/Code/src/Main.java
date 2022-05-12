@@ -3,6 +3,7 @@ import java.util.Arrays;
 
 import java.util.EmptyStackException;
 import java.util.Stack;
+import Problem.Search;
 class test{
     private int data;
     test(int i){
@@ -146,13 +147,25 @@ public class Main {
     }
 
     public static void main(String[] args){
-        myLinkedQueue<Integer> q = new myLinkedQueue<>();
-        for(int i = 0; i < 10; i++){
-            q.push(i);
-        }
-        for(int i = 0 ; i < 5; i++){
-            System.out.println(q.pop());
-        }
-        System.out.println(q.isEmpty());
+        Search solve = new Search();
+        int[][] input1 = {
+                {1,1,1,0},
+                {1,2,2,0},
+                {1,0,0,1},
+                {0,0,0,1},
+                {0,0,0,3},
+                {0,0,0,3}};
+        int[][] input2 = {
+                {0, 1, 1, 0, 1, 0, 0},
+                {0, 1, 1, 0, 1, 0, 1},
+                {1, 1, 1, 0, 1, 0, 1},
+                {0, 0, 0, 0, 1, 1, 1},
+                {0, 1, 0, 0, 0, 0, 0},
+                {0, 1, 1, 1, 1, 1, 0},
+                {0, 1, 1, 1, 0, 0, 0}
+        };
+
+//        int[] res = solve.BFS_solution(input1);
+//        System.out.println(Arrays.toString(res));
     }
 }

@@ -21,7 +21,7 @@ opencv 설치 pip install opencv-python
 
 dilb설치 
 pip install cmake
-pip install opencv-contrib-python dlib
+pip install opencv-contrib-python
 pip install dlib
 (dlib설치 오류시) conda install -c conda-forge dlib
 한국인이 참기 힘든 기다림
