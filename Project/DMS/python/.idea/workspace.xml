@@ -5,20 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9de2fc36-516b-49fb-8286-72b7e59e37a0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/dataset.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/landmark.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/pos_estimatiion.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/Problem/Search.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experimental/distribution.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/experimental/pose_estimator.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/facial-landmark-detection/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/Report.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/Report.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/make_face_landmark_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/make_face_landmark_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shape_predictor_68_face_landmarks.dat.bz2" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/landmark.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection/landmark.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/make_face_landmark_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection/make_face_landmark_dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection/model.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../기계학습프로그래밍/Code/Python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../기계학습프로그래밍/Code/Python/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../데이터베이스/Oracle Database check.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../데이터베이스/Oracle Database check.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/Problem/Search.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/Problem/Search.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -58,6 +56,11 @@
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../딥러닝 수학/Code" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection" />
+    </key>
   </component>
   <component name="RunManager" selected="Python.make_face_landmark_dataset">
     <configuration name="function_stub" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
@@ -114,7 +117,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/make_face_landmark_dataset.py" />
+      <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection\make_face_landmark_dataset.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -217,16 +220,5 @@
         </entry>
       </map>
     </option>
-  </component>
-  <component name="XDebuggerManager">
-    <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/landmark.py</url>
-          <line>3</line>
-          <option name="timeStamp" value="1" />
-        </line-breakpoint>
-      </breakpoints>
-    </breakpoint-manager>
   </component>
 </project>
