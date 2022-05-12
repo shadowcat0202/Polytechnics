@@ -5,14 +5,12 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9de2fc36-516b-49fb-8286-72b7e59e37a0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/experimental/distribution.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/experimental/pose_estimator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/facial-landmark-detection/__init__.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/Report.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/Report.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/landmark.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection/landmark.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/make_face_landmark_dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection/make_face_landmark_dataset.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/model.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection/model.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/dataset.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection-unknown/dataset.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/embedded.py" beforeDir="false" afterPath="$PROJECT_DIR$/test2.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/facial-landmark-detection-unknown/landmark.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection-unknown/landmark.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/test1.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../기계학습프로그래밍/Code/Python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../기계학습프로그래밍/Code/Python/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../데이터베이스/Oracle Database check.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../../../데이터베이스/Oracle Database check.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/Main.java" afterDir="false" />
@@ -59,6 +57,9 @@
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection-unknown" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\still-unknown1" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\still-unknown" />
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection" />
     </key>
   </component>
@@ -168,7 +169,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="test1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -180,7 +181,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/test.py" />
+      <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\test1.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -193,7 +194,7 @@
       <list>
         <item itemvalue="Python.make_face_landmark_dataset" />
         <item itemvalue="Python.pos_estimatiion" />
-        <item itemvalue="Python.test" />
+        <item itemvalue="Python.test1" />
         <item itemvalue="Python.function_stub" />
         <item itemvalue="Python.stub" />
       </list>
