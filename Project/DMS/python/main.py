@@ -35,6 +35,8 @@ right_eye_ER_array = []
 MAX_ER_left = 0
 MAX_ER_right = 0
 eye_ratio_limit = 0.00
+during_close_eye = [0, 0]
+during_size = 5
 
 count_time = [0, 0]
 program_switch = False
@@ -42,6 +44,12 @@ program_switch = False
 open_eye = False
 eye_close_count = 0
 driving_state_step = [15, 35]
+
+
+def during_close():
+    if(sum(during_close_eye) / 2) / during_size > 0.8
+        cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+        return True
 
 
 # (두 점 사이의 유클리드 거리 계산)
@@ -67,15 +75,6 @@ def rotate(brx, bry):
     rx = int(arx + midx)
     ry = int(ary + midy)
     return rx, ry
-
-
-# 눈 비율 계산
-def calculate_EAR(eye):
-    # 얼굴 특징점 번호 사진 참조
-    A = distance(eye[1], eye[5])
-    B = distance(eye[2], eye[4])
-    C = distance(eye[0], eye[3])
-    return (A + B) / (2.0 * C)
 
 
 face_detector = dlib.get_frontal_face_detector()
@@ -239,6 +238,7 @@ if video_capture.isOpened():
                         cv2.rectangle(dst_frame, (xx, yy), (xx1, yy1), GREEN, 1)
                         d2landmarks = np.array(list([p.x, p.y] for p in d2shape.parts()))
 
+
                         ER_left = ER_ratio(d2landmarks[LEFT_EYE])
                         ER_right = ER_ratio(d2landmarks[RIGHT_EYE])
                         # limit 비율로 측정 눈감으면 open_eye = False 뜨면 True
@@ -256,22 +256,24 @@ if video_capture.isOpened():
                         #     cv2.putText(dst_frame, "SLEEP!!", (xx, yy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
 
                         # # 2. 빈도수(eye_close_count)를 가지고 비율을 계산하는 방법 =================================
-                        if ER_array_ready:
-                            if open_eye:
-                                if eye_close_count > 0:
-                                    eye_close_count -= 1
-                            else:
-                                if eye_close_count <= ER_array_ready_size:
-                                    eye_close_count += 1
-                                    cv2.putText(dst_frame, "close", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                            print(f"close_count:{eye_close_count}")
-                        # 졸음의 정도를  driving_state_step 수치를 조정해야한다 [0]활성화 임계점 [1]자는임계점
-                        if eye_close_count >= driving_state_step[1]:
-                            cv2.putText(dst_frame, "SLEEP!!", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                        elif driving_state_step[0] < eye_close_count < driving_state_step[1]:
-                            cv2.putText(dst_frame, "DROWSY", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                        else:
-                            cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # if ER_array_ready:
+                        #     if open_eye:
+                        #         if eye_close_count > 0:
+                        #             eye_close_count -= 1
+                        #     else:
+                        #         if eye_close_count <= ER_array_ready_size:
+                        #             eye_close_count += 1
+                        #             cv2.putText(dst_frame, "close", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        #     print(f"close_count:{eye_close_count}")
+                        #
+                        # # 졸음의 정도를  driving_state_step 수치를 조정 필요 [0]활성화 임계점 [1]자는 임계점
+                        # if eye_close_count >= driving_state_step[1]:
+                        #     cv2.putText(dst_frame, "SLEEP!!", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # elif driving_state_step[0] < eye_close_count < driving_state_step[1]:
+                        #     cv2.putText(dst_frame, "DROWSY", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # else:
+                        #     cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        if
 
                     cv2.imshow("dst_frame", dst_frame)
 

@@ -16,6 +16,8 @@ PURPLE = (255, 0, 255)
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
+
+
 ALL = list(range(0, 68))
 RIGHT_EYEBROW = list(range(17, 22))
 LEFT_EYEBROW = list(range(22, 27))
@@ -26,6 +28,7 @@ MOUTH_OUTLINE = list(range(48, 61))
 MOUTH_INLINE = list(range(51, 68))
 FACE_OUTLINE = list(range(0, 17))
 NOTHING = list(range(0, 0))
+index = NOTHING
 
 # 100프레임을 미리 저장해서 눈의 비율의 최대치등을 계산
 ER_array_ready = False
@@ -36,13 +39,22 @@ MAX_ER_left = 0
 MAX_ER_right = 0
 eye_ratio_limit = 0.00
 
+during_close_eye = [0, 0]   # [왼쪽, 오른쪽] 눈 감긴 횟수
+during_size = 5 # during_close_eye의 최대 카운팅 횟수 5 frame 기준으로 비정상적인 감지를 보정하는 역할
+
 count_time = [0, 0]
 program_switch = False
 
 open_eye = False
-eye_close_count = 0
+eye_close_count = [0,0]
 driving_state_step = [15, 35]
 
+
+def during_close():
+    if(sum(during_close_eye) / 2) / during_size > 0.8:  # 전체 범위중에 80% 이상 눈의 비율이 감긴다고 판단하면 최종적으로 감았다고 결정
+        cv2.putText(dst_frame, "eye close", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)    #화면에 보여준다
+        return True # 눈 감음
+    return False    # 눈 뜸
 
 
 # (두 점 사이의 유클리드 거리 계산)
@@ -69,15 +81,20 @@ def rotate(brx, bry):
     ry = int(ary + midy)
     return rx, ry
 
-
-# 눈 비율 계산
-def calculate_EAR(eye):
-    # 얼굴 특징점 번호 사진 참조
-    A = distance(eye[1], eye[5])
-    B = distance(eye[2], eye[4])
-    C = distance(eye[0], eye[3])
-    return (A + B) / (2.0 * C)
-
+def choice_button(key_input):
+    if key_input == ord("1"):
+        return ALL
+    elif key_input == ord("2"):
+        return LEFT_EYEBROW + RIGHT_EYEBROW
+    elif key_input == ord("3"):
+        return LEFT_EYE + RIGHT_EYE
+    elif key_input == ord("4"):
+        return NOSE
+    elif key_input == ord("5"):
+        return MOUTH_OUTLINE + MOUTH_INLINE
+    elif key_input == ord("6"):
+        return FACE_OUTLINE
+    return NOTHING
 
 face_detector = dlib.get_frontal_face_detector()
 shape_predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
@@ -96,22 +113,9 @@ if video_capture.isOpened():
             start_t = timeit.default_timer()
         # 얼굴 랜드마크 종류별로 변경
         key = cv2.waitKey(1)
-        if key == ord('q'):
-            break
-        elif key == ord("1"):
-            index = ALL
-        elif key == ord("2"):
-            index = LEFT_EYEBROW + RIGHT_EYEBROW
-        elif key == ord("3"):
-            index = LEFT_EYE + RIGHT_EYE
-        elif key == ord("4"):
-            index = NOSE
-        elif key == ord("5"):
-            index = MOUTH_OUTLINE + MOUTH_INLINE
-        elif key == ord("6"):
-            index = FACE_OUTLINE
-        elif key == ord("7"):
-            index = NOTHING
+
+        if key == ord('q'):   break# 종료
+        else:   index = choice_button(key)
 
         # frame = cv2.flip(frame, 1)  # cv2.flip(frame, [0 | 1]) 0 상하, 1 좌우 반전
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -240,6 +244,7 @@ if video_capture.isOpened():
                         cv2.rectangle(dst_frame, (xx, yy), (xx1, yy1), GREEN, 1)
                         d2landmarks = np.array(list([p.x, p.y] for p in d2shape.parts()))
 
+
                         ER_left = ER_ratio(d2landmarks[LEFT_EYE])
                         ER_right = ER_ratio(d2landmarks[RIGHT_EYE])
                         # limit 비율로 측정 눈감으면 open_eye = False 뜨면 True
@@ -257,22 +262,23 @@ if video_capture.isOpened():
                         #     cv2.putText(dst_frame, "SLEEP!!", (xx, yy), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
 
                         # # 2. 빈도수(eye_close_count)를 가지고 비율을 계산하는 방법 =================================
-                        if ER_array_ready:
-                            if open_eye:
-                                if eye_close_count > 0:
-                                    eye_close_count -= 1
-                            else:
-                                if eye_close_count <= ER_array_ready_size:
-                                    eye_close_count += 1
-                                    cv2.putText(dst_frame, "close", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                            print(f"close_count:{eye_close_count}")
-                        # 졸음의 정도를  driving_state_step 수치를 조정해야한다 [0]활성화 임계점 [1]자는임계점
-                        if eye_close_count >= driving_state_step[1]:
-                            cv2.putText(dst_frame, "SLEEP!!", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                        elif driving_state_step[0] < eye_close_count < driving_state_step[1]:
-                            cv2.putText(dst_frame, "DROWSY", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                        else:
-                            cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # if ER_array_ready:
+                        #     if open_eye:
+                        #         if eye_close_count > 0:
+                        #             eye_close_count -= 1
+                        #     else:
+                        #         if eye_close_count <= ER_array_ready_size:
+                        #             eye_close_count += 1
+                        #             cv2.putText(dst_frame, "close", (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        #     print(f"close_count:{eye_close_count}")
+                        #
+                        # # 졸음의 정도를  driving_state_step 수치를 조정 필요 [0]활성화 임계점 [1]자는 임계점
+                        # if eye_close_count >= driving_state_step[1]:
+                        #     cv2.putText(dst_frame, "SLEEP!!", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # elif driving_state_step[0] < eye_close_count < driving_state_step[1]:
+                        #     cv2.putText(dst_frame, "DROWSY", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # else:
+                        #     cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
 
                     cv2.imshow("dst_frame", dst_frame)
 

@@ -43,6 +43,8 @@ eye_close_count = 0
 driving_state_step = [15, 35]
 
 
+
+
 # (두 점 사이의 유클리드 거리 계산)
 def distance(p1, p2):
     return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** (1 / 2)

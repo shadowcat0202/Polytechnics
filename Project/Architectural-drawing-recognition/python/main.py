@@ -1,29 +1,23 @@
-import PyPDF2
+# pip3 install openpyxl
+# pip3 install openpyxl-image-loader
 
-from PIL import Image
+#Importing the modules
+import openpyxl
+from openpyxl_image_loader import SheetImageLoader
 
-if __name__ == '__main__':
-    input1 = PyPDF2.PdfFileReader(open("input.pdf", "rb"))
-    page0 = input1.getPage(0)
-    xObject = page0['/Resources']['/XObject'].getObject()
 
-    for obj in xObject:
-        if xObject[obj]['/Subtype'] == '/Image':
-            size = (xObject[obj]['/Width'], xObject[obj]['/Height'])
-            data = xObject[obj].getData()
-            if xObject[obj]['/ColorSpace'] == '/DeviceRGB':
-                mode = "RGB"
-            else:
-                mode = "P"
+#loading the Excel File and the sheet
+pxl_doc = openpyxl.load_workbook("./test_xlsx.xlsx")
+sheet = pxl_doc['Sheet1']
 
-            if xObject[obj]['/Filter'] == '/FlateDecode':
-                img = Image.frombytes(mode, size, data)
-                img.save(obj[1:] + ".png")
-            elif xObject[obj]['/Filter'] == '/DCTDecode':
-                img = open(obj[1:] + ".jpg", "wb")
-                img.write(data)
-                img.close()
-            elif xObject[obj]['/Filter'] == '/JPXDecode':
-                img = open(obj[1:] + ".jp2", "wb")
-                img.write(data)
-                img.close()
+#calling the image_loader
+image_loader = SheetImageLoader(sheet)
+
+#get the image (put the cell you need instead of 'A1')
+image = image_loader.get('.png')
+
+#showing the image
+image.show()
+
+#saving the image
+image.save('./image_name.jpg')

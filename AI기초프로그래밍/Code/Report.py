@@ -4,7 +4,7 @@ import os
 import pprint
 
 
-def solution_v1():
+def solution_v1():  # 맘에 들지 않는 최적화
     path = "./CAM_FRONT/"
     file_path_list = glob.glob("./CAM_FRONT/*.json")
     for i in range(len(file_path_list)):
@@ -42,13 +42,11 @@ def solution_v1():
         f.close()
 
 
-def solution_v2():
+def solution_v2():  # 완성형
     path = "./CAM_FRONT/"
     file_path_list = glob.glob("./CAM_FRONT/*.json")
     for i in range(len(file_path_list)):
         filename = file_path_list[i][len(file_path_list[i]) - file_path_list[i].rfind("\\"):]
-
-        print(f"<<<<<<<< {filename}")
         f = open(file_path_list[i])
         json_data = json.load(f)
         Vehicles = []
@@ -61,6 +59,5 @@ def solution_v2():
 
         json_data["Object"] = Vehicles
         pprint.pprint(json_data)
-        print("===============================================================================")
 
 solution_v2()

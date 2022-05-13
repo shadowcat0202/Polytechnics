@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <h1 id="heading">JavaScript</h1>
+
+        <fieldset>
+            <legend>js 작성 요령</legend>
+            <h1 id="h1" style="display: inline;">자바스크립트</h1>
+            <button id = "p1">클릭</button>
+            <h1 id="h2" style="display: inline;">자바스크립트</h1>
+            <button id = "p2">클릭</button>
+        </fieldset>
+        <fieldset>
+            <legend>배수 출력</legend>
+            <form action="javascript:mul()">                
+                <input type="text" id="input_num1">
+                <input type="text" id="input_num2">
+                <input type="submit">
+            </form>
+        </fieldset>
+        
+
+        <script>
+            var p1 = document.querySelector("#p1");
+            p1.onclick = function(){
+                h1 = document.querySelector("#h1")
+                if(h1.style.color != 'red')
+                    h1.style.color = 'red';
+                else
+                    h1.style.color = 'blue';
+            }
+        </script>
+        <script src="../javascript/20220513.js"></script>
+    </body>
+</html>

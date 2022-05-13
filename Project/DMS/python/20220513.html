@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<!-- saved from url=(0040)http://127.0.0.1:5500/html/20220513.html -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+    </head>
+    <body>
+        <h1 id="heading">JavaScript</h1>
+
+        <fieldset>
+            <legend>js 작성 요령</legend>
+            <div id="div1" style="display: inline;">
+                <h1 id="h1">자바스크립트</h1>
+                <p id="p1">클릭해보세요(내부 작성)</p>
+            </div>
+            <div id="div2" style="display: inline;">
+                <h1 id="h2">자바스크립트</h1>
+                <p id="p2">클릭해보세요(외부 작성)</p>        
+            </div>
+        </fieldset>
+        <fieldset>
+            <legend>배수 출력 (10개 까지만)</legend>
+            <form action="javascript:mul()">                
+                <input type="text" id="input_num">
+                <input type="submit">
+            </form>
+
+        </fieldset>
+
+        <script>
+            var p1 = document.querySelector("#p1");
+            p1.onclick = function(){
+                h1 = document.querySelector("#h1")
+                if(h1.style.color != 'red')
+                    h1.style.color = 'red';
+                else
+                    h1.style.color = 'blue';
+            }
+        </script>
+        <script src="./20220513_files/20220513.js.다운로드"></script>
+    <!-- Code injected by live-server -->
+<script type="text/javascript">
+	// <![CDATA[  <-- For SVG support
+	if ('WebSocket' in window) {
+		(function () {
+			function refreshCSS() {
+				var sheets = [].slice.call(document.getElementsByTagName("link"));
+				var head = document.getElementsByTagName("head")[0];
+				for (var i = 0; i < sheets.length; ++i) {
+					var elem = sheets[i];
+					var parent = elem.parentElement || head;
+					parent.removeChild(elem);
+					var rel = elem.rel;
+					if (elem.href && typeof rel != "string" || rel.length == 0 || rel.toLowerCase() == "stylesheet") {
+						var url = elem.href.replace(/(&|\?)_cacheOverride=\d+/, '');
+						elem.href = url + (url.indexOf('?') >= 0 ? '&' : '?') + '_cacheOverride=' + (new Date().valueOf());
+					}
+					parent.appendChild(elem);
+				}
+			}
+			var protocol = window.location.protocol === 'http:' ? 'ws://' : 'wss://';
+			var address = protocol + window.location.host + window.location.pathname + '/ws';
+			var socket = new WebSocket(address);
+			socket.onmessage = function (msg) {
+				if (msg.data == 'reload') window.location.reload();
+				else if (msg.data == 'refreshcss') refreshCSS();
+			};
+			if (sessionStorage && !sessionStorage.getItem('IsThisFirstTime_Log_From_LiveServer')) {
+				console.log('Live reload enabled.');
+				sessionStorage.setItem('IsThisFirstTime_Log_From_LiveServer', true);
+			}
+		})();
+	}
+	else {
+		console.error('Upgrade your browser. This Browser is NOT supported WebSocket for Live-Reloading.');
+	}
+	// ]]>
+</script>
+</body></html>
