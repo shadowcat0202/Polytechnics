@@ -47,7 +47,7 @@ driving_state_step = [15, 35]
 
 
 def during_close():
-    if(sum(during_close_eye) / 2) / during_size > 0.8
+    if(sum(during_close_eye) / 2) / during_size > 0.8:
         cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
         return True
 
@@ -273,7 +273,7 @@ if video_capture.isOpened():
                         #     cv2.putText(dst_frame, "DROWSY", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
                         # else:
                         #     cv2.putText(dst_frame, "ACTIVE", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                        if
+
 
                     cv2.imshow("dst_frame", dst_frame)
 
