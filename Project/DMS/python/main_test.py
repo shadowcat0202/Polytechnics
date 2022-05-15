@@ -5,6 +5,8 @@ import cv2
 import dlib
 import numpy as np
 import time
+import math
+
 
 RED = (0, 0, 255)
 GREEN = (0, 255, 0)
@@ -29,7 +31,7 @@ LANDMARK_INDEX = RIGHT_EYE + LEFT_EYE
 # LANDMARK_INDEX = ALL
 
 eye_close_record = [0, 0]
-eye_record_size = 50
+eye_record_size = 40
 
 ER_cnt = 0
 ER_max = [0, 0]
@@ -79,9 +81,9 @@ def sleep_check(eyes_ER, cnt, st):
     if check_state > 0.7:
         cv2.putText(img, "SLEEP!!", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
         st = 0
-    elif check_state > 0.4:
-        cv2.putText(img, "DROWSY!", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-        st = 1
+    # elif check_state > 0.4:
+    #     cv2.putText(img, "DROWSY!", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+    #     st = 1
     else:
         cv2.putText(img, "ACTIVE", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
         st = 2
@@ -91,7 +93,7 @@ def sleep_check(eyes_ER, cnt, st):
     if cnt == 30:
         for i in range(2):
             ER_avg[i] = round((ER_avg[i] + ER_sum[i]) / (ER_cnt + 1), 3)
-            if ER_avg[i] > ER_max[i]:
+            if ER_avg[i] >= ER_max[i]:
                 ER_max[i] = ER_avg[i]
             else:
                 if st != 0:  # 눈을 감은 상태가 길어질수록 최대 값이 감소하면서 눈을 뜨는 걸로 판단해버림 이것을 방지 하기위해서
@@ -102,7 +104,7 @@ def sleep_check(eyes_ER, cnt, st):
 
 
 face_detector = dlib.get_frontal_face_detector()
-shape_predictor = dlib.shape_predictor("./shape_predictor_68_face_landmarks.dat")
+shape_predictor = dlib.shape_predictor("./asset/shape_predictor_68_face_landmarks.dat")
 print("stub loading facial landmark predictor...")
 video_capture = cv2.VideoCapture("./test1.mp4")  # 사진
 # video_capture = cv2.VideoCapture(0)  # 카메라
@@ -133,18 +135,20 @@ if video_capture.isOpened():
          영역적인 정보를 추출해서 결과 영상을 셋팅합니다.
          영상을 축소할 때 이용합니다."""
 
-        img = cv2.resize(img, (500, 500), cv2.INTER_AREA)
+        img = cv2.resize(img, (450, 450), cv2.INTER_AREA)
         img = cv2.flip(img, 1)  # cv2.flip(frame, [0 | 1]) 0 상하, 1 좌우 반전
         gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
         clahe = cv2.createCLAHE(clipLimit=2.0,
                                 tileGridSize=(8, 8))
         clahe_image = clahe.apply(gray)
         detection = face_detector(clahe_image, 0)
-        # print(detection)
 
         if detection:
             for d in detection:  # 얼굴을 감지한것이 여러명일 경우도 있기때문에 for문으로 작성
+                print(f"{type(d)},")
+
                 shape = shape_predictor(clahe_image, d)
+
                 landmarks = list([p.x, p.y] for p in shape.parts())
 
                 # 얼굴 점 찍어주고 싶다면
@@ -157,10 +161,10 @@ if video_capture.isOpened():
                 d_x2 = d.right()
                 d_y2 = d.bottom()
                 # 여유 공간 확보
-                border_x1 = d_x1 - (d_x2 - d_x1) / 2
-                border_y1 = d_y1 - (d_y2 - d_y1) / 2
-                border_x2 = d_x2 + (d_x2 - d_x1) / 2
-                border_y2 = d_y2 + (d_y2 - d_y1) / 2
+                border_x1 = d_x1 - (d_x2 - d_x1) * 0.2
+                border_y1 = d_y1 - (d_y2 - d_y1) * 0.2
+                border_x2 = d_x2 + (d_x2 - d_x1) * 0.2
+                border_y2 = d_y2 + (d_y2 - d_y1) * 0.2
 
                 # 감지한 얼굴 상자에서 중앙 좌표 계산
                 center_x = (d_x1 + d_x2) / 2
@@ -194,8 +198,7 @@ if video_capture.isOpened():
                     [[d2b_1[0], d2b_1[1]], [d2b_2[0], d2b_2[1]], [d2b_3[0], d2b_3[1]], [d2b_4[0], d2b_4[1]]])
                 pts2 = np.float32([[0, 0], [400, 0], [0, 400], [400, 400]])
                 M = cv2.getPerspectiveTransform(pts1, pts2)
-                dst_frame = cv2.warpPerspective(img, M, (
-                    400, 400))  # 원근 변환 cv2.warpPerspective(origin_frame, 변환 프레임, (width, height))
+                dst_frame = cv2.warpPerspective(img, M, (400, 400))  # 원근 변환 cv2.warpPerspective(origin_frame, 변환 프레임, (width, height))
                 gray2 = cv2.cvtColor(dst_frame, cv2.COLOR_RGB2GRAY)
                 clahe_image2 = clahe.apply(gray2)
                 detection2 = face_detector(clahe_image2)
@@ -214,8 +217,8 @@ if video_capture.isOpened():
                     ER_right = ER_ratio(landmarks2[RIGHT_EYE])
                     ER_cnt, eye_state = sleep_check([ER_left, ER_right], ER_cnt, eye_state)
 
-                    for p in landmarks2[LANDMARK_INDEX]:
-                        cv2.circle(dst_frame, (p[0], p[1]), 2, RED, -1)
+                    # for p in landmarks2[LANDMARK_INDEX]:
+                    #     cv2.circle(dst_frame, (p[0], p[1]), 2, RED, -1)
 
                     cv2.putText(img, f"cnt:{ER_cnt}", (10, 100), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
                     for i, ea in enumerate(ER_avg):
