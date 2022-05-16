@@ -5,11 +5,7 @@
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/Java/src" isTestSource="false" />
     </content>
-<<<<<<< HEAD
-    <orderEntry type="jdk" jdkName="Python 3.9 (Python)" jdkType="Python SDK" />
-=======
     <orderEntry type="inheritedJdk" />
->>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
 </module>
