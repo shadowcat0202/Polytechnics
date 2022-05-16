@@ -34,6 +34,9 @@ ER_cnt = 0
 eye_record_size = 30
 # [left, right]
 eye_close_record = [0, 0]
+record_left_eye_close = []
+record_right_eye_close = []
+
 ER_max = [0, 0] # 눈을 뜨고 있는 평균 값을 유지 하기 위한 변수
 ER_avg = [0, 0] # ER_frame_cnt 까지의 평균을 저장 해서 ER_max 와 비교 후 갱신 혹은 유지 해주기 위한 임시 평균 리스트
 ER_sum = [0, 0] # ER_frame_cnt 로 나눠 평균을 구해 ER_avg 에 저장 하기 위한 변수 리스트
@@ -182,43 +185,43 @@ if video_capture.isOpened():
 
                     eyes = [ER_ratio(landmarks2[LEFT_EYE]), ER_ratio(landmarks2[RIGHT_EYE])]
 
-                    # 눈 감김 판단 =========================================================================
-                    for i, eye in enumerate(eyes):
-                        if eye < ER_max[i] * 0.8:   # 현재 눈의 비율이 ER_max의 일정 % 보다 작아질 경우 감았다고 판단
-                            # eye_close_record가 eye record_size 보다 커지거나 0 보다 작아지는거 예외처리
-                            if eye_close_record[i] < eye_record_size:
-                                eye_close_record[i] += 1
-                        else:
-                            if eye_close_record[i] > 0:
-                                eye_close_record[i] -= 1
-
-                    eye_close_record_avg = (sum(eye_close_record) / 2) / eye_record_size
-
-                    # 현재 기준 이전 eye_record_size 프레임 동안 눈을 감은 횟수가 특정 %보다 높으면 확실하게 감았다고 판단(보수적으로 판단하라고 요구사항이 들어왔다)
-                    if eye_close_record_avg > 0.5:
-                        cv2.putText(img, "CLOSE", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                        eye_state = 0
-                    # elif eye_close_record_avg > 0.4:
-                    #     cv2.putText(img, "DROWSY!", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                    #     st = 1
-                    else:
-                        cv2.putText(img, "ACTIVE", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                        eye_state = 1
-
-                    ER_sum[0] += eyes[0]
-                    ER_sum[1] += eyes[1]
-                    if ER_cnt == eye_record_size:
-                        for i in range(2):
-                            ER_avg[i] = round((ER_avg[i] + ER_sum[i]) / (ER_cnt + 1), 3)
-                            if ER_avg[i] >= ER_max[i]:
-                                ER_max[i] = ER_avg[i]
-                            else:
-                                if eye_state == 1:  # 눈을 감은 상태가 길어질수록 최대 값이 점점 감소하면서 눈을 뜨는 걸로 판단해버림 이것을 방지 하기위해서
-                                    ER_max[i] = (ER_avg[i] + ER_max[i]) * 0.5
-                            ER_sum[i] = 0
-                        ER_cnt = 0
-                    ER_cnt += 1
-                    # 눈 판단 끝 ===================================================================================
+                    # # 눈 감김 판단 =========================================================================
+                    # for i, eye in enumerate(eyes):
+                    #     if eye < ER_max[i] * 0.8:   # 현재 눈의 비율이 ER_max의 일정 % 보다 작아질 경우 감았다고 판단
+                    #         # eye_close_record가 eye record_size 보다 커지거나 0 보다 작아지는거 예외처리
+                    #         if eye_close_record[i] < eye_record_size:
+                    #             eye_close_record[i] += 1
+                    #     else:
+                    #         if eye_close_record[i] > 0:
+                    #             eye_close_record[i] -= 1
+                    #
+                    # eye_close_record_avg = (sum(eye_close_record) / 2) / eye_record_size
+                    #
+                    # # 현재 기준 이전 eye_record_size 프레임 동안 눈을 감은 횟수가 특정 %보다 높으면 확실하게 감았다고 판단(보수적으로 판단하라고 요구사항이 들어왔다)
+                    # if eye_close_record_avg > 0.5:
+                    #     cv2.putText(img, "CLOSE", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                    #     eye_state = 0
+                    # # elif eye_close_record_avg > 0.4:
+                    # #     cv2.putText(img, "DROWSY!", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                    # #     st = 1
+                    # else:
+                    #     cv2.putText(img, "ACTIVE", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                    #     eye_state = 1
+                    #
+                    # ER_sum[0] += eyes[0]
+                    # ER_sum[1] += eyes[1]
+                    # if ER_cnt == eye_record_size:
+                    #     for i in range(2):
+                    #         ER_avg[i] = round((ER_avg[i] + ER_sum[i]) / (ER_cnt + 1), 3)
+                    #         if ER_avg[i] >= ER_max[i]:
+                    #             ER_max[i] = ER_avg[i]
+                    #         else:
+                    #             if eye_state == 1:  # 눈을 감은 상태가 길어질수록 최대 값이 점점 감소하면서 눈을 뜨는 걸로 판단해버림 이것을 방지 하기위해서
+                    #                 ER_max[i] = (ER_avg[i] + ER_max[i]) * 0.5
+                    #         ER_sum[i] = 0
+                    #     ER_cnt = 0
+                    # ER_cnt += 1
+                    # # 눈 판단 끝 ===================================================================================
                     if not waring_flag and eye_state == 0:
                         waring_flag = True
                         sleep_waring += 1
