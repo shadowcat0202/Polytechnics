@@ -1,4 +1,6 @@
 """Estimate head pose according to the facial landmarks"""
+import pprint
+
 import cv2
 import numpy as np
 
@@ -46,10 +48,10 @@ class PoseEstimator:
             for line in file:
                 raw_value.append(line)
         model_points = np.array(raw_value, dtype=np.float32)
-        model_points = np.reshape(model_points, (3, -1)).T
+        model_points = np.reshape(model_points, (3, -1)).T # (row는 3행 열은 가변).T = 가변 행 3열
 
         # Transform the model into a front view.
-        model_points[:, 2] *= -1
+        model_points[:, 2] *= -1    # 왜 2번 인덱스 열에 -로 변환하는가?
 
         return model_points
 

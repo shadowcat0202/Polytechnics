@@ -5,14 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9de2fc36-516b-49fb-8286-72b7e59e37a0" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/face_detector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/head-pose-estimation/main.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/head-pose-estimation/mark_detector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/head-pose-estimation/pose_estimator.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/laboratory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/.idea/Code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/.idea/Code.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/python.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/head-pose-estimation/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/head-pose-estimation/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/head-pose-estimation/mark_detector.py" beforeDir="false" afterPath="$PROJECT_DIR$/head-pose-estimation/mark_detector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/head-pose-estimation/pose_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/head-pose-estimation/pose_estimator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_test.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/shape_predictor_68_face_landmarks.dat" beforeDir="false" afterPath="$PROJECT_DIR$/asset/shape_predictor_68_face_landmarks.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../프로젝트 개요.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +52,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../AI기초프로그래밍/Code" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="RecentsManager">
@@ -62,7 +64,7 @@
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main_test">
+  <component name="RunManager" selected="Python.main (1)">
     <configuration name="function_stub" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -147,7 +149,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="make_face_landmark_dataset" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="pose_estimator" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -155,11 +157,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/head-pose-estimation" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection\make_face_landmark_dataset.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/head-pose-estimation/pose_estimator.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -191,11 +193,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main_test" />
         <item itemvalue="Python.main (1)" />
+        <item itemvalue="Python.main_test" />
+        <item itemvalue="Python.pose_estimator" />
         <item itemvalue="Python.stub" />
         <item itemvalue="Python.function_stub" />
-        <item itemvalue="Python.make_face_landmark_dataset" />
       </list>
     </recent_temporary>
   </component>

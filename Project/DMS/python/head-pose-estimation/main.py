@@ -72,7 +72,6 @@ if __name__ == '__main__':
 
         # Any face found?
         if facebox is not None:
-
             # Step 2: Detect landmarks. Crop and feed the face area into the
             # mark detector.
             x1, y1, x2, y2 = facebox
@@ -95,8 +94,8 @@ if __name__ == '__main__':
             # pose on the frame in realtime.
 
             # Do you want to see the pose annotation?
-            # pose_estimator.draw_annotation_box(
-            #     frame, pose[0], pose[1], color=(0, 255, 0))
+            pose_estimator.draw_annotation_box(
+                frame, pose[0], pose[1], color=(0, 255, 0))
 
             # Do you want to see the head axes?
             pose_estimator.draw_axes(frame, pose[0], pose[1])
