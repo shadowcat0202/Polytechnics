@@ -84,6 +84,7 @@ class MarkDetector:
     def draw_box(image, boxes, box_color=(255, 255, 255)):
         """Draw square boxes on image"""
         for box in boxes:
+            print(f"{type(box[0])}")
             cv2.rectangle(image,
                           (box[0], box[1]),
                           (box[2], box[3]), box_color, 3)

@@ -157,19 +157,20 @@ class PoseEstimator:
         cv2.line(image, tuple(point_2d[3]), tuple(
             point_2d[8]), color, line_width, cv2.LINE_AA)
 
-    def draw_axis(self, img, R, t):
+    def get_axis(self, img, R, t):
         points = np.float32(
             [[30, 0, 0], [0, 30, 0], [0, 0, 30], [0, 0, 0]]).reshape(-1, 3)
 
         axisPoints, _ = cv2.projectPoints(
             points, R, t, self.camera_matrix, self.dist_coeefs)
 
-        img = cv2.line(img, tuple(axisPoints[3].ravel()), tuple(
-            axisPoints[0].ravel()), (255, 0, 0), 3)
-        img = cv2.line(img, tuple(axisPoints[3].ravel()), tuple(
-            axisPoints[1].ravel()), (0, 255, 0), 3)
-        img = cv2.line(img, tuple(axisPoints[3].ravel()), tuple(
-            axisPoints[2].ravel()), (0, 0, 255), 3)
+        # img = cv2.line(img, tuple(axisPoints[3].ravel()), tuple(
+        #     axisPoints[0].ravel()), (255, 0, 0), 3)
+        # img = cv2.line(img, tuple(axisPoints[3].ravel()), tuple(
+        #     axisPoints[1].ravel()), (0, 255, 0), 3)
+        # img = cv2.line(img, tuple(axisPoints[3].ravel()), tuple(
+        #     axisPoints[2].ravel()), (0, 0, 255), 3)
+        return axisPoints
 
     def draw_axes(self, img, R, t):
         img	= cv2.drawFrameAxes(img, self.camera_matrix, self.dist_coeefs, R, t, 30)
