@@ -74,18 +74,20 @@ if __name__ == '__main__':
         if facebox is not None:
             # Step 2: Detect landmarks. Crop and feed the face area into the
             # mark detector.
-            x1, y1, x2, y2 = facebox
+            x1, y1, x2, y2 = facebox    # 예로 들면 222 94 349 221 이런식
             face_img = frame[y1: y2, x1: x2]
 
             # Run the detection.
             tm.start()
             marks = mark_detector.detect_marks(face_img)
             tm.stop()
-
+            print(f"원본 marks:{marks}")
             # Convert the locations from local face area to the global image.
             marks *= (x2 - x1)
+            print(f"{x2-x1} : {marks}")
             marks[:, 0] += x1
             marks[:, 1] += y1
+            print(f"{type(marks)}{marks}")
 
             # Try pose estimation with 68 points.
             pose = pose_estimator.solve_pose_by_68_points(marks)
@@ -93,7 +95,7 @@ if __name__ == '__main__':
             # All done. The best way to show the result would be drawing the
             # pose on the frame in realtime.
 
-            # Do you want to see the pose annotation?
+            # # Do you want to see the pose annotation?
             pose_estimator.draw_annotation_box(
                 frame, pose[0], pose[1], color=(0, 255, 0))
 
@@ -101,7 +103,7 @@ if __name__ == '__main__':
             pose_estimator.draw_axes(frame, pose[0], pose[1])
 
             # Do you want to see the marks?
-            mark_detector.draw_marks(frame, marks, color=(0, 255, 0))
+            # mark_detector.draw_marks(frame, marks, color=(0, 255, 0))
 
             # Do you want to see the facebox?
             # mark_detector.draw_box(frame, [facebox])

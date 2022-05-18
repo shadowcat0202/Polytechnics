@@ -5,12 +5,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9de2fc36-516b-49fb-8286-72b7e59e37a0" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/../../밴처창업견진대회/python/main.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mark_detector.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pose_estimator.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/asset/shape_predictor_68_face_landmarks.dat" beforeDir="false" afterPath="$PROJECT_DIR$/assets/shape_predictor_68_face_landmarks.dat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/face_detector.py" beforeDir="false" afterPath="$PROJECT_DIR$/face_detector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/head-pose-estimation/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/head-pose-estimation/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/head-pose-estimation/mark_detector.py" beforeDir="false" afterPath="$PROJECT_DIR$/head-pose-estimation/mark_detector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/head-pose-estimation/pose_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/head-pose-estimation/pose_estimator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_test.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/stub.py" beforeDir="false" afterPath="$PROJECT_DIR$/stub.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../밴처창업견진대회/[폴리텍리그] 제5차 창업아이템경진대회 제출서류.hwp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../밴처창업견진대회/[하이스쿨리그] 제5차 창업아이템경진대회 제출서류.hwp" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +53,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../학습데이터처리/Code" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/asset" />
     <property name="settings.editor.selected.configurable" value="configurable.group.appearance" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -60,6 +65,10 @@
     </option>
   </component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\asset" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\mystudy\pholythec\Project\DMS\python\asset" />
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection-unknown" />
@@ -68,7 +77,7 @@
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main_test">
+  <component name="RunManager" selected="Python.main (1)">
     <configuration name="function_stub" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -195,11 +204,30 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="Doctests in WOWOOWOW" type="tests" factoryName="Doctests" temporary="true" nameIsGenerated="true">
+      <module name="python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/WOWOOWOW.py" />
+      <option name="CLASS_NAME" value="" />
+      <option name="METHOD_NAME" value="" />
+      <option name="FOLDER_NAME" value="" />
+      <option name="TEST_TYPE" value="TEST_SCRIPT" />
+      <option name="PATTERN" value="" />
+      <option name="USE_PATTERN" value="false" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main_test" />
-        <item itemvalue="Python.stub" />
         <item itemvalue="Python.main (1)" />
+        <item itemvalue="Python.stub" />
+        <item itemvalue="Python.main_test" />
+        <item itemvalue="Python tests.Doctests in WOWOOWOW" />
         <item itemvalue="Python.pose_estimator" />
       </list>
     </recent_temporary>

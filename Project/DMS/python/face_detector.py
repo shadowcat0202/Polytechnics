@@ -37,7 +37,7 @@ class FaceDetector:
 
 
 class MarkDetector:
-    def __init__(self, model="asset/shape_predictor_68_face_landmarks.dat"):
+    def __init__(self, model="assets/shape_predictor_68_face_landmarks.dat"):
         self.shape_predictor = dlib.shape_predictor(model)
         self.f_detector = FaceDetector()
 

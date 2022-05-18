@@ -3,10 +3,13 @@ import timeit
 
 import cv2
 import dlib
+import numpy
 import numpy as np
 import time
 from functools import wraps
-import math
+from mark_detector import MarkDetector
+from pose_estimator import PoseEstimator
+from argparse import ArgumentParser
 
 RED = (0, 0, 255)
 GREEN = (0, 255, 0)
@@ -27,11 +30,10 @@ MOUTH_OUTLINE = list(range(48, 61))
 MOUTH_INLINE = list(range(51, 68))
 FACE_OUTLINE = list(range(0, 17))
 NOTHING = list(range(0, 0))
-INDEX = RIGHT_EYE + LEFT_EYE
-print(INDEX)
+INDEX = RIGHT_EYE + LEFT_EYE + MOUTH_INLINE
 
 face_detector = dlib.get_frontal_face_detector()
-shape_predictor = dlib.shape_predictor("./asset/shape_predictor_68_face_landmarks.dat")
+shape_predictor = dlib.shape_predictor("./assets/shape_predictor_68_face_landmarks.dat")
 print("stub loading facial landmark predictor...")
 # video_capture = cv2.VideoCapture("./test1.mp4")  # 사진
 video_capture = cv2.VideoCapture(0)  # 카메라
@@ -63,7 +65,8 @@ def eye_close(left_eye, right_eye):
 
 
 # https://wjh2307.tistory.com/21
-def counter(func):
+# 눈 감기(함수) + 자는거 판단(밑에 코드)
+def close_counter(func):
     @wraps(func)
     def tmp(*args, **kwargs):
         tmp.count += 1
@@ -78,13 +81,38 @@ def counter(func):
     return tmp
 
 
-@counter
+@close_counter
 def close():
     cv2.putText(img, "close", (10, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
 
 
+# detection한 네모중에 가장 큰(카메라와 가장 가깝다고 판단) 얼굴을 찾아낸다
+def front_detection(squares):
+    most_front_face_index = 0
+    max_size_area = 0
+    for i, sq in enumerate(squares):
+        curr_area = (sq.right() - sq.left()) * (sq.bottom() - sq.top())
+        if curr_area > max_size_area:
+            max_size_area = curr_area
+            most_front_face_index = i
+    return most_front_face_index
 
-def yawn():
+
+clahe = cv2.createCLAHE(clipLimit=2.0,
+                        tileGridSize=(8, 8))
+def img_Preprocessing(img_frame):
+    re_size = cv2.resize(img_frame, (400, 400), cv2.INTER_AREA)
+    gray = cv2.cvtColor(re_size, cv2.COLOR_BGR2GRAY)
+    lab = cv2.cvtColor(re_size, cv2.COLOR_BGR2LAB)
+
+    gray = clahe.apply(gray)
+    # lab = clahe.apply(lab)
+
+    L = lab[:, :, 0]
+    med_L = cv2.medianBlur(L, 99)  # median filter
+    invert_L = cv2.bitwise_not(med_L)  # invert lightness
+    composed = cv2.addWeighted(gray, 0.75, invert_L, 0.25, 0)
+    return re_size, composed
 
 
 if video_capture.isOpened():
@@ -113,38 +141,28 @@ if video_capture.isOpened():
         5. cv2.INTER_AREA - 영상 축소시 효과적
          영역적인 정보를 추출해서 결과 영상을 셋팅합니다.
          영상을 축소할 때 이용합니다."""
-
-        img = cv2.resize(img, (400, 400), cv2.INTER_AREA)
-        img = cv2.flip(img, 1)  # cv2.flip(frame, [0 | 1]) 0 상하, 1 좌우 반전
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        clahe = cv2.createCLAHE(clipLimit=2.0,
-                                tileGridSize=(8, 8))
-        clahe_image = clahe.apply(gray)
-        detection = face_detector(clahe_image, 0)
+        img, cmpos = img_Preprocessing(img)
+        detection = face_detector(cmpos, 0)
 
         if detection:
-            for d in detection:  # 얼굴을 감지한것이 여러명일 경우도 있기때문에 for문으로 작성
-                # print(f"{type(d)},")
+            d_index = front_detection(detection)  # 카메라에서 가장 가까운 얼굴 찾기
+            print(f"{type(detection[d_index])}, {detection[d_index]}")
+            shape = shape_predictor(cmpos, detection[d_index])  # 그 얼굴에서 랜드마크 추출
+            landmarks = list([p.x, p.y] for p in shape.parts())  # 리스트화
+            eye_close_status = eye_close(landmarks[42:48], landmarks[36:42])
+            if eye_close_status:
+                close()
+                # print(f'close count : {close.count}')
+                if close.count >= 15:
+                    # waring_flag += 1
+                    cv2.putText(img, "SLEEPING!!!", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
 
-                shape = shape_predictor(clahe_image, d)
-
-                landmarks = list([p.x, p.y] for p in shape.parts())
-
-                check = eye_close(landmarks[42:48], landmarks[36:42])
-                if check:
-                    close()
-                    # print(f'close count : {close.count}')
-                    if close.count >= 20:
-                        # waring_flag += 1
-                        cv2.putText(img, "SLEEPING!!!", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-
-                for i in INDEX:
-                    cv2.circle(img, (landmarks[i][0], landmarks[i][1]), 1, GREEN, -1)
+            for i in INDEX:
+                cv2.circle(img, (landmarks[i][0], landmarks[i][1]), 1, GREEN, -1)
 
         cv2.putText(img, f"FPS:{int(1. / (time.time() - start_t))}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
 
-        cv2.imshow("test", img)
-        # cv2.imshow("gray", gray)
+        cv2.imshow("img", img)
 
 cv2.destroyAllWindows()
 video_capture.release()

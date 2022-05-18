@@ -174,7 +174,6 @@ class MarkDetector:
 
         # Convert predictions to landmarks.
         marks = np.reshape(marks, (-1, 2))
-
         return marks
 
     @staticmethod
