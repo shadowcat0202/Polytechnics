@@ -62,3 +62,12 @@ $  SELECT dept_id, first_name, last_name FROM s_emp WHERE dept_id = 41;
 value는  대소문자를 구분해야한다
 2. WHERE colunm = value;
 $ SELECT first_name, last_name, title FROM s_emp WHERE last_name = 'Magee';
+
+#작성한 sql문 저장
+$ SAVE file_name --> sqlplus 실행한 디렉토리에 file_name.sql 생성
+# sql문 가져오기
+$ GET file_name
+# 저장한 sql문 실행하기
+$ START file_name
+or
+$ @file_name
