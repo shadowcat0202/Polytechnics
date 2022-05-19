@@ -10,6 +10,8 @@ import math
 
 from mark_detector import MarkDetector
 from pose_estimator import PoseEstimator
+from calculation import eye_calculation
+
 
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
@@ -141,6 +143,8 @@ if video_capture.isOpened():
             break
         ret, img = video_capture.read()
 
+        img = cv2.flip(img, 1)
+
         """
         cv2.resize((fx,fy),interpilation )
         1. cv2.INTER_NEAREST - 최근방 이웃 보간법
@@ -181,7 +185,7 @@ if video_capture.isOpened():
             # --> BLUE(정면) GREEN(아래) RED(좌측) CENTER(중심)
             pose_estimator.draw_axes(img, pose[0], pose[1])
             # 얼굴 랜드마크 보고 싶다면?
-            # mark_detector.draw_marks(img, landmarks[MARK_INDEX], color=GREEN)
+            mark_detector.draw_marks(img, landmarks[MARK_INDEX], color=GREEN)
 
             # 얼굴 detect box 보고 싶다면?
             # detection_box = [detection[d_index].left(), detection[d_index].top(),
