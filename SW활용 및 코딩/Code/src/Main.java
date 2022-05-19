@@ -1,6 +1,45 @@
 import java.util.Scanner;
 import package1.*;
 import package2.*;
+import java.util.Arrays;
+class Point{
+    private int x, y;
+    public void set(int x, int y){
+        this.x = x;
+        this.y = y;
+    }
+
+    public void showPoint(){
+        System.out.println("(" + this.x + ", " + this.y + ")");
+    }
+}
+
+class ColorPoint extends Point{
+    private int R, G, B;
+    public void setColor(int r, int g, int b){
+        try{
+            if(r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
+                throw new Exception("color int: 0 to 255");
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
+        this.R = r;
+        this.G = g;
+        this.B = b;
+    }
+    public int[] get_color_array(){
+        return new int[] {this.R, this.G, this.B};
+    }
+    public void showColorPoint(){
+        StringBuilder sb = new StringBuilder();
+        sb.append("(");
+        sb.append(this.R).append(", ");
+        sb.append(this.G).append(", ");
+        sb.append(this.B).append(")");
+        System.out.println(sb.toString());
+    }
+}
 
 class pizza{
     private int r = 0;
@@ -19,8 +58,7 @@ class pizza{
         System.out.println(sb);
     }
 }
-<<<<<<< HEAD
-=======
+
 class AA{
     AA(){
         System.out.println("Class AA");
@@ -31,7 +69,6 @@ class BB extends AA{
         System.out.println("Class BB");
     }
 }
->>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
 public class Main {
     public void dowhile(){
         char c = 'a';
@@ -81,48 +118,12 @@ public class Main {
 
 
     }
-<<<<<<< HEAD
-=======
-
->>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
     public static void main(String[] args){
-        pizza g = new pizza("맛있는 피자", 10);
-        pizza b = new pizza("맛없는 피자", 2);
-        g.show();
-        b.show();
-
-        Circle c1 = new Circle(1);
-        Circle c2 = new Circle(2);
-        Circle c3 = new Circle(3);
-
-        c1.set(4);
-        c2.set(5);
-        c3.set(6);
-
-        System.out.println(c1.r);
-        System.out.println(c2.r);
-        System.out.println(c3.r);
-
-        Circle c4 = new Circle(10, "가나다라");
-        c1.info();
-        c2.info();
-        c3.info();
-        c4.info();
-
-        Circle[] c_arr = new Circle[3];
-        for(int i = 0; i < c_arr.length; i++){
-            c_arr[i] = new Circle(i+1, "c_"+i);
-        }
-        for(int i = 0; i < c_arr.length; i++){
-            c_arr[i].info();
-        }
-
-<<<<<<< HEAD
-=======
-        AA cc = new AA();
-        AA aa = new BB();
-        BB bb = new BB();
->>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b
+        ColorPoint cp = new ColorPoint();
+        cp.set(10, 20);
+        cp.setColor(0,100,225);
+        cp.showPoint();
+        cp.showColorPoint();
 
     }
 
