@@ -1,7 +1,6 @@
 import numpy as np
-import cv2
 from my_mark_detector import MarkDetector, FaceDetector
-from pose_estimator import PoseEstimator
+from master.pose_estimator import PoseEstimator
 from calculation import *
 
 
@@ -53,7 +52,7 @@ MARK_INDEX = RIGHT_EYE + LEFT_EYE + MOUTH_INLINE
 
 lastsave = 0
 
-# video_capture = cv2.VideoCapture("./test1.mp4")  # 사진
+# video_capture = cv2.VideoCapture("./branch_test1.mp4")  # 사진
 video_capture = cv2.VideoCapture(0)  # 카메라
 
 width = video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)

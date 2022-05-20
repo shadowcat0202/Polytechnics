@@ -1,17 +1,11 @@
-import pprint
-import timeit
-
 import cv2
 import dlib
 import numpy as np
 import time
 from functools import wraps
-import math
 
-from mark_detector import MarkDetector
-from pose_estimator import PoseEstimator
-from calculation import eye_calculation
-
+from master.mark_detector import MarkDetector
+from master.pose_estimator import PoseEstimator
 
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
@@ -119,7 +113,7 @@ def img_Preprocessing(img_frame):
 face_detector = dlib.get_frontal_face_detector()
 shape_predictor = dlib.shape_predictor("./assets/shape_predictor_68_face_landmarks.dat")
 print("stub loading facial landmark predictor...")
-# video_capture = cv2.VideoCapture("./test1.mp4")  # 사진
+# video_capture = cv2.VideoCapture("./branch_test1.mp4")  # 사진
 video_capture = cv2.VideoCapture(0)  # 카메라
 
 width = video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)

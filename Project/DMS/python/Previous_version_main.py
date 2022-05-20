@@ -32,7 +32,7 @@ INDEX = RIGHT_EYE + LEFT_EYE + MOUTH_INLINE
 face_detector = dlib.get_frontal_face_detector()
 shape_predictor = dlib.shape_predictor("./assets/shape_predictor_68_face_landmarks.dat")
 print("stub loading facial landmark predictor...")
-# video_capture = cv2.VideoCapture("./test1.mp4")  # 사진
+# video_capture = cv2.VideoCapture("./branch_test1.mp4")  # 사진
 video_capture = cv2.VideoCapture(0)  # 카메라
 
 lastsave = 0

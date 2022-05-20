@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <h1>함수 실험실</h1>
+    </head>
+    <body>        
+        <button onclick="inntext()">innertext</button>
+        <button onclick="innhtml()">innerhtml</button>
+        <h1>현재 시각:</h1>
+        <div id="current"></div>
+        <script>            
+            var now = new Date();
+
+            function inntext(){
+                document.getElementById('current').innerText = now;
+            }
+            function innhtml(){
+                document.getElementById('current').innerHTML = "<em>" + now + "</em>";
+            }
+        </script>
+    </body>
+</html>
