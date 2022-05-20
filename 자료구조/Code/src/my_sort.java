@@ -20,7 +20,6 @@ public class my_sort {
         //장점:구현이 쉽다, 직관적이다
         //단점:비효율적이다 시간복잡도는 모두 N^2 (노답이다)
         long beforeTime = System.currentTimeMillis();
-        this.desc = false;
         for(int i = 0; i < arr.length; i++){
             //배열의 크기만큼 0~N-1까지 탐색하면서 인접한 칸과 비교하여 swap하는 방식
             for(int j = 0; j < arr.length - 1; j++){
@@ -46,7 +45,7 @@ public class my_sort {
         //단점:버블정렬과 같다(답도 없다)
         long beforeTime = System.currentTimeMillis();
         for(int i = 0; i < arr.length - 1; i++){
-            int idx = i;    //시작은 기준인덱스부터 닷!
+            int idx = i;    //시작은 기준인덱스부터 시작!
             for(int j = i + 1; j < arr.length; j++){
                 //기준으로 잡은 인덱스를 시작으로 진행 방향의 모든 값들을 비교해서 최소|최대값이 존재하는 인덱스를 기억한다
                 if(!this.desc && (arr[j] < arr[idx]))   idx = j;
@@ -240,7 +239,6 @@ public class my_sort {
         merge(arr, left, mid, right);   //병합 작업
     }
     /**
-     * 
      * @param arr   정렬할 배열
      * @param left  배열의 시작점
      * @param mid   배열의 중간점

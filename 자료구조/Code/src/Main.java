@@ -147,25 +147,6 @@ public class Main {
     }
 
     public static void main(String[] args){
-        Search solve = new Search();
-        int[][] input1 = {
-                {1,1,1,0},
-                {1,2,2,0},
-                {1,0,0,1},
-                {0,0,0,1},
-                {0,0,0,3},
-                {0,0,0,3}};
-        int[][] input2 = {
-                {0, 1, 1, 0, 1, 0, 0},
-                {0, 1, 1, 0, 1, 0, 1},
-                {1, 1, 1, 0, 1, 0, 1},
-                {0, 0, 0, 0, 1, 1, 1},
-                {0, 1, 0, 0, 0, 0, 0},
-                {0, 1, 1, 1, 1, 1, 0},
-                {0, 1, 1, 1, 0, 0, 0}
-        };
 
-//        int[] res = solve.BFS_solution(input1);
-//        System.out.println(Arrays.toString(res));
     }
 }
