@@ -111,7 +111,7 @@ def img_Preprocessing(img_frame):
 
 
 face_detector = dlib.get_frontal_face_detector()
-shape_predictor = dlib.shape_predictor("./assets/shape_predictor_68_face_landmarks.dat")
+shape_predictor = dlib.shape_predictor("../assets/shape_predictor_68_face_landmarks.dat")
 print("stub loading facial landmark predictor...")
 # video_capture = cv2.VideoCapture("./branch_test1.mp4")  # 사진
 video_capture = cv2.VideoCapture(0)  # 카메라
@@ -163,7 +163,7 @@ if video_capture.isOpened():
             d_index = 0
             if len(detection) >= 2:  # 인식된 얼굴이 2명 이상인 경우
                 d_index = front_detection(detection)  # 카메라에서 가장 가까운 얼굴 찾기
-
+            print(type(detection[d_index]))
             shape = shape_predictor(cmpos, detection[d_index])  # 그 얼굴에서 랜드마크 추출
             landmarks = list([p.x, p.y] for p in shape.parts())  # 리스트화
             landmarks = np.array(landmarks, dtype=np.float32)  # 파라미터 타입은 numpy.ndarray으로 해야함

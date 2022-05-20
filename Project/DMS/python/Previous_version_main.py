@@ -143,7 +143,8 @@ if video_capture.isOpened():
 
         if detection:
             d_index = front_detection(detection)  # 카메라에서 가장 가까운 얼굴 찾기
-            shape = shape_predictor(cmpos, detection[d_index])  # 그 얼굴에서 랜드마크 추출
+            print(type(detection[d_index]))
+            shape = shape_predictor(cmpos, detection[d_index])  # 그 얼굴에서 랜드마크 추출 <class '_dlib_pybind11.rectangle'> 가능한데? 왜 못함
             landmarks = list([p.x, p.y] for p in shape.parts())  # 리스트화
 
             eye_close_status = eye_close(landmarks[42:48], landmarks[36:42])

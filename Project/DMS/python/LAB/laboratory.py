@@ -1,41 +1,20 @@
 from argparse import ArgumentParser
-
+from function_stub import *
 import cv2
-from face_detector import MarkDetector
-from face_detector import FaceDetector
-
-print(__doc__)
-print("OpenCV version: {}".format(cv2.__version__))
 
 
-parser = ArgumentParser()
-parser.add_argument("--video", type=str, default=None,
-                    help="Video file to be processed.")
-parser.add_argument("--cam", type=int, default=None,
-                    help="The webcam index.")
-args = parser.parse_args()
+cnt = lab_test_class()
 
-if __name__ == '__main__':
-    video_src = args.cam if args.cam is not None else args.video
-    if video_src is None:
-        print("video default webcam will be used.")
-        video_src = 0
+video_capture = cv2.VideoCapture(0)  # 카메라
 
-    cap = cv2.VideoCapture(video_src)
+while True:
+    frame_got, frame = video_capture.read()
+    key = cv2.waitKey(1)
+    if key == 27:  # ESC
+        break
 
-    width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
-    height = cap.get(cv2.CAP_PROP_FRAME_HEIGHT)
+    if key == 65:
+        cnt.inner()
+    ret, img = video_capture.read()
 
-    face_detector = FaceDetector()
-    mark_detector = MarkDetector()
-
-    while True:
-        frame_got, frame = cap.read()
-        if frame_got is False:
-            break
-
-        if video_src == 0:
-            frame = cv2.flip(frame, 2)
-
-        face_detector.preprocessing(frame)
-
+    cv2.imshow("test", img)

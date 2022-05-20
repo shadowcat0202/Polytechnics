@@ -12,8 +12,8 @@ class FaceDetector:
     """Detect human face from image"""
 
     def __init__(self,
-                 dnn_proto_text='assets/deploy.prototxt',
-                 dnn_model='assets/res10_300x300_ssd_iter_140000.caffemodel'):
+                 dnn_proto_text='../assets/deploy.prototxt',
+                 dnn_model='../assets/res10_300x300_ssd_iter_140000.caffemodel'):
 
         """Initialization"""
         self.face_net = cv2.dnn.readNetFromCaffe(dnn_proto_text, dnn_model)
@@ -69,7 +69,7 @@ class FaceDetector:
 class MarkDetector:
     """Facial landmark detector by Convolutional Neural Network"""
 
-    def __init__(self, saved_model='assets/pose_model'):
+    def __init__(self, saved_model='../assets/pose_model'):
         """Initialization"""
         # A face detector is required for mark detection.
         self.face_detector = FaceDetector()

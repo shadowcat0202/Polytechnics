@@ -5,21 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9de2fc36-516b-49fb-8286-72b7e59e37a0" name="Changes" comment="Changes">
-      <change afterPath="$PROJECT_DIR$/calculation.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/my_mark_detector.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/stub_1.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/.idea/Code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/python.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/sort_during_in_class.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main_test.py" beforeDir="false" afterPath="$PROJECT_DIR$/main_non_use_dnn_sub.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/stub.py" beforeDir="false" afterPath="$PROJECT_DIR$/stub.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/.idea/modules.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/.idea/modules.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/Test.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/Test.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/package1/AAA.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/package1/AAA.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB/function_stub.py" beforeDir="false" afterPath="$PROJECT_DIR$/LAB/function_stub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LAB/laboratory.py" beforeDir="false" afterPath="$PROJECT_DIR$/LAB/laboratory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Previous_version_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/Previous_version_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/calculation.py" beforeDir="false" afterPath="$PROJECT_DIR$/branch_test1/calculation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/branch_test1/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/my_mark_detector.py" beforeDir="false" afterPath="$PROJECT_DIR$/branch_test1/my_mark_detector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/pose_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/branch_test1/pose_estimator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/facial-landmark-detection(unknown)/experimental/pose_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/facial-landmark-detection(unknown)/experimental/pose_estimator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/main_non_use_dnn_sub.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/main_non_use_dnn_sub.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/main_use_dnn.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/main_use_dnn.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/mark_detector.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/mark_detector.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/pose_estimator.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/pose_estimator.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/my_sort.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/my_sort.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,6 +45,18 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/branch_test1/main.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/branch_test1/calculation.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/branch_test1/my_mark_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/pose_estimator.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file:////172.16.30.52/ai-data/DMS/python/stub_1.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/mark_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/face_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/main_use_dnn.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Previous_version_main.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/branch_test1/pose_estimator.py" root0="FORCE_HIGHLIGHTING" />
+  </component>
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
@@ -57,7 +70,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/asset" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/branch_test1" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -70,18 +83,61 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\branch_test1" />
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\asset" />
       <recent name="D:\JEON\Polytechnics\Project\DMS\python" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\mystudy\pholythec\Project\DMS\python\asset" />
-      <recent name="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection-unknown" />
-      <recent name="D:\JEON\Polytechnics\Project\DMS\python\still-unknown1" />
-      <recent name="D:\JEON\Polytechnics\Project\DMS\python\still-unknown" />
-      <recent name="D:\JEON\Polytechnics\Project\DMS\python\facial-landmark-detection" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\LAB" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\master" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\original" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\assets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.stub">
+  <component name="RunManager" selected="Python.main (2)">
+    <configuration name="Previous_version_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/Previous_version_main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="calculation" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/branch_test1" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/branch_test1/calculation.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="function_stub" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -94,7 +150,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/function_stub.py" />
+      <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\original\function_stub.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -103,7 +159,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="main (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -111,11 +167,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/head-pose-estimation" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/branch_test1" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/head-pose-estimation/main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/branch_test1/main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -136,28 +192,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main_non_use_dnn_sub" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="python" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\main_non_use_dnn_sub.py" />
+      <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\original\main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -174,11 +209,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/branch_test1" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/my_mark_detector.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/branch_test1/my_mark_detector.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -187,7 +222,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="stub" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="pose_estimator" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -195,32 +230,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/branch_test1" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/stub.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="stub_1" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="python" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/stub_1.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/branch_test1/pose_estimator.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -231,11 +245,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.stub" />
-        <item itemvalue="Python.stub_1" />
+        <item itemvalue="Python.main (2)" />
+        <item itemvalue="Python.calculation" />
+        <item itemvalue="Python.pose_estimator" />
         <item itemvalue="Python.my_mark_detector" />
-        <item itemvalue="Python.main (1)" />
-        <item itemvalue="Python.main_non_use_dnn_sub" />
+        <item itemvalue="Python.Previous_version_main" />
       </list>
     </recent_temporary>
   </component>

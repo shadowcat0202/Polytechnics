@@ -1,17 +1,41 @@
+from functools import wraps
+
 import cv2
 import numpy
 import dlib
+import time
 
-ER_cnt = 0
-state = 1
-
-def test(a, b):
-    if b == 30:
-        b = 0
-    return b + 1, a
+lastsave = 0
 
 
-while True:
-    ER_cnt, state = test([10, 20], ER_cnt)
-    print(f"{ER_cnt},{state}")
+class lab_test_class:
+    def __init__(self):
+        self.count = 0
 
+    def inner_counter(self, func):
+        def tmp(self, *args, **kwargs):
+            self.count += 1
+            global lastsave
+            # print(f"during close: {time.time() - lastsave}")
+            if time.time() - lastsave > 5:
+                lastsave = time.time()
+                tmp.count = 0
+            return func(*args, **kwargs)
+        tmp.count = 0
+        return tmp
+
+        # @wraps(func)
+        # def tmp(*args, **kwargs):
+        #     tmp.count += 1
+        #     global lastsave
+        #     # print(f"during close: {time.time() - lastsave}")
+        #     if time.time() - lastsave > 5:
+        #         lastsave = time.time()
+        #         tmp.count = 0
+        #     return func(*args, **kwargs)
+        # tmp.count = 0
+        # return tmp
+
+    @inner_counter
+    def inner(self, a):
+        print(a, "inner")
