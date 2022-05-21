@@ -95,6 +95,25 @@ class eye_calculation:
         cv2.imshow("Histograms Equalization", composed)
         return re_size, composed
 
+    def img_Preprocessing_v2(self, img_frame):
+        # Gaussian Pyramid: An image pyramid is a collection of images - all arising from a single original image - that are successively downsampled until some desired stopping point is reached.
+        # https://docs.opencv.org/3.4/d4/d1f/tutorial_pyramids.html
+        re_size = 0
+        for i in range(10):
+            re_size = cv2.pyrDown(img_frame)
+
+        # Tophat: The top-hat filter is used to enhance bright objects of interest in a dark background.
+        # https://www.geeksforgeeks.org/top-hat-and-black-hat-transform-using-python-opencv/
+        filterSize = (150, 150)
+        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, filterSize)
+        topHat = cv2.morphologyEx(re_size, cv2.MORPH_TOPHAT, kernel)
+
+        # HE: It is a method that improves the contrast in an image, in order to stretch out the intensity range (see also the corresponding Wikipedia entry).
+        gray = cv2.cvtColor(topHat, cv2.COLOR_BGR2GRAY)
+        result = cv2.equalizeHist(gray)
+
+        return re_size, result
+
     @close_counter
     def close(self, img, color=(0, 0, 255)):
         cv2.putText(img, "close", (250, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
