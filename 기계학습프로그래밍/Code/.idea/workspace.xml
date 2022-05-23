@@ -5,19 +5,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54393a3d-d365-4db0-9f69-1e27cdf71328" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/pytorch-base-Nerual-Network-build.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Python/Pima-inidans-diabetes.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/.idea/Code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/.idea/Code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/pytorch-base-Nerual-Network-build.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/pytorch-base-Nerual-Network-build.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/python.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Code.iml" beforeDir="false" afterPath="$PROJECT_DIR$/Code.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Python/dataset/Iris.csv" beforeDir="false" afterPath="$PROJECT_DIR$/Python/dataset/Iris.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../프로젝트 개요.xlsx" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/LAB/laboratory.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/LAB/laboratory.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/calculation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/calculation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,7 +49,7 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../Project/Architectural-drawing-recognition/python" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
   <component name="RunManager" selected="Python.Pima-inidans-diabetes">
