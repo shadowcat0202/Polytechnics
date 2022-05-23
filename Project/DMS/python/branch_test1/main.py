@@ -35,7 +35,7 @@ MARK_INDEX = RIGHT_EYE + LEFT_EYE + MOUTH_INLINE
 frame_cnt = 0
 frame_sum = 0
 frame_avg = 0
-video_capture = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220520_16_10_36_Pro.mp4")  # 사진
+video_capture = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220520_16_13_04_Pro.mp4")
 # video_capture = cv2.VideoCapture(0)  # 카메라
 
 width = video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)
@@ -48,7 +48,6 @@ face_detector = FaceDetector()
 mark_detector = MarkDetector(save_model="../assets/shape_predictor_68_face_landmarks.dat")  # 경로 확인 필수!!
 
 eye_calc = eye_calculation()
-
 
 if video_capture.isOpened():
     print("camera is ready")
@@ -63,7 +62,7 @@ if video_capture.isOpened():
         # img = cv2.flip(img, 1) # 시나리오 측정할때는 좌우 반전 풀고 실행
         # img = cv2.rotate(img, cv2.ROTATE_90_CLOCKWISE)  # 적외선 카메라 사용시
 
-        img, cmpos = eye_calc.img_Preprocessing(img)  # 프레임별 이미지 전처리
+        img, cmpos = eye_calc.img_Preprocessing_v2(img)  # 프레임별 이미지 전처리
         face_box = face_detector.get_faceboxes(cmpos)  # 전처리한 이미지에서 얼굴 검출
         if face_box is not None:
             landmark = mark_detector.get_marks(cmpos, face_box)  # 얼굴에서 랜드마크 추출 type:list
@@ -79,7 +78,6 @@ if video_capture.isOpened():
                 if eye_calc.close.count >= 7:
                     cv2.putText(img, "SLEEPING!!!", (100, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
             # # 눈 감김 판단 끝 =======================================================================
-
 
             # # 시각화 ===============================================================================
             # # 육면체를 보고싶다면?
@@ -98,8 +96,6 @@ if video_capture.isOpened():
             # detection_box = [face_box.left(), face_box.top(),
             #                  face_box.right(), face_box.bottom()]
             # mark_detector.draw_box(img, [detection_box], box_color=BLUE)
-
-
 
         frame_sum += int(1. / (time.time() - start_t))
         if frame_cnt == 3:

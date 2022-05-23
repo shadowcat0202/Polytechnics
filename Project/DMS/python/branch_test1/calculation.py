@@ -50,7 +50,7 @@ class eye_calculation:
 
         avg = round((left_ER + right_ER) / 2, 2)
         self.both_ER_ratio_avg = avg
-        return avg < 0.3
+        return avg < 0.2
 
     def draw_eye_close_ratio(self, img, color=(0, 255, 0)):
         cv2.putText(img, f"{self.both_ER_ratio_avg}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)

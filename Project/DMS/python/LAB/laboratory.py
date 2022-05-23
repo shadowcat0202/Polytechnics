@@ -33,7 +33,8 @@ def down(img):
 
 # video_capture = cv2.VideoCapture("../test_face.png")  # 카메라
 # src = cv2.imread("D:/mystudy/pholythec/Project/DMS/face_sample/face_sample3.png")
-src = cv2.imread("../dark_face.png")
+# src = cv2.imread("D:/JEON/Polytechnics/Project/DMS/dataset/face_sample2.png")
+src = cv2.imread("../test_face.png")
 src = cv2.resize(src, (250, 250))
 filterSize = (150, 150)
 
