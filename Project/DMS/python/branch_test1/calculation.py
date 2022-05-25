@@ -59,7 +59,7 @@ def get_rotate_border_box(img, box, mark):
     d2_4 = rotate(bdx1, bdy1,midx, midy,angle)
 
     pts1 = np.float32([[d2_1[0], d2_1[1]], [d2_2[0], d2_2[1]], [d2_3[0], d2_3[1]], [d2_4[0], d2_4[1]]])
-    pts2 = np.float32([[0, 0], [500, 0], [0, 500], [500, 500]])
+    pts2 = np.float32([[0, 0], [400, 0], [0, 400], [400, 400]])
 
     M = cv2.getPerspectiveTransform(pts1, pts2)
 
