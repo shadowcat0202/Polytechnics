@@ -12,6 +12,79 @@ def distance(p1, p2):
     return ((p1[0] - p2[0]) ** 2 + (p1[1] - p2[1]) ** 2) ** (1 / 2)
 
 
+def rotate(brx, bry, midx, midy, angle):
+    crx = brx - midx
+    cry = bry - midy
+    arx = np.cos(-angle) * crx - np.sin(-angle) * cry
+    ary = np.sin(-angle) * crx + np.cos(-angle) * cry
+    rx = int(arx + midx)
+    ry = int(ary + midy)
+
+    return [rx, ry]
+
+
+def get_rotate_border_box(img, box, mark):
+    x = box.left()
+    y = box.top()
+    x1 = box.right()
+    y1 = box.bottom()
+    bdx = x - (x1 - x) / 2
+    bdy = y - (y1 - y) / 2
+    bdx1 = x1 + (x1 - x) / 2
+    bdy1 = y1 + (y1 - y) / 2
+    midx = (x + x1) / 2
+    midy = (y + y1) / 2
+
+
+    rex = mark[45][0]
+    rey = mark[45][1]
+    lex = mark[36][0]
+    ley = mark[36][1]
+
+    mex = int(lex + (rex - lex) / 2)
+    mey = int(ley + (rey - ley) / 2)
+
+    tanx = mex - lex
+    tany = ley - mey
+    tan = tany / tanx
+    angle = np.arctan(tan)
+
+    rsd_1 = rotate(x, y,midx, midy,angle)
+    rsd_2 = rotate(x1, y,midx, midy,angle)
+    rsd_3 = rotate(x, y1,midx, midy,angle)
+    rsd_4 = rotate(x1, y1,midx, midy,angle)
+    d2_1 = rotate(bdx, bdy,midx, midy,angle)
+    d2_2 = rotate(bdx1, bdy,midx, midy,angle)
+    d2_3 = rotate(bdx, bdy1,midx, midy,angle)
+    d2_4 = rotate(bdx1, bdy1,midx, midy,angle)
+
+    pts1 = np.float32([[d2_1[0], d2_1[1]], [d2_2[0], d2_2[1]], [d2_3[0], d2_3[1]], [d2_4[0], d2_4[1]]])
+    pts2 = np.float32([[0, 0], [500, 0], [0, 500], [500, 500]])
+
+    M = cv2.getPerspectiveTransform(pts1, pts2)
+
+    return cv2.warpPerspective(img, M, (400, 400))
+
+
+def prespective_Transform(rotate_border_box, img, mulrate=1):
+    width = int(mulrate * distance([rotate_border_box[0][0], rotate_border_box[0][1]], [rotate_border_box[1][0],rotate_border_box[0][1]]))
+    hight = int(mulrate * distance([rotate_border_box[0][0], rotate_border_box[0][1]], [rotate_border_box[0][0],rotate_border_box[1][1]]))
+    # print(width, hight)
+
+    pts1 = np.float32([[rotate_border_box[0][0], rotate_border_box[0][1]],
+                       [rotate_border_box[1][0], rotate_border_box[0][1]],
+                       [rotate_border_box[0][0], rotate_border_box[1][1]],
+                       [rotate_border_box[1][0], rotate_border_box[1][1]]])
+
+    pts2 = np.float32([[0, 0], [width, 0], [0, hight], [width, hight]])
+    # pts2 = np.float32([[0, 0], [400, 0], [0, 400], [400, 400]])
+
+    M = cv2.getPerspectiveTransform(pts1, pts2)
+
+    return cv2.warpPerspective(img, M, (width, hight))
+    # return cv2.warpPerspective(img, M, (400, 400))
+
+
 # https://wjh2307.tistory.com/21
 # 눈 감기(함수) + 자는거 판단(부정확)
 def close_counter(func):
@@ -33,8 +106,6 @@ class eye_calculation:
     def __init__(self):
         """Initialization"""
         self.both_ER_ratio_avg = 0
-        self.clahe = cv2.createCLAHE(clipLimit=2.0,
-                                     tileGridSize=(8, 8))
 
     # 눈 비율 값 계산
     def ER_ratio(self, eye_point):
@@ -55,65 +126,6 @@ class eye_calculation:
     def draw_eye_close_ratio(self, img, color=(0, 255, 0)):
         cv2.putText(img, f"{self.both_ER_ratio_avg}", (10, 60), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
 
-    def img_Preprocessing(self, img_frame):
-        """
-        cv2.resize((fx,fy),interpilation )
-        1. cv2.INTER_NEAREST - 최근방 이웃 보간법
-         가장 빠르지만 퀄리티가 많이 떨어집니다. 따라서 잘 쓰이지 않습니다.
-        2. cv2.INTER_LINEAR - 양선형 보간법(2x2 이웃 픽셀 참조)
-         4개의 픽셀을 이용합니다.
-         효율성이 가장 좋습니다. 속도도 빠르고 퀄리티도 적당합니다.
-
-        3. cv2.INTER_CUBIC - 3차회선 보간법(4x4 이웃 픽셀 참조)
-         16개의 픽셀을 이용합니다.
-         cv2.INTER_LINEAR 보다 느리지만 퀄리티는 더 좋습니다.
-        4. cv2.INTER_LANCZOS4 - Lanczos 보간법 (8x8 이웃 픽셀 참조)
-         64개의 픽셀을 이용합니다.
-         좀더 복잡해서 오래 걸리지만 퀄리티는 좋습니다.
-        5. cv2.INTER_AREA - 영상 축소시 효과적
-         영역적인 정보를 추출해서 결과 영상을 셋팅합니다.
-         영상을 축소할 때 이용합니다."""
-        re_size = cv2.resize(img_frame, (400, 400), cv2.INTER_AREA)
-
-        gray = cv2.cvtColor(re_size, cv2.COLOR_BGR2GRAY)
-        lab = cv2.cvtColor(re_size, cv2.COLOR_BGR2LAB)
-
-        # # CLAHE
-        gray = self.clahe.apply(gray)
-        # lab = self.clahe.apply(lab)
-
-        # # 빛 제거? 무슨 원리인지는 모르겠다
-        L = lab[:, :, 0]
-        med_L = cv2.medianBlur(L, 99)  # median filter  # 뭔지 모르겠음
-        invert_L = cv2.bitwise_not(med_L)  # invert lightness   # 빛 제거?
-        composed = cv2.addWeighted(gray, 0.75, invert_L, 0.25, 0)
-
-        # # Histograms Equalization
-        # equ = cv2.equalizeHist(gray)  # 무조건 색상이 1차원이여야 한다 = gray
-        # result = np.hstack((gray, equ))
-
-        cv2.imshow("Histograms Equalization", composed)
-        return re_size, composed
-
-    def img_Preprocessing_v2(self, img_frame):
-        # Gaussian Pyramid: An image pyramid is a collection of images - all arising from a single original image - that are successively downsampled until some desired stopping point is reached.
-        # https://docs.opencv.org/3.4/d4/d1f/tutorial_pyramids.html
-        re_size = 0
-        for i in range(10):
-            re_size = cv2.pyrDown(img_frame)
-
-        # Tophat: The top-hat filter is used to enhance bright objects of interest in a dark background.
-        # https://www.geeksforgeeks.org/top-hat-and-black-hat-transform-using-python-opencv/
-        filterSize = (150, 150)
-        kernel = cv2.getStructuringElement(cv2.MORPH_RECT, filterSize)
-        topHat = cv2.morphologyEx(re_size, cv2.MORPH_TOPHAT, kernel)
-
-        # HE: It is a method that improves the contrast in an image, in order to stretch out the intensity range (see also the corresponding Wikipedia entry).
-        gray = cv2.cvtColor(topHat, cv2.COLOR_BGR2GRAY)
-        result = cv2.equalizeHist(gray)
-
-        return re_size, result
-
     @close_counter
     def close(self, img, color=(0, 0, 255)):
-        cv2.putText(img, "close", (250, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)
+        cv2.putText(img, "close", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, color, 2)

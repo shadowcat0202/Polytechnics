@@ -14,6 +14,7 @@ Download FADID Training Database(Nighttime) [https://cvpr.kmu.ac.kr/Dataset_Faci
  
 얼굴에서 랜드마크 뽑아내는 모델 학습 방법
 https://ballentain.tistory.com/33
+https://github.com/kalyanghosh/Face-Detection-using-CNN  20220524
 
 
 https://ys-cs17.tistory.com/24	졸음 감지 학습 
