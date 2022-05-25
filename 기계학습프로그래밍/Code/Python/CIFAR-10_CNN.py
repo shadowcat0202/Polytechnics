@@ -1,3 +1,5 @@
+import os
+
 import numpy
 import tensorflow as tf
 
@@ -11,34 +13,32 @@ from tensorflow.keras.layers import MaxPooling2D
 from tensorflow.keras.layers import Flatten
 
 from tensorflow.keras.models import load_model
-from keras import initializers
-from torch.nn import Dropout
 
-device = tf.device('cuda')
-
-numpy.random.seed(0)
 
 MY_EPOCH = 10
 MY_BATCHSIZE = 200
 filename = f"./model/cnn_e({MY_EPOCH}).h5"
 
-(train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
-
-
-def make_model():
+def make_model_CNN():
     model = Sequential()
-
-    model.add(Conv2D(filters=32, kernel_size=(5, 5), activation='relu',
+    # Layer 1
+    model.add(Conv2D(512, (5, 5), activation='relu',
                      input_shape=(32, 32, 3),
-                     padding='same'))
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Conv2D(32, (5, 5), activation='relu', padding='same'))
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Conv2D(64, (5, 5), activation='relu', padding='same'))
-    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Flatten())
+                     padding='same'))  # 32 x 32 x 3
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 16 x 16
+
+    # Layer 2
+    model.add(Conv2D(256, (5, 5), activation='relu', padding='same'))  # Conv2d(filter, kernel_size 부터 시작한다)
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 8 x 8
+
+    # Layer 3
+    model.add(Conv2D(128, (5, 5), activation='relu', padding='same'))  # Conv2d(filter, kernel_size 부터 시작한다)
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 4 x 4
+
+    model.add(Flatten())  # 4 x 4 로 만들어진 이미지를 1 차원으로 핀다
+
     model.add(Dense(64, activation='relu'))
-    model.add(Dense(10, activation='softmax'))
+    model.add(Dense(10, activation="softmax"))
     model.summary()
 
     model.compile(loss="categorical_crossentropy",
@@ -64,6 +64,12 @@ def test_all(x, y):
     return test_loss, test_acc
 
 
-cnn = make_model()
+device = tf.device('cuda')
+
+numpy.random.seed(0)
+
+(train_images, train_labels), (test_images, test_labels) = cifar10.load_data()
+
+cnn = make_model_CNN()
 train(cnn, train_images, train_labels)
 print(test_all(test_images, test_labels))

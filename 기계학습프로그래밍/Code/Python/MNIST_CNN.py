@@ -42,9 +42,9 @@ def make_model_CNN():
                      activation="relu",
                      input_shape=(28, 28, 1),
                      padding="same"))  # 28 x 28
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 14 x 14
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 14 x 14
     model.add(Conv2D(64, (5, 5), activation="relu", padding="same"))  # Conv2d(filter, kernel_size 부터 시작한다)
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다
+    model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다
 
     model.add(Flatten())  # 7 x 7 로 만들어진 이미지를 1 차원으로 핀다
     model.add(Dense(1000, activation="relu"))
@@ -59,7 +59,7 @@ def make_model_CNN():
 
 
 def train(model, X, Y):
-    MY_EPOCH = 20
+    MY_EPOCH = 10
     MY_BATCHSIZE = 200
     Y = tf.keras.utils.to_categorical(Y, 10)
     history = model.fit(X, Y, epochs=MY_EPOCH, batch_size=MY_BATCHSIZE)
