@@ -147,6 +147,18 @@ public class Main {
     }
 
     public static void main(String[] args){
+        int[][] map = {
+                {0, 1, 1, 0, 2, 0, 0},
+                {0, 1, 1, 0, 2, 0, 2},
+                {1, 1, 1, 0, 2, 0, 2},
+                {0, 0, 0, 0, 2, 2, 2},
+                {0, 3, 0, 0, 0, 0, 0},
+                {0, 3, 3, 3, 3, 3, 0},
+                {0, 3, 3, 3, 0, 0, 0}
+        };
+        Search sr = new Search();
+        int[] ans = sr.solution_use_recursive(map);
 
+        System.out.printf("영역의 개수: %d\n가장 큰 영역: %d",ans[0], ans[1]);
     }
 }
