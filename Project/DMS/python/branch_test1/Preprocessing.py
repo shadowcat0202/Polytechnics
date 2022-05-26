@@ -67,12 +67,13 @@ def img_Preprocessing_v3(img_frame):
     re_size = cv2.pyrDown(np.mean(img_frame, axis=2).astype("uint8"))
 
     # Tophat: The top-hat filter is used to enhance bright objects of interest in a dark background.
-    filterSize = (320, 200)
+    # filterSize = (320, 200)
+    filterSize = (160, 100)
     kernel = cv2.getStructuringElement(cv2.MORPH_RECT, filterSize)
     topHat = cv2.morphologyEx(re_size, cv2.MORPH_TOPHAT, kernel)  # 밝기가 높은것을 부각 시켜준다
 
     # CLAHE : # Equalizes the histogram of a grayscale image using Contrast Limited Adaptive Histogram Equalization.
-    clahe = cv2.createCLAHE(clipLimit = 5.0, tileGridSize = (8,8))
+    clahe = cv2.createCLAHE(clipLimit = 1.0, tileGridSize = (16,16))
     clahe = clahe.apply(topHat)
 
     histEqual = cv2.equalizeHist(clahe)
