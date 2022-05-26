@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="97de327e-3475-4661-abf0-8410644337af" name="Changes" comment="Changes" />
+    <list default="true" id="97de327e-3475-4661-abf0-8410644337af" name="Changes" comment="Changes">
+      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/branch_test1/Preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/branch_test1/Preprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/branch_test1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/branch_test1/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../Project/DMS/python/face_landmark_training/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../Project/DMS/python/face_landmark_training/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Code.iml" beforeDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -30,7 +38,7 @@
     <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../../other/my-java-data-structure" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../Python" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -41,7 +49,7 @@
       <recent name="D:\mystudy\폴리텍\기계학습프로그래밍\Code\Java\src" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Midterm_exam">
+  <component name="RunManager">
     <configuration name="Main" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="Main" />
       <module name="Java" />
@@ -57,12 +65,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <recent_temporary>
-      <list>
-        <item itemvalue="Application.Midterm_exam" />
-        <item itemvalue="Application.Main" />
-      </list>
-    </recent_temporary>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -88,6 +90,5 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
 </project>

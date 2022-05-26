@@ -5,14 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54393a3d-d365-4db0-9f69-1e27cdf71328" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/pytorch-base-Nerual-Network-build.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/pytorch-base-Nerual-Network-build.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/python.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/LAB/laboratory.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/LAB/laboratory.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/calculation.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/calculation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/Preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/Preprocessing.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/branch_test1/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/face_landmark_training/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/face_landmark_training/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../SW활용 및 코딩/Code/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../SW활용 및 코딩/Code/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Code.iml" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,10 +48,10 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/.." />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Java" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PythonContentEntriesConfigurable" />
   </component>
-  <component name="RunManager" selected="Python.Pima-inidans-diabetes">
+  <component name="RunManager" selected="Python.main">
     <configuration name="MNIST (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="Code" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -158,6 +157,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="Python.Pima-inidans-diabetes" />
@@ -189,5 +209,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>8</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

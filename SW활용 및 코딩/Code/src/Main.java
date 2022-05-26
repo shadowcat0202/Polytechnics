@@ -4,19 +4,23 @@ import package2.*;
 import java.util.Arrays;
 class Point{
     private int x, y;
-    public void set(int x, int y){
+    public Point(){
+        this.x = this.y = 0;
+    }
+    public Point(int x, int y){
         this.x = x;
         this.y = y;
     }
 
     public void showPoint(){
-        System.out.println("(" + this.x + ", " + this.y + ")");
+        System.out.println("pos:(" + this.x + ", " + this.y + ")");
     }
 }
 
 class ColorPoint extends Point{
     private int R, G, B;
-    public void setColor(int r, int g, int b){
+    public ColorPoint(int x, int y, int r, int g, int b){
+        super(x,y);
         try{
             if(r < 0 || g < 0 || b < 0 || r > 255 || g > 255 || b > 255)
                 throw new Exception("color int: 0 to 255");
@@ -33,10 +37,11 @@ class ColorPoint extends Point{
     }
     public void showColorPoint(){
         StringBuilder sb = new StringBuilder();
-        sb.append("(");
+        sb.append("color:(");
         sb.append(this.R).append(", ");
         sb.append(this.G).append(", ");
         sb.append(this.B).append(")");
+        showPoint();
         System.out.println(sb.toString());
     }
 }
@@ -61,12 +66,35 @@ class pizza{
 
 class AA{
     AA(){
-        System.out.println("Class AA");
+        System.out.println("Class AA non");
+    }
+    AA(int a){
+        System.out.println("Class AA" + a);
     }
 }
 class BB extends AA{
     BB(){
         System.out.println("Class BB");
+    }
+}
+class Shape{
+    public Shape next;
+    public Shape(){
+        this.next = null;
+    }
+    public void draw(){
+        System.out.println("Shape");
+    }
+}
+class Line extends Shape{
+    public void draw(){
+        super.draw();
+        System.out.println("Line");
+    }
+}
+class Rect extends Shape{
+    public void draw(){
+        System.out.println("Rect");
     }
 }
 public class Main {
@@ -118,12 +146,25 @@ public class Main {
 
 
     }
+
     public static void main(String[] args){
-        ColorPoint cp = new ColorPoint();
-        cp.set(10, 20);
-        cp.setColor(0,100,225);
-        cp.showPoint();
-        cp.showColorPoint();
+        Shape start, end, obj;
+        start = new Shape();
+        end = start;
+        obj = new Line();
+        end.next = obj;
+        end = obj;
+        obj = new Rect();
+        end.next = obj;
+        end = obj;
+
+        Shape p = start;
+        while(p != null){
+            p.draw();
+            p = p.next;
+        }
+
+
 
     }
 
