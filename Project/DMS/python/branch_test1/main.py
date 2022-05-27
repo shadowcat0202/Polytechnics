@@ -6,6 +6,8 @@ from branch_test1.pose_estimator import PoseEstimator
 import calculation as calc
 from branch_test1.img_draw import *
 import Preprocessing as ps
+import tensorflow as tf
+
 from functools import wraps
 
 lastsave = 0
@@ -43,6 +45,9 @@ frame_avg = 0
 total_frame1 = 0
 detection_frame1 = 0
 frame_sum1 = 0
+
+trackers = []
+
 video_capture = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220520_16_13_04_Pro.mp4")
 # video_capture = cv2.VideoCapture(0)  # 카메라
 
@@ -69,11 +74,11 @@ if video_capture.isOpened():
         if key == 27 or not ret:  # ESC
             break
 
-        img = cv2.resize(img,
-                         (round(img.shape[1] * img_resize_rate), round(img.shape[0] * img_resize_rate)),
-                         cv2.INTER_AREA)
-        print(type(img))
-        # img = cv2.resize(img, (640, 400), cv2.INTER_AREA)
+        # img = cv2.resize(img,
+        #                  (round(img.shape[1] * img_resize_rate), round(img.shape[0] * img_resize_rate)),
+        #                  cv2.INTER_AREA)
+        # print(type(img))
+        img = cv2.resize(img, (640, 400), cv2.INTER_AREA)
         # img, g, r = cv2.split(img)
         # b = b // 3
 
@@ -90,7 +95,8 @@ if video_capture.isOpened():
         # IM.showMultiImage(dstimage, tholdc, rows, cols, 1, 0, 1)
         # IM.showMultiImage(dstimage, tholdo, rows, cols, 1, 1, 0)
 
-        face_box = face_detector.get_faceboxes(cmpos)  # 전처리한 이미지에서 얼굴 검출
+        face_box = face_detector.get_faceboxes(img)  # 전처리한 이미지에서 얼굴 검출
+
         if face_box is not None:
             detection_frame += 1
             landmark = mark_detector.get_marks(cmpos, face_box)  # 얼굴에서 랜드마크 추출 type:list
@@ -99,7 +105,7 @@ if video_capture.isOpened():
             # 추가로 solve_pose_by_68_points 내부 함수 중 cv2.solvePnP의 인자중 랜드마크는 np.float32로 해주어야 한다
             pose = pose_estimator.solve_pose_by_68_points(landmark_ndarray)
 
-            dst = calc.get_rotate_border_box(cmpos, face_box, landmark)
+            dst = calc.get_rotate_border_box(img, face_box, landmark)
             cv2.imshow("dst", dst)
             # cmpos1 = ps.img_Preprocessing_v2(dst)
             face_box1 = face_detector.get_faceboxes(dst)
@@ -137,10 +143,10 @@ if video_capture.isOpened():
             #     frame_sum = 0
             # cv2.putText(img, f"FPS:{frame_avg}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
             # cv2.imshow("img", img)
-            cv2.putText(cmpos, "detection!!!", (250, 210), cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 2)
-        cv2.putText(cmpos, f"cmpos rate :{round((detection_frame / total_frame) * 100, 2)}", (10, 210),
+            cv2.putText(img, "detection!!!", (250, 210), cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 2)
+        cv2.putText(img, f"cmpos rate :{round((detection_frame / total_frame) * 100, 2)}", (10, 210),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 2)
-        cv2.imshow("cmpos", cmpos)
+        cv2.imshow("cmpos", img)
 
 cv2.destroyAllWindows()
 video_capture.release()

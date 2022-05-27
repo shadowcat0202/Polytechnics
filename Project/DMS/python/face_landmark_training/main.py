@@ -8,6 +8,7 @@ from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+from tensorflow import keras
 # from tensorflow.python.keras.optimizer_v2.adam import Adam
 import pandas as pd
 import cv2
@@ -15,11 +16,12 @@ from tensorflow.python.keras.layers import AvgPool2D
 from tensorflow.python.keras.optimizer_v2.gradient_descent import SGD
 
 
-def make_model(inSahpe, outShape=24):
+def make_model(x, y):
     demention = 1
-    if len(inSahpe) == 4:
+    if len(x.shape) == 4:
         demention = 3
-    print(inSahpe, outShape, demention)
+    outShape = len(y[0])
+    print(x.shape, outShape, demention)
     # model = Sequential()
     # model.add(Conv2D(32, (3, 3), padding='same', activation='tanh', input_shape=(inSahpe[1], inSahpe[2], demention)))
     # model.add(MaxPool2D(pool_size=(2, 2)))
@@ -32,8 +34,8 @@ def make_model(inSahpe, outShape=24):
 
     model = Sequential()
     # Layer 1
-    model.add(Conv2D(64, (5,5), activation='tanh',
-                     input_shape=(inSahpe[1], inSahpe[2], demention),
+    model.add(Conv2D(64, (5, 5), activation='tanh',
+                     input_shape=(x.shape[1], x.shape[2], demention),
                      padding='same'))  # 32 x 32 x 3
     model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 16 x 16
     # model.add(AvgPool2D(pool_size=(2, 2), strides=(2, 2)))
@@ -45,13 +47,13 @@ def make_model(inSahpe, outShape=24):
     # model.add(AvgPool2D(pool_size=(2, 2), strides=(2, 2)))
 
     # Layer 3
-    model.add(Conv2D(32, (5,5), activation='tanh', padding='same'))  # Conv2d(filter, kernel_size 부터 시작한다)
+    model.add(Conv2D(32, (5, 5), activation='tanh', padding='same'))  # Conv2d(filter, kernel_size 부터 시작한다)
     model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 4 x 4
     # model.add(AvgPool2D(pool_size=(2, 2), strides=(2, 2)))
     # model.add(Dropout(0.25))
     model.add(Flatten())  # 4 x 4 로 만들어진 이미지를 1 차원으로 핀다
 
-    model.add(Dense(8, activation='tanh'))
+    model.add(Dense(16, activation='tanh'))
     model.add(Dense(outShape, activation="softmax"))
     model.summary()
 
@@ -61,6 +63,8 @@ def make_model(inSahpe, outShape=24):
                   optimizer=opt,
                   metrics=["accuracy"])
     return model
+
+
 
 
 def read_text_to_np():
@@ -113,31 +117,32 @@ def make_X_Y(path=None):
 # print(img_name_list)
 
 # print(img.shape)    #(480, 720, 3)
-# for i in range(2, 21):
-#     plt.imshow(img)
-#     x, y = zip(df[img_name_list[0]][i])
-#     plt.scatter(x, y)
-#     plt.show()
 
 
-Xtrain, Ytrain = make_X_Y("../../dataset/face_landmark_train_set/Train_daytime/")
-# Xtrain, Ytrain = make_train("../../dataset/face_landmark_train_set/train/5_chs/")
-print(len(Ytrain[0])/2)
+
+# Xtrain, Ytrain = make_X_Y("../../dataset/face_landmark_train_set/Train_daytime/")
+Xtrain, Ytrain = make_X_Y("../../dataset/face_landmark_train_set/train/5_chs/")
+print(len(Ytrain[0]) / 2)
 
 print(f"Xtype{type(Xtrain)}, Ytype{type(Ytrain)}, shape: {Xtrain.shape}")
 Xtest, Ytest = make_X_Y("../../dataset/face_landmark_train_set/test/8_test_sj/")
 print(type(Xtest))
 print(type(Ytest))
 
-
-MY_EPOCH = 20
+MY_EPOCH = 10
 MY_BATCHSIZE = 20
 
-model = make_model(Xtrain.shape, len(Ytrain[0]))
+print(f"input_shape={Xtrain.shape}, output_size={len(Ytrain[0])}")
+model = make_model(Xtrain, Ytrain)
 with tf.device("/gpu:0"):
     # model.fit(Xtrain, Ytrain, batch_size=MY_BATCHSIZE, epochs=MY_EPOCH, validation_data=(Xtest, Ytest), verbose=1)
     model.fit(Xtrain, Ytrain, batch_size=MY_BATCHSIZE, epochs=MY_EPOCH, verbose=1)
 filename = "./model/cnn_test({0}).h5".format(MY_EPOCH)
 model.save(filename)
 
-# Ytrain_pred = model.predict()
+Ytrain_pred = model.predict(Xtest[0])
+# for i in range(2, 21):
+#     plt.imshow(img)
+#     x, y = zip(df[img_name_list[0]][i])
+#     plt.scatter(x, y)
+#     plt.show()
