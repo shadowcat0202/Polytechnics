@@ -45,8 +45,6 @@ public class Search {
         }
         System.out.println(sb.toString());
         return new int[] {n_group, max_area};
-
-
     }
 
     // 큐 혹은 스텍을 사용해서 해결
