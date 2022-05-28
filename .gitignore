@@ -2,10 +2,10 @@
 *.pyc
 강의자료/
 dataset/
-<<<<<<< HEAD
-*.h5
-=======
 *.h5
 *.plk
 *.mp4
 ./Porject/DMS/dataset
+*.zip
+*.png
+*.data-00000-of-00001
