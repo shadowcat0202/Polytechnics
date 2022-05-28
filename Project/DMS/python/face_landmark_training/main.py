@@ -1,7 +1,6 @@
 # https://www.kaggle.com/code/richardarendsen/face-landmarks-with-cnn/notebook
-import pprint
 from glob import glob
-import MODEL
+import Model_tf
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -10,12 +9,10 @@ from tensorflow import keras
 # from tensorflow.python.keras.optimizer_v2.adam import Adam
 import pandas as pd
 import cv2
-from tensorflow.python.keras.layers import AvgPool2D
-from tensorflow.python.keras.optimizer_v2.gradient_descent import SGD
+from Model_tf import eye_Net
 
-<<<<<<< HEAD
 MY_EPOCH = 10
-MY_BATCHSIZE = 30
+MY_BATCHSIZE = 5
 
 
 def draw_plot(img, gt):
@@ -44,11 +41,11 @@ def draw_subplots(img, gt, row, col):
 def train_fit_save(X, Y, seq=True):
     lr = 0.8
     if seq:
-        model = MODEL.my_test_cnn_model_Sequential(X.shape, Y.shape, lr=lr)
+        model = Model_tf.my_test_cnn_model_Sequential(X.shape, Y.shape, lr=lr)
     else:
-        model = MODEL.my_test_cnn_model_functional(X.shape, Y.shape, lr=lr)
+        model = Model_tf.my_test_cnn_model_functional(X.shape, Y.shape, lr=lr)
 
-    with tf.device("/gpu:0"):
+    with tf.device("/device:GPU:0"):
         history = model.fit(X, Y, epochs=MY_EPOCH, batch_size=MY_BATCHSIZE, verbose=1)
 
     # loss, acc = model.evaluate(X, Y)
@@ -68,69 +65,12 @@ def test_predict(X, Y, h5=True):
     if h5:
         model = tf.keras.models.load_model("./weight/cnn_seq(10).h5")
     else:
-        model = MODEL.my_test_cnn_model_functional(X.shape, Y.shape)
+        model = Model_tf.my_test_cnn_model_functional(X.shape, Y.shape)
         model.load_weights("./weight/cnn_weight(10)")
 
     pred = model.predict(X)
-    for img, p in zip(X[::len(X)//10], pred[::len(pred)//10]):
+    for img, p in zip(X[::len(X) // 10], pred[::len(pred) // 10]):
         draw_plot(img, p)
-=======
-
-def make_model(x, y):
-    demention = 1
-    if len(x.shape) == 4:
-        demention = 3
-    outShape = len(y[0])
-    print(x.shape, outShape, demention)
-    # model = Sequential()
-    # model.add(Conv2D(32, (3, 3), padding='same', activation='tanh', input_shape=(inSahpe[1], inSahpe[2], demention)))
-    # model.add(MaxPool2D(pool_size=(2, 2)))
-    # model.add(Dropout(0.25))
-    # model.add(Flatten())
-    # model.add(Dense(32, activation='tanh'))
-    # model.add(Dropout(0.5))
-    # model.add(Dense(outShape, activation='sigmoid'))
-    # model.summary()
-
-    model = Sequential()
-    # Layer 1
-    model.add(Conv2D(64, (5, 5), activation='tanh',
-                     input_shape=(x.shape[1], x.shape[2], demention),
-                     padding='same'))  # 32 x 32 x 3
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 16 x 16
-    # model.add(AvgPool2D(pool_size=(2, 2), strides=(2, 2)))
-    model.add(Dropout(0.25))
-
-    # Layer 2
-    # model.add(Conv2D(32, (5,5), activation='tanh', padding='same'))  # Conv2d(filter, kernel_size 부터 시작한다)
-    # model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 8 x 8
-    # model.add(AvgPool2D(pool_size=(2, 2), strides=(2, 2)))
-
-    # Layer 3
-    model.add(Conv2D(32, (5, 5), activation='tanh', padding='same'))  # Conv2d(filter, kernel_size 부터 시작한다)
-    model.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 4 x 4
-    # model.add(AvgPool2D(pool_size=(2, 2), strides=(2, 2)))
-    # model.add(Dropout(0.25))
-    model.add(Flatten())  # 4 x 4 로 만들어진 이미지를 1 차원으로 핀다
-
-    model.add(Dense(16, activation='tanh'))
-    model.add(Dense(outShape, activation="softmax"))
-    model.summary()
-
-    opt = tensorflow.keras.optimizers.Adam(learning_rate=0.5)
-    # opt = SGD(lr=1.5, decay=1e-6, momentum=0.9, nesterov=True)
-    model.compile(loss="mean_squared_error",
-                  optimizer=opt,
-                  metrics=["accuracy"])
-    return model
-
-
-
-
-def read_text_to_np():
-    file = open("../../dataset/face_landmark_train_set/Train_daytime/", "r")
->>>>>>> 78fd2eb0bd6008a3605869b61f1526d8281e3e61
-
 
 
 def make_X_Y(path=None):
@@ -168,53 +108,57 @@ def make_X_Y(path=None):
     return X, Y
 
 
-<<<<<<< HEAD
-_X, _Y = make_X_Y("../../dataset/Train_daytime/")
-train_fit_save(_X, _Y, seq=True)
+# _X, _Y = make_X_Y("../../dataset/Train_daytime/")
+# train_fit_save(_X, _Y, seq=True)
 # train_fit_save(_X, _Y, seq=False)
 
 
-_X, _Y = make_X_Y("../../dataset/Test_daytime/1_test_ej/")
-test_predict(_X, _Y, h5=True)
+# _X, _Y = make_X_Y("../../dataset/Test_daytime/1_test_ej/")
+# test_predict(_X, _Y, h5=True)
 # test_predict(_X, _Y, h5=False)
 
 
 # Xtext, Ytest = make_X_Y("../../dataset/Test_daytime/1_test_ej/")
 # for x, y in zip(_X[:100:5], _Y[:100:5]):
 #     draw_plot(x, y)
-=======
-# print(img_name_list)
-
-# print(img_name_list)
-
-# print(img.shape)    #(480, 720, 3)
 
 
+# img = np.expand_dims(img, axis=-1)
 
-# Xtrain, Ytrain = make_X_Y("../../dataset/face_landmark_train_set/Train_daytime/")
-Xtrain, Ytrain = make_X_Y("../../dataset/face_landmark_train_set/train/5_chs/")
-print(len(Ytrain[0]) / 2)
+PATH = "D:/Dataset/"
+class_path = "eye/"
+detail = "train/"
 
-print(f"Xtype{type(Xtrain)}, Ytype{type(Ytrain)}, shape: {Xtrain.shape}")
-Xtest, Ytest = make_X_Y("../../dataset/face_landmark_train_set/test/8_test_sj/")
-print(type(Xtest))
-print(type(Ytest))
+# print("reading...")
+# find_img_path = glob(PATH + class_path + detail + "open eyes/*.png")
+# Y = np.full((len(find_img_path), 1), 1)
+# X = np.array([np.expand_dims(cv2.resize(plt.imread(path), (90, 90)), axis=-1) for path in find_img_path])
+#
+# find_img_path = glob(PATH + class_path + detail + "close eyes/*.png")
+# # np.r_[a, b] --> 수평으로 이어 붙이기 or np.r_[[a],[b]] --> 수직으로 이어 붙이기 와 같은 형식으로 사용 가능
+# Y = np.vstack([Y, np.full((len(find_img_path), 1), 0)])
+# X = np.vstack([X, np.array([np.expand_dims(cv2.resize(plt.imread(path), (90, 90)), axis=-1) for path in find_img_path])])
+#
+# np.save("D:/Dataset/eye/X_save", X)
+# np.save("D:/Dataset/eye/Y_save", Y)
+# print("nparray 저장 완료")
 
-MY_EPOCH = 10
-MY_BATCHSIZE = 20
+print("X, Y nparray loading...")
+X = np.load("D:/Dataset/eye/X_save.npy")
+Y = np.load("D:/Dataset/eye/Y_save.npy")
+print("X, Y nparray load completion")
 
-print(f"input_shape={Xtrain.shape}, output_size={len(Ytrain[0])}")
-model = make_model(Xtrain, Ytrain)
-with tf.device("/gpu:0"):
-    # model.fit(Xtrain, Ytrain, batch_size=MY_BATCHSIZE, epochs=MY_EPOCH, validation_data=(Xtest, Ytest), verbose=1)
-    model.fit(Xtrain, Ytrain, batch_size=MY_BATCHSIZE, epochs=MY_EPOCH, verbose=1)
-filename = "./model/cnn_test({0}).h5".format(MY_EPOCH)
+eye_model = eye_Net()
+model = eye_model.model()
+with tf.device("/device:GPU:0"):
+    history = model.fit(X, Y, epochs=MY_EPOCH, batch_size=MY_BATCHSIZE, verbose=1)
+
+filename = "./weight/cnn_eye({0}).h5".format(MY_EPOCH)
 model.save(filename)
 
-Ytrain_pred = model.predict(Xtest[0])
-# for i in range(2, 21):
-#     plt.imshow(img)
-#     x, y = zip(df[img_name_list[0]][i])
-#     plt.scatter(x, y)
-#     plt.show()
->>>>>>> 78fd2eb0bd6008a3605869b61f1526d8281e3e61
+
+# print(f"{X.shape}")
+
+# X = np.array([np.array(plt.imread(path),dtype="float32") for path in find_img_path[:5]])
+
+# print(f"{X.shape}\n{X}")
