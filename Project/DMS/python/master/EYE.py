@@ -11,6 +11,7 @@ import numpy as np
 class eye_Net:
     def __init__(self):
         self.img_size = (90, 90, 1)
+        self.eye_model = None
 
     # https://www.kaggle.com/datasets/tauilabdelilah/mrl-eye-dataset?resource=download
     def model(self, lr=0.001):
@@ -84,9 +85,14 @@ class eye_Net:
         return X, Y
 
     def eye_predictor(self, _path):
-        model = tf.keras.models.load_model(_path)
+        self.eye_model = tf.keras.models.load_model(_path)
         print("load model")
-        return model
+
+    def eye_predict(self, img, landmark):
+        spl, border_pnt = self.eye_img_split(img, landmark)
+        img_reshape = self.make_input_shape(spl)
+        result = self.eye_model.predict(img_reshape)[0][0]
+        return result, border_pnt
 
     def make_input_shape(self, img):
         # print(f"make_input_shape(img){type(img)}, img.shape={img.shape}, len(img.shape)={len(img.shape)}")
@@ -109,9 +115,9 @@ class eye_Net:
         # -> 차원 추가 앞(axis= 0)(1, 90, 90, 1)
         return result / 255
 
-    def eye_img_split(self, img, eye_lm):
-        row = [i[0] for i in eye_lm]
-        col = [i[1] for i in eye_lm]
+    def eye_img_split(self, img, eye_landmark):
+        row = [i[0] for i in eye_landmark]
+        col = [i[1] for i in eye_landmark]
 
         row_min, row_max = min(row), max(row)
         col_min, col_max = min(col), max(col)

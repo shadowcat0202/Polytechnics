@@ -37,6 +37,8 @@ class MarkDetector:
 
     # 랜드마크를 리스트타입으로 반환
     def get_marks(self, image, detect):
+        print(type(detect))
+        print(detect)
         # print(type(detect)) # <class '_dlib_pybind11.rectangles'> 인데?
         # detect인자는 <class _dlib_pybind11.full_object_detection> 타입으로 입력해야함 이라고 오류 나는데
         # 다른 파일에서는 <class '_dlib_pybind11.rectangle'> 로 shape_predictor가능한데? 뭐지? 날 화나게 하는건가?

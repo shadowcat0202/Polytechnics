@@ -10,7 +10,7 @@ from operator import itemgetter
 import math
 import dnn
 
-dnn.FaceDetector.set_param("resolution", dnn.RESOLUTION.HIGH)
+
 detectum = dnn.FaceDetector()
 THRESHOLD = 0.8  # Value between 0 and 1 for confidence score
 
@@ -73,7 +73,6 @@ while (cap.isOpened()):
                 # add the tracker to our list of trackers so we can
                 # utilize it during skip frames
                 trackers.append(tracker)
-
         else:
             # Else we just attempt to track from the previous frame
             # track all the detected faces
