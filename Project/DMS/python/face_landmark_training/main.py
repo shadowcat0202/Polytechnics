@@ -9,7 +9,7 @@ from tensorflow import keras
 # from tensorflow.python.keras.optimizer_v2.adam import Adam
 import pandas as pd
 import cv2
-from Model_tf import eye_Net
+from EYE import eye_Net
 
 MY_EPOCH = 10
 MY_BATCHSIZE = 5
@@ -125,10 +125,6 @@ def make_X_Y(path=None):
 
 # img = np.expand_dims(img, axis=-1)
 
-PATH = "D:/Dataset/"
-class_path = "eye/"
-detail = "train/"
-
 # print("reading...")
 # find_img_path = glob(PATH + class_path + detail + "open eyes/*.png")
 # Y = np.full((len(find_img_path), 1), 1)
@@ -143,22 +139,14 @@ detail = "train/"
 # np.save("D:/Dataset/eye/Y_save", Y)
 # print("nparray 저장 완료")
 
-print("X, Y nparray loading...")
-X = np.load("D:/Dataset/eye/X_save.npy")
-Y = np.load("D:/Dataset/eye/Y_save.npy")
-print("X, Y nparray load completion")
-
-eye_model = eye_Net()
-model = eye_model.model()
+eye = eye_Net()
+X, Y = eye.load_dataset("D:/Dataset/eye/train/", "train_save")
+model = eye.model()
 with tf.device("/device:GPU:0"):
-    history = model.fit(X, Y, epochs=MY_EPOCH, batch_size=MY_BATCHSIZE, verbose=1)
+    model.fit(X,Y,epochs=MY_EPOCH, batch_size=MY_BATCHSIZE,verbose=1)
+model.save("D:/Dataset/eye/model/keras_eye_trained_model.h5")
 
-filename = "./weight/cnn_eye({0}).h5".format(MY_EPOCH)
-model.save(filename)
-
-
-# print(f"{X.shape}")
-
-# X = np.array([np.array(plt.imread(path),dtype="float32") for path in find_img_path[:5]])
-
-# print(f"{X.shape}\n{X}")
+# X, Y = eye.load_dataset("D:/Dataset/eye/test/", "test_save")
+# model = eye.eye_predictor("D:/Dataset/eye/model/cnn_eye_open_close(0.0918 0.9684).h5")
+# test_loss, test_acc = model.evaluate(X, Y, verbose=0)
+# print(f"loss:{test_loss}, acc:{test_acc}")

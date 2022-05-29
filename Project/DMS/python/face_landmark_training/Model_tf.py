@@ -1,7 +1,11 @@
+import numpy as np
 import tensorflow.keras.optimizers
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Dropout, Flatten, Conv2D, MaxPool2D
 import tensorflow as tf
+import cv2
+from glob import glob
+import matplotlib.pyplot as plt
 
 hidden_node = [32, 8, 4, 128]
 
@@ -75,52 +79,3 @@ def my_test_cnn_model_functional(input_shape, output_shape, lr=0.001):
     return model
 
 
-class eye_Net:
-    def __init__(self):
-        pass
-    # https://www.kaggle.com/datasets/tauilabdelilah/mrl-eye-dataset?resource=download
-    def model(self, lr=0.001):
-        X = Sequential()
-        X.add(Conv2D(8, (3, 3), activation='relu',  # Conv2D 필터 개수에 따른 차이는 미확인 상태
-                     input_shape=(90, 90, 1),
-                     padding='same'))  # input_shape = (None, 90, 90, 1)
-        X.add(MaxPool2D(pool_size=(2, 2), strides=(1, 1)))
-
-        # X.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
-        # X.add(MaxPool2D(pool_size=(2, 2), strides=(1, 1)))
-        X.add(Flatten())
-
-        X.add(Dense(16, activation='relu')) # 8일때 acc=0.5 언저리
-        X.add(Dense(1, activation='sigmoid'))  # output = 1
-        X.summary()
-
-        opt = tensorflow.keras.optimizers.Adam(learning_rate=lr)
-        X.compile(loss="binary_crossentropy", # class가 이진 분류 문제의 손실함수는 binary_crossentropy
-                  optimizer=opt,
-                  metrics=["accuracy"])
-        # https://cheris8.github.io/artificial%20intelligence/DL-Keras-Loss-Function/
-        # Binary classification
-        # sigmoid
-        # binary_crossentropy
-        # Dog vs cat, Sentiemnt analysis(pos / neg)
-        #
-        # Multi-class, single-label classification
-        # softmax
-        # categorical_crossentropy
-        # MNIST has 10 classes single label (one prediction is one digit)
-        #
-        # Multi-class, multi-label classification
-        # sigmoid
-        # binary_crossentropy
-        # News tags classification, one blog can have multiple tags
-        #
-        # Regression to arbitrary values
-        # None
-        # mse
-        # Predict house price(an integer / float point)
-        #
-        # Regression to values between 0 and 1
-        # sigmoid
-        # mse or binary_crossentropy
-        # Engine health assessment where 0 is broken, 1 is new
-        return X
