@@ -5,14 +5,22 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9de2fc36-516b-49fb-8286-72b7e59e37a0" name="Changes" comment="Changes">
+      <change beforePath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/pytorch-base-Nerual-Network-build.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../../AI기초프로그래밍/Code/pytorch-base-Nerual-Network-build.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/python.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/branch_test1/EYE.py" beforeDir="false" afterPath="$PROJECT_DIR$/branch_test1/EYE.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/branch_test1/calc1.txt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/branch_test1/decisionTreeClassifier.sav" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/branch_test1/my_mark_detector.py" beforeDir="false" afterPath="$PROJECT_DIR$/branch_test1/my_mark_detector.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/face-tracking/ft_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/face-tracking/ft_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/main_non_use_dnn_sub.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/main_use_dnn.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/세환.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/세환눈코입비율.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/시영.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/시영눈코입비율.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/은정.txt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/branch_test1/은정눈코입비율.csv" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/face_landmark_training/EYE.py" beforeDir="false" afterPath="$PROJECT_DIR$/face_landmark_training/EYE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/face_landmark_training/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/face_landmark_training/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/EYE.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/EYE.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/Preprocessing.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/Preprocessing.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/master_main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/my_tracker.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/my_tracker.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,12 +46,12 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/branch_test1/calculation.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/branch_test1/main.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/master/mark_detector.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/master/pose_estimator.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/master/face_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/branch_test1/calculation.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/branch_test1/my_mark_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/pose_estimator.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/mark_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/face_detector.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Previous_version_main.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/branch_test1/pose_estimator.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -73,11 +81,11 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\master" />
+      <recent name="D:\JEON\Polytechnics\Project\DMS\python\face_landmark_training" />
       <recent name="D:\mystudy\pholythec\Project\DMS\python\master" />
       <recent name="D:\mystudy\pholythec\Project\DMS\python\face_landmark_training" />
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\LAB\assets" />
-      <recent name="D:\JEON\Polytechnics\Project\DMS\python\branch_test1" />
-      <recent name="D:\JEON\Polytechnics\Project\DMS\python\asset" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\LAB" />
@@ -87,8 +95,8 @@
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\assets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.main (1)">
-    <configuration name="ft_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="Python.train_main">
+    <configuration name="EYE" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -96,11 +104,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/face-tracking" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/master" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/face-tracking/ft_main.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/master/EYE.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -130,48 +138,6 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="python" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/master" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/master/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main (2)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="python" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/branch_test1" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/branch_test1/main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
     <configuration name="main" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -193,7 +159,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="my_mark_detector" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="master_main (1)" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -205,7 +171,7 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/master/my_mark_detector.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/master/master_main.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -214,7 +180,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="my_tracker" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="master_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -226,7 +192,49 @@
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/master/my_tracker.py" />
+      <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\master\master_main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="train_main" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/MRL_train" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/MRL_train/train_main.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="training" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/master" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/master/training.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -237,11 +245,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.main (1)" />
-        <item itemvalue="Python.main (2)" />
-        <item itemvalue="Python.my_mark_detector" />
-        <item itemvalue="Python.my_tracker" />
-        <item itemvalue="Python.ft_main" />
+        <item itemvalue="Python.train_main" />
+        <item itemvalue="Python.master_main (1)" />
+        <item itemvalue="Python.training" />
+        <item itemvalue="Python.EYE" />
+        <item itemvalue="Python.master_main" />
       </list>
     </recent_temporary>
   </component>

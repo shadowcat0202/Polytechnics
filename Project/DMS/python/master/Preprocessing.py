@@ -81,6 +81,9 @@ def img_Preprocessing_v3(img_frame):
     result = histEqual
     return result
 
+def img_gray_Preprocessing(img_frame):
+    result = cv2.cvtColor(img_frame, cv2.COLOR_BGR2GRAY)
+    return result
 
 def thresHold(img):
     # _, th = cv2.threshold(img, 127, 255, cv2.THRESH_BINARY)

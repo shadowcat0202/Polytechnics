@@ -115,7 +115,7 @@ def make_X_Y(path=None):
 
 # _X, _Y = make_X_Y("../../dataset/Test_daytime/1_test_ej/")
 # test_predict(_X, _Y, h5=True)
-# test_predict(_X, _Y, h5=False)
+test_predict(_X, _Y, h5=False)
 
 
 # Xtext, Ytest = make_X_Y("../../dataset/Test_daytime/1_test_ej/")

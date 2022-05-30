@@ -1,6 +1,5 @@
 import cv2
 import dlib
-import dnn
 
 
 class Tracker:
@@ -30,7 +29,7 @@ class Tracker:
         # 여기서 tracker는 find_tracker에서 correlation_tracker 타입으로 append되었기 때문에
         # rectangle 타입으로 바꿔서 넘겨 주어야 한다
         rect = self.dlib_corr_tracker_to_rectangle(self.tracker)
-        self.draw_rectangle(img, rect)
+        # self.draw_rectangle(img, rect)
         return rect
 
     def dlib_corr_tracker_to_rectangle(self, corr):

@@ -10,22 +10,24 @@ import numpy as np
 
 class eye_Net:
     def __init__(self):
-        self.img_size = (90, 90, 1)
+        self.img_size = (100, 100, 1)
         self.eye_model = None
 
     # https://www.kaggle.com/datasets/tauilabdelilah/mrl-eye-dataset?resource=download
+    # 집에서 테스트 하느라 엄청 타협봤음 ㅋ 노드 수 조금만 올려도 메모리 부족하다고 해서
     def model(self, lr=0.001):
         X = Sequential()
-        X.add(Conv2D(8, (3, 3), activation='relu',  # Conv2D 필터 개수에 따른 차이는 미확인 상태
+        X.add(Conv2D(8, (5, 5), activation='relu',  # Conv2D 필터 개수에 따른 차이는 미확인 상태
                      input_shape=self.img_size,
                      padding='same'))  # input_shape = (None, 90, 90, 1)
-        X.add(MaxPool2D(pool_size=(2, 2), strides=(1, 1)))
+        X.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
-        # X.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
+        # X.add(Conv2D(8, (3, 3), activation='relu', padding='same'))
         # X.add(MaxPool2D(pool_size=(2, 2), strides=(1, 1)))
         X.add(Flatten())
 
-        X.add(Dense(13, activation='relu'))  # 8일때 acc=0.5 언저리
+        X.add(Dense(8, activation='tanh'))  # 8일때 acc=0.5 언저리 이부분 노드 개수에 따라 학습율에 변동이 크다
+        X.add(Dense(16, activation='tanh'))  # 8일때 acc=0.5 언저리 이부분 노드 개수에 따라 학습율에 변동이 크다
         X.add(Dense(1, activation='sigmoid'))  # output = 1
         X.summary()
 
@@ -61,16 +63,17 @@ class eye_Net:
         return X
 
     def make_dataset(self, _path, _file_name):
-        print("train image reading...")
+        print(f"self.img_size[0]{self.img_size[0]}")
+        print(f"self.img_size[1]{self.img_size[1]}")
+        print("make dataset...")
         find_img_path = glob(_path + "open eyes/*.png")
         Y = np.full((len(find_img_path), 1), 1)
-        X = np.array([np.expand_dims(cv2.resize(plt.imread(path), (90, 90)), axis=-1) for path in find_img_path])
-        print("train label reading...")
+        X = np.array([np.expand_dims(cv2.resize(plt.imread(path), (self.img_size[0], self.img_size[1])), axis=-1) for path in find_img_path])
         find_img_path = glob(_path + "close eyes/*.png")
         # np.r_[a, b] --> 수평으로 이어 붙이기 or np.r_[[a],[b]] --> 수직으로 이어 붙이기 와 같은 형식으로 사용 가능
         Y = np.vstack([Y, np.full((len(find_img_path), 1), 0)])
         X = np.vstack(
-            [X, np.array([np.expand_dims(cv2.resize(plt.imread(path), (90, 90)), axis=-1) for path in find_img_path])])
+            [X, np.array([np.expand_dims(cv2.resize(plt.imread(path), (self.img_size[0], self.img_size[1])), axis=-1) for path in find_img_path])])
 
         np.save(_path + f"X_{_file_name}", X)  # .npy
         np.save(_path + f"Y_{_file_name}", Y)  # .npy
@@ -98,6 +101,7 @@ class eye_Net:
         # print(f"make_input_shape(img){type(img)}, img.shape={img.shape}, len(img.shape)={len(img.shape)}")
         result = None
         if len(img.shape) == 2:
+            cv2.imshow("what1?", img)
             # 차원 증가 (a, b) --> (a, b, 1)
             img = cv2.resize(img, (self.img_size[0], self.img_size[1]))
             # img = np.expand_dims(img, axis=-1)
@@ -106,6 +110,7 @@ class eye_Net:
         elif len(img.shape) == 3:
             if img.shape[2] == 3:
                 img, _, _ = cv2.split(img)  # 흑백만 남긴다
+                cv2.imshow("what1?", img)
                 img = cv2.resize(img, (self.img_size[0], self.img_size[1]))
                 # img = np.expand_dims(img, axis=-1)
                 # result = np.expand_dims(img, axis=0)
@@ -125,10 +130,15 @@ class eye_Net:
         row_mid = row_max - row_min
         col_mid = col_max - col_min
 
-        row_border1 = int(row_min - row_mid * 0.5)
-        col_border1 = int(col_min - col_mid * 1.5)
-        row_border2 = int(row_max + row_mid * 0.5)
-        col_border2 = int(col_max + col_mid * 1.5)
+        row_border1 = int(row_min - row_mid * 0.9)
+        col_border1 = int(col_min - col_mid * 2.5)
+        row_border2 = int(row_max + row_mid * 0.9)
+        col_border2 = int(col_max + col_mid * 2.5)
+
+        # row_border1 = int(row_min - 15) # w
+        # col_border1 = int(col_min - 20) # h
+        # row_border2 = int(row_max + 15)
+        # col_border2 = int(col_max + 20)
 
         result = np.array(img[col_border1:col_border2, row_border1:row_border2])
         return result, [row_border1, col_border1, row_border2, col_border2]

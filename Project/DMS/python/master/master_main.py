@@ -10,6 +10,8 @@ from my_mark_detector import *
 from pose_estimator import PoseEstimator
 from my_tracker import *
 from EYE import eye_Net
+from Preprocessing import *
+from img_draw import imgMake
 
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
@@ -28,31 +30,40 @@ PIXELS = [(1280, 720), (640, 480), (256, 144), (320, 240), (480, 360)]
 PIXEL_NUMBER = 1
 RES_W, RES_H = PIXELS[PIXEL_NUMBER][0], PIXELS[PIXEL_NUMBER][1]
 
-cap = cv2.VideoCapture(1)
+
 
 FaceDetector = FaceDetector()   # 얼굴 인식 관련
 MarkDetector = MarkDetector(save_model="../assets/shape_predictor_68_face_landmarks.dat")   # 랜드마크 관련
+# cv2.matchTemplate()도 해보자
 Tracker = Tracker() # 트래킹 관련
 eye = eye_Net() # 눈 깜빡임 관련 + 모델
-eye.eye_predictor("D:/Dataset/eye/model/cnn_eye_open_close(0.0918 0.9684).h5")  # 모델
+eye.eye_predictor("D:/JEON/dataset/eye/model/keras_eye_trained_model_wow.h5")  # 모델
+iMake = imgMake()
 
+cap = None
 try:
-    cap = cv2.VideoCapture(0)
+    # 카메라 or 영상
+    # cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220530_16_33_34_Pro.mp4")
 except:
     print("Error opening video stream or file")
-
 while cap.isOpened():
     perv_time = time.time()
     ret, frame = cap.read()
     if ret:
         frame = np.array(imutils.resize(frame, width=RES_W, height=RES_H))  # imutils cv2 경량화 보조 패키지
+        view = frame
+        # frame = img_Preprocessing_v3(frame)
+        frame = img_gray_Preprocessing(frame)
+        # frame = np.array(imutils.resize(frame, width=RES_W, height=RES_H))
+
         if frame is None:   break
-        # cv2.imshow("1", frame)
+
         if Tracker.track_number == 0:
             Tracker.find_tracker(frame, FaceDetector)
         else:   # 트레킹 할 얼굴이 1명 이상 있다면(지금은 1명만 트레킹 하도록 작성함)
             box_rect = None
-            if Tracker.frame_counter == 30:  # 60 프레임마다 한번씩 트래커 이탈 방지용 refaceDetection
+            if Tracker.frame_counter == 60:  # 60 프레임마다 한번씩 트래커 이탈 방지용 refaceDetection
                 box_rect = Tracker.find_tracker(frame, FaceDetector, re=True)
             else:
                 box_rect = Tracker.tracking(frame)  # 네모 박스 처준다 원한다면 rectangle타입 반환도 가능
@@ -64,26 +75,37 @@ while cap.isOpened():
 
 # 눈 계산 + 예측(분명 학습은 잘 한거같은데 왜 직접 사용하면 뭔가 이상함)=========================================================
                 landmarks = MarkDetector.full_object_detection_to_ndarray(landmarks)
-                close_open_check = [1, 1]
+                eye_pred_val = ""
+                close_open_check = [None, None]
                 for i, land in enumerate([landmarks[36:42], landmarks[42:48]]):
                     close_open_check[i], bpnt = eye.eye_predict(frame, land)
                     if i == 0:
-                        cv2.putText(frame, "open" if close_open_check[i] > 0.7 else "close",
-                                    (bpnt[0], bpnt[1]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                        # eye_pred_val = str(close_open_check[i]) + ", "
+                        cv2.putText(view, f"{close_open_check[i]}" if close_open_check[i] > 0.9 else "close",
+                                    (400, 200), cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 2)
+                        cv2.putText(view, "open" if close_open_check[i] > 0.9 else "close",
+                                    (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 2)
+                        # cv2.imshow("left", frame[bpnt[1]:bpnt[3], bpnt[0]:bpnt[2]])
                     else:
-                        cv2.putText(frame, "open" if close_open_check[i] > 0.7 else "close",
-                                    (bpnt[2], bpnt[3]), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-                    if close_open_check[i] < 0.5:
-                        close_open_check[i] = 0
-                    cv2.rectangle(frame, (bpnt[0], bpnt[1]), (bpnt[2], bpnt[3]), RED, 1)
+                        # eye_pred_val += str(close_open_check[i])
+                        cv2.putText(view, f"{close_open_check[i]}" if close_open_check[i] > 0.9 else "close",
+                                    (400, 230), cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 2)
+                        cv2.putText(view, "open" if close_open_check[i] > 0.9 else "close",
+                                    (10, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 2)
+                        # cv2.imshow("right", frame[bpnt[1]:bpnt[3], bpnt[0]:bpnt[2]])
+
+                    if close_open_check[i] > 0.9:
+                        close_open_check[i] = 1
+                    # cv2.rectangle(view, (bpnt[0], bpnt[1]), (bpnt[2], bpnt[3]), WHITE, 1)
 
                 if close_open_check[0] == 0 and close_open_check[1] == 0:
-                    cv2.putText(frame, "SLEEP!!!", (10, 10), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 1)
+                    cv2.putText(view, "SLEEP!!!", (10, 110), cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 3)
+                print(eye_pred_val)
 
 
 
-    cv2.putText(frame, f"fps:{int(1. / (time.time() - perv_time))}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-    cv2.imshow('frame', frame)
+        cv2.putText(view, f"fps:{int(1. / (time.time() - perv_time))}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, WHITE, 2)
+        cv2.imshow('show_frame', view)
     # if the `esc` key was pressed, break from the loop
     key = cv2.waitKey(1)
     if key == 27:

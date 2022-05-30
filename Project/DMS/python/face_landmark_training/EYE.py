@@ -11,20 +11,23 @@ import numpy as np
 class eye_Net:
     def __init__(self):
         self.img_size = (90, 90, 1)
+        self.eye_model = None
 
     # https://www.kaggle.com/datasets/tauilabdelilah/mrl-eye-dataset?resource=download
+    # 집에서 테스트 하느라 엄청 타협봤음 ㅋ
     def model(self, lr=0.001):
         X = Sequential()
-        X.add(Conv2D(8, (3, 3), activation='relu',  # Conv2D 필터 개수에 따른 차이는 미확인 상태
+        X.add(Conv2D(32, (3, 3), activation='tanh',  # Conv2D 필터 개수에 따른 차이는 미확인 상태
                      input_shape=self.img_size,
                      padding='same'))  # input_shape = (None, 90, 90, 1)
-        X.add(MaxPool2D(pool_size=(2, 2), strides=(1, 1)))
+        X.add(MaxPool2D(pool_size=(2, 2), strides=(2, 2)))
 
         # X.add(Conv2D(64, (3, 3), activation='relu', padding='same'))
         # X.add(MaxPool2D(pool_size=(2, 2), strides=(1, 1)))
         X.add(Flatten())
 
-        X.add(Dense(13, activation='relu'))  # 8일때 acc=0.5 언저리
+        X.add(Dense(8, activation='tanh'))  # 8일때 acc=0.5 언저리 이부분 노드 개수에 따라 학습율에 변동이 크다 이전 8, tanh
+        X.add(Dense(16, activation='tanh'))  # 8일때 acc=0.5 언저리 이부분 노드 개수에 따라 학습율에 변동이 크다 이전 8, tanh
         X.add(Dense(1, activation='sigmoid'))  # output = 1
         X.summary()
 
@@ -84,30 +87,39 @@ class eye_Net:
         return X, Y
 
     def eye_predictor(self, _path):
-        model = tf.keras.models.load_model(_path)
+        self.eye_model = tf.keras.models.load_model(_path)
         print("load model")
-        return model
+
+    def eye_predict(self, img, landmark):
+        spl, border_pnt = self.eye_img_split(img, landmark)
+        img_reshape = self.make_input_shape(spl)
+        result = self.eye_model.predict(img_reshape)[0][0]
+        return result, border_pnt
 
     def make_input_shape(self, img):
         # print(f"make_input_shape(img){type(img)}, img.shape={img.shape}, len(img.shape)={len(img.shape)}")
         result = None
         if len(img.shape) == 2:
             # 차원 증가 (a, b) --> (a, b, 1)
-            result = np.expand_dims(np.expand_dims(cv2.resize(img, (self.img_size[0], self.img_size[1])), axis=-1),
-                                    axis=0)
+            img = cv2.resize(img, (self.img_size[0], self.img_size[1]))
+            # img = np.expand_dims(img, axis=-1)
+            # img = np.expand_dims(img, axis=0)
+            result = img.reshape(1, self.img_size[0], self.img_size[1], 1)
         elif len(img.shape) == 3:
             if img.shape[2] == 3:
-                result = np.expand_dims(
-                    np.expand_dims(cv2.resize(img, (self.img_size[0], self.img_size[1]))[:, :, 0], axis=-1),
-                    axis=0)  # 1개 차원만 남긴다
+                img, _, _ = cv2.split(img)  # 흑백만 남긴다
+                img = cv2.resize(img, (self.img_size[0], self.img_size[1]))
+                # img = np.expand_dims(img, axis=-1)
+                # result = np.expand_dims(img, axis=0)
+                result = img.reshape(1, self.img_size[0], self.img_size[1], 1)
         # (1, 90, 90, 1)로 만들어주기 위해서 reisze(90,90)
         # -> 차원 추가 뒤(axis=-1)(90, 90, 1)
         # -> 차원 추가 앞(axis= 0)(1, 90, 90, 1)
-        return result
+        return result / 255
 
-    def eye_img_split(self, img, eye_lm):
-        row = [i[0] for i in eye_lm]
-        col = [i[1] for i in eye_lm]
+    def eye_img_split(self, img, eye_landmark):
+        row = [i[0] for i in eye_landmark]
+        col = [i[1] for i in eye_landmark]
 
         row_min, row_max = min(row), max(row)
         col_min, col_max = min(col), max(col)
@@ -115,10 +127,10 @@ class eye_Net:
         row_mid = row_max - row_min
         col_mid = col_max - col_min
 
-        row_border1 = int(row_min - row_mid * 0.8)
-        col_border1 = int(col_min - col_mid * 2.2)
-        row_border2 = int(row_max + row_mid * 0.8)
-        col_border2 = int(col_max + col_mid * 2.2)
+        row_border1 = int(row_min - row_mid * 0.5)
+        col_border1 = int(col_min - col_mid * 1.5)
+        row_border2 = int(row_max + row_mid * 0.5)
+        col_border2 = int(col_max + col_mid * 1.5)
 
         result = np.array(img[col_border1:col_border2, row_border1:row_border2])
         return result, [row_border1, col_border1, row_border2, col_border2]

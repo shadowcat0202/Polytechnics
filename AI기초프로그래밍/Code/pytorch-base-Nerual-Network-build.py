@@ -6,7 +6,7 @@ from PIL import Image
 import numpy as np
 import cv2
 from img_draw import imgMake
-
+import matplotlib.pyplot as plt
 
 
 def d20220513():
@@ -141,4 +141,53 @@ def GPU():
     print(use_gpu, torch.cuda.device_count())
 
 
-GPU()
+def get_data():
+    train_X = np.array([3.3, 4.4, 5.5, 6.71, 6.93, 4.168, 9.779, 6.182, 7.59, 2.167,
+                        7.042, 10.791, 5.313, 7.997, 5.654, 9.27, 3.1])
+    train_Y = np.array([1.7, 2.76, 2.09, 3.19, 1.694, 1.573, 3.366, 2.596, 2.53, 1.221,
+                        2.827, 3.465, 1.65, 2.904, 2.42, 2.94, 1.3])
+
+    x = torch.from_numpy(train_X)
+    y = torch.from_numpy(train_Y)
+    return x, y
+
+
+def get_weights():
+    # w, b를 random normal 한 값으로 셋팅
+    # randn(random normal 약어): 정규분포를 기준으로 랜덤한 값 생성 68.4%
+    # rand: 0~1사이의 랜덤한 값을 반환 (균등하게 나누어서 반환)
+    # w, b는 항상 미분되어야 하므로(최적값을 찾기 위해, loss, Cost, Error 값을 최소화) .requires_grad = True
+    w = torch.randn(1)
+    w.requires_grad = True  # 미분 한다고 명시
+    b = torch.randn(1)
+    b.requires_grad = True  # 미분 한다고 명시 loss를 줄이기 위한 경사하강 계산
+
+    return w, b
+
+
+def simple_network(x):
+    y_pred = torch.matmul(x, w) + b
+    return y_pred
+
+
+def loss_fu(y, y_pred):
+    loss = torch.mean((y_pred - y).pow(2).sum())
+    for param in [w, b]:
+        if not param.grid in None: param.grid.data.zero_()
+    loss.backward()  # backward 호출: MES 기울기 계산
+    return loss.data
+def optiimize():
+        pass
+
+X = [1, 2, 3]
+Y = [1, 2, 3]
+w_val = []
+cost_val = []
+for i in range(-30, 50):
+    weight = i * 0.1
+    w_val.append(weight)
+    curr_cost = #MSE
+    cost_val.append(curr_cost)
+plt.plot(w_val, cost_val)
+
+
