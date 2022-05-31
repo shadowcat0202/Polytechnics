@@ -44,7 +44,7 @@ cap = None
 try:
     # 카메라 or 영상
     # cap = cv2.VideoCapture(0)
-    cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220530_16_33_34_Pro.mp4")
+    cap = cv2.VideoCapture("D:/JEON/dataset/04-4.mp4")
 except:
     print("Error opening video stream or file")
 while cap.isOpened():

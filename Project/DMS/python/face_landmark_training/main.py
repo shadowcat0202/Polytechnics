@@ -147,6 +147,6 @@ with tf.device("/device:GPU:0"):
 model.save("D:/Dataset/eye/model/keras_eye_trained_model.h5")
 
 # X, Y = eye.load_dataset("D:/Dataset/eye/test/", "test_save")
-# model = eye.eye_predictor("D:/Dataset/eye/model/cnn_eye_open_close(0.0918 0.9684).h5")
+model = eye.eye_predictor("D:/Dataset/eye/model/cnn_eye_open_close(0.0918 0.9684).h5")
 # test_loss, test_acc = model.evaluate(X, Y, verbose=0)
 # print(f"loss:{test_loss}, acc:{test_acc}")

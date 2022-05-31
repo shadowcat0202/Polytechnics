@@ -130,10 +130,10 @@ class eye_Net:
         row_mid = row_max - row_min
         col_mid = col_max - col_min
 
-        row_border1 = int(row_min - row_mid * 0.9)
-        col_border1 = int(col_min - col_mid * 2.5)
-        row_border2 = int(row_max + row_mid * 0.9)
-        col_border2 = int(col_max + col_mid * 2.5)
+        row_border1 = int(row_min - row_mid * 0.5)
+        col_border1 = int(col_min - col_mid * 1.5)
+        row_border2 = int(row_max + row_mid * 0.5)
+        col_border2 = int(col_max + col_mid * 1.5)
 
         # row_border1 = int(row_min - 15) # w
         # col_border1 = int(col_min - 20) # h
