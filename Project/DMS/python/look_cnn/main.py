@@ -12,6 +12,31 @@ from my_tracker import *
 from EYE import eye_Net
 from Preprocessing import *
 
+def make_input_shape(img):
+    # print(f"make_input_shape(img){type(img)}, img.shape={img.shape}, len(img.shape)={len(img.shape)}")
+    result = None
+    if len(img.shape) == 2:
+        # 차원 증가 (a, b) --> (a, b, 1)
+        # img = cv2.resize(img, img_size)
+        # img = np.expand_dims(img, axis=-1)
+        # img = np.expand_dims(img, axis=0)
+        # result = img.reshape(1, img_size[0], img_size[1], 1)
+        # result = img.reshape(img_size[0], img_size[1], 1)
+        result = np.expand_dims(img, axis=-1)
+    elif len(img.shape) == 3:
+        if img.shape[2] == 3:
+            img, _, _ = cv2.split(img)  # 흑백만 남긴다
+            # img = cv2.resize(img, (img_size[0], img_size[1]))
+            # img = np.expand_dims(img, axis=-1)
+            # result = np.expand_dims(img, axis=0)
+            # result = img.reshape(1, img_size[0], img_size[1], 1)
+            # result = img.reshape(img_size[0], img_size[1], 1)
+            result = np.expand_dims(img, axis=-1)
+    # (1, 90, 90, 1)로 만들어주기 위해서 reisze(90,90)
+    # -> 차원 추가 뒤(axis=-1)(90, 90, 1)
+    # -> 차원 추가 앞(axis= 0)(1, 90, 90, 1)
+    return result
+
 
 def eye_img_split(img, eye_landmark):
     row = [i[0] for i in eye_landmark]
@@ -20,18 +45,18 @@ def eye_img_split(img, eye_landmark):
     row_min, row_max = min(row), max(row)
     col_min, col_max = min(col), max(col)
 
+    btw_row = row_max - row_min
+    btw_col = col_max - col_min
+    border_size_row = btw_row * 0.2
+    border_size_col = btw_col * 0.5
+
     row_mid = row_max - row_min
     col_mid = col_max - col_min
 
-    row_border1 = int(row_min - row_mid * 0.9)
-    col_border1 = int(col_min - col_mid * 2.5)
-    row_border2 = int(row_max + row_mid * 0.9)
-    col_border2 = int(col_max + col_mid * 2.5)
-
-    # row_border1 = int(row_min - 15) # w
-    # col_border1 = int(col_min - 20) # h
-    # row_border2 = int(row_max + 15)
-    # col_border2 = int(col_max + 20)
+    row_border1 = int(row_min - border_size_row)
+    col_border1 = int(col_min - border_size_col)
+    row_border2 = int(row_max + border_size_row)
+    col_border2 = int(col_max + border_size_col)
 
     result = np.array(img[col_border1:col_border2, row_border1:row_border2])
     return result, [row_border1, col_border1, row_border2, col_border2]
@@ -58,9 +83,9 @@ MarkDetector = MarkDetector(save_model="../assets/shape_predictor_68_face_landma
 Tracker = Tracker()  # 트래킹 관련
 # eye = eye_Net()  # 눈 깜빡임 관련 + 모델
 
-vid_root_path = "D:/JEON/dataset/look_direction/"
-save_root_path = "D:/JEON/dataset/look_direction/img/"
-save_look_number = [str(i) for i in range(2, 10)]
+vid_root_path = "D:/JEON/dataset/look_direction/vid/"
+save_root_path = "D:/JEON/dataset/look_direction/cnn_eyes/"
+save_look_number = [str(i) for i in range(1, 7)]
 cap = None
 for look_num in save_look_number:
     print(f"{vid_root_path + look_num} spliting...")
@@ -115,8 +140,7 @@ for look_num in save_look_number:
                             # close_open_check[i], bpnt = eye.eye_predict(frame, land)
                             if i == 0:  # 사람 기준 왼쪽눈
                                 spl_img, _ = eye_img_split(frame, land)
-                                spl_img = cv2.resize(spl_img, (100, 100))
-                                spl_img = spl_img.reshape(100, 100, 1)
+                                spl_img = np.expand_dims(spl_img, axis=-1)
                                 save_name = save_root_path + look_num + "/" + '{0:05}'.format(img_name_counter) + ".png"
                                 # print(save_name)
                                 cv2.imwrite(save_name,spl_img)
@@ -129,8 +153,7 @@ for look_num in save_look_number:
                                 # cv2.imshow("left", frame[bpnt[1]:bpnt[3], bpnt[0]:bpnt[2]])
                             else:   # 사람 기준 오른쪽 눈
                                 spl_img, _ = eye_img_split(frame, land)
-                                spl_img = cv2.resize(spl_img, (100, 100))
-                                spl_img = spl_img.reshape(100, 100, 1)
+                                spl_img = np.expand_dims(spl_img, axis=-1)
                                 save_name = save_root_path + look_num + "/" + '{0:05}'.format(img_name_counter) + ".png"
                                 # print(save_name)
                                 cv2.imwrite(save_name,spl_img)

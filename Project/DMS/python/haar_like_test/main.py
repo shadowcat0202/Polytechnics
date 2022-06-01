@@ -42,7 +42,8 @@ predictor = dlib.shape_predictor('../assets/shape_predictor_68_face_landmarks.da
 left = [36, 37, 38, 39, 40, 41]
 right = [42, 43, 44, 45, 46, 47]
 
-cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220526_15_33_19_Pro.mp4")
+# cap = cv2.VideoCapture(0)
 ret, img = cap.read()
 thresh = img.copy()
 
@@ -58,6 +59,7 @@ cv2.createTrackbar('threshold', 'image', 0, 255, nothing)
 
 while (True):
     ret, img = cap.read()
+    img = cv2.resize(img, (760, 480))
     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     rects = detector(gray, 1)
     for rect in rects:
@@ -66,9 +68,12 @@ while (True):
         mask = np.zeros(img.shape[:2], dtype=np.uint8)
         mask = eye_on_mask(mask, left)
         mask = eye_on_mask(mask, right)
-        mask = cv2.dilate(mask, kernel, 5)
-        eyes = cv2.bitwise_and(img, img, mask=mask)
+        mask = cv2.dilate(mask, kernel, 5)  # mask굴기
+        eyes = cv2.bitwise_and(img, img, mask=mask) # 눈 흰부분 모두 표시?
+        print(eyes)
+        cv2.imshow("eyes", eyes)
         mask = (eyes == [0, 0, 0]).all(axis=2)
+
         eyes[mask] = [255, 255, 255]
         mid = (shape[42][0] + shape[39][0]) // 2
         eyes_gray = cv2.cvtColor(eyes, cv2.COLOR_BGR2GRAY)

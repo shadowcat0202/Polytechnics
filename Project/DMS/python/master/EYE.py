@@ -68,12 +68,16 @@ class eye_Net:
         print("make dataset...")
         find_img_path = glob(_path + "open eyes/*.png")
         Y = np.full((len(find_img_path), 1), 1)
-        X = np.array([np.expand_dims(cv2.resize(plt.imread(path), (self.eye_close_img_size[0], self.eye_close_img_size[1])), axis=-1) for path in find_img_path])
+        X = np.array([np.expand_dims(
+            cv2.resize(plt.imread(path), (self.eye_close_img_size[0], self.eye_close_img_size[1])), axis=-1) for path in
+                      find_img_path])
         find_img_path = glob(_path + "close eyes/*.png")
         # np.r_[a, b] --> 수평으로 이어 붙이기 or np.r_[[a],[b]] --> 수직으로 이어 붙이기 와 같은 형식으로 사용 가능
         Y = np.vstack([Y, np.full((len(find_img_path), 1), 0)])
         X = np.vstack(
-            [X, np.array([np.expand_dims(cv2.resize(plt.imread(path), (self.eye_close_img_size[0], self.eye_close_img_size[1])), axis=-1) for path in find_img_path])])
+            [X, np.array([np.expand_dims(
+                cv2.resize(plt.imread(path), (self.eye_close_img_size[0], self.eye_close_img_size[1])), axis=-1) for
+                          path in find_img_path])])
 
         np.save(_path + f"X_{_file_name}", X)  # .npy
         np.save(_path + f"Y_{_file_name}", Y)  # .npy
@@ -127,18 +131,19 @@ class eye_Net:
         row_min, row_max = min(row), max(row)
         col_min, col_max = min(col), max(col)
 
+        btw_row = row_max - row_min
+        btw_col = col_max - col_min
+        per = 0.5
+        border_size_row = btw_row * per
+        border_size_col = btw_col * 0.3
+
         row_mid = row_max - row_min
         col_mid = col_max - col_min
 
-        row_border1 = int(row_min - row_mid * 0.9)
-        col_border1 = int(col_min - col_mid * 2.5)
-        row_border2 = int(row_max + row_mid * 0.9)
-        col_border2 = int(col_max + col_mid * 2.5)
-
-        # row_border1 = int(row_min - 15) # w
-        # col_border1 = int(col_min - 20) # h
-        # row_border2 = int(row_max + 15)
-        # col_border2 = int(col_max + 20)
+        row_border1 = int(row_min - border_size_row)
+        col_border1 = int(col_min - border_size_col)
+        row_border2 = int(row_max + border_size_row)
+        col_border2 = int(col_max + border_size_col)
 
         result = np.array(img[col_border1:col_border2, row_border1:row_border2])
         return result, [row_border1, col_border1, row_border2, col_border2]
