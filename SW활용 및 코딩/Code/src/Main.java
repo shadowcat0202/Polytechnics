@@ -1,7 +1,53 @@
 import java.util.Scanner;
+
+import Interface.MP3Interface;
+import Interface.MobliePhoneInterface;
 import package1.*;
 import package2.*;
 import java.util.Arrays;
+import Interface.PhoneInterface;
+
+class PDA{
+    public int calc(int x, int y){
+        return x + y;
+    }
+}
+class smartPhone extends PDA implements MobliePhoneInterface, MP3Interface{
+
+    @Override
+    public void play() {
+        System.out.println("음악 연주");
+    }
+
+    @Override
+    public void stop() {
+        System.out.println("음악 중단");
+    }
+
+    @Override
+    public void sendSMS() {
+        System.out.println("문자 보냄");
+    }
+
+    @Override
+    public void receiveSMS() {
+        System.out.println("문자 받음");
+    }
+
+    @Override
+    public void sendCall() {
+        System.out.println("전화 건다");
+    }
+
+    @Override
+    public void receiveCall() {
+        System.out.println("전화 받는다");
+    }
+    public void schedule(){
+        System.out.println("일정 관리");
+    }
+}
+
 class Point{
     private int x, y;
     public Point(){
@@ -148,22 +194,11 @@ public class Main {
     }
 
     public static void main(String[] args){
-        Shape start, end, obj;
-        start = new Shape();
-        end = start;
-        obj = new Line();
-        end.next = obj;
-        end = obj;
-        obj = new Rect();
-        end.next = obj;
-        end = obj;
-
-        Shape p = start;
-        while(p != null){
-            p.draw();
-            p = p.next;
-        }
-
+        smartPhone phone = new smartPhone();
+        phone.play();
+        phone.receiveCall();
+        System.out.println(phone.calc(3,6));
+        phone.schedule();
 
 
     }
