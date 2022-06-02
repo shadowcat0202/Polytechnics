@@ -42,8 +42,8 @@ predictor = dlib.shape_predictor('../assets/shape_predictor_68_face_landmarks.da
 left = [36, 37, 38, 39, 40, 41]
 right = [42, 43, 44, 45, 46, 47]
 
-cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220526_15_33_19_Pro.mp4")
-# cap = cv2.VideoCapture(0)
+# cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220526_15_33_19_Pro.mp4")
+cap = cv2.VideoCapture(0)
 ret, img = cap.read()
 thresh = img.copy()
 
