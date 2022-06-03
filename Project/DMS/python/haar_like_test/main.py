@@ -70,7 +70,6 @@ while (True):
         mask = eye_on_mask(mask, right)
         mask = cv2.dilate(mask, kernel, 5)  # mask굴기
         eyes = cv2.bitwise_and(img, img, mask=mask) # 눈 흰부분 모두 표시?
-        print(eyes)
         cv2.imshow("eyes", eyes)
         mask = (eyes == [0, 0, 0]).all(axis=2)
 
@@ -90,7 +89,7 @@ while (True):
     # show the image with the face detections + facial landmarks
     cv2.imshow('eyes', img)
     cv2.imshow("image", thresh)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
+        if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 cap.release()

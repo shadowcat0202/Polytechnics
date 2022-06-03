@@ -151,6 +151,25 @@ class look_cnn:
         result = np.array(img[p1_H_border:p2_H_border, p1_W_border:p2_W_border])
         return result, border
 
+    def eye_crop_none_border(self, img, eye_landmark):
+        """
+        :argument
+            img: 한 프레임(이미지)
+            eye_landmark: 눈의 랜드마크 좌표
+        :return
+            result: img에서 눈 영역의 이미지를 잘라서 반환
+            border: 잘라낸 눈의 영역의 [(p1.x, p1.y), (p2.x, p2.y)]
+        """
+        W = [i[0] for i in eye_landmark]
+        H = [i[1] for i in eye_landmark]
+
+        W_min, W_max = min(W), max(W)
+        H_min, H_max = min(H), max(H)
+
+        result = img[H_min:H_max, W_min:W_max]
+        result = np.expand_dims(result, axis=-1)
+        return result
+
     def load_npy(self, _path):
         """
         :param _path: .npy file full path
