@@ -81,7 +81,7 @@ WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
 
 PIXELS = [(1280, 720), (640, 480), (256, 144), (320, 240), (480, 360)]
-PIXEL_NUMBER = 1
+PIXEL_NUMBER = 0
 RES_W, RES_H = PIXELS[PIXEL_NUMBER][0], PIXELS[PIXEL_NUMBER][1]
 
 FaceDetector = FaceDetector()  # 얼굴 인식 관련
@@ -90,14 +90,13 @@ MarkDetector = MarkDetector(save_model="../assets/shape_predictor_68_face_landma
 Tracker = Tracker()  # 트래킹 관련
 haar_like = Haar_like()
 iMake = imgMake()
-eye = Eye
 
 crop = None
 cap = None
 try:
     # 카메라 or 영상
     cap = cv2.VideoCapture(1)
-    # cap = cv2.VideoCapture("D:/JEON/dataset/haar-like/WIN_20220601_15_48_25_Pro.mp4")
+    # cap = cv2.VideoCapture("D:/mystudy/pholythec/Project/DMS/WIN_20220520_16_13_04_Pro.mp4")
     # cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220526_15_33_19_Pro.mp4")
     # cap = cv2.VideoCapture("D:/JEON/dataset/look_direction/vid/5/04-5.mp4")
 
@@ -109,11 +108,12 @@ while cap.isOpened():
     ret, frame = cap.read()
     if ret:
         frame = np.array(imutils.resize(frame, width=RES_W, height=RES_H))  # imutils cv2 경량화 보조 패키지
-        view = frame
+        view = frame    # 화면 출력용 view
         # frame = img_Preprocessing_v3(frame)
-        frame = img_gray_Preprocessing(frame)
+        frame = img_gray_Preprocessing(frame)    # (H, W)
 
-        if frame is None:   break
+        if frame is None:
+            break
 
         if Tracker.track_number == 0:
             Tracker.find_tracker(frame, FaceDetector)
@@ -125,22 +125,25 @@ while cap.isOpened():
                 box_rect = Tracker.tracking(frame)  # 네모 박스 처준다 원한다면 rectangle타입 반환도 가능
 
             if box_rect is not None:
-                # 랜드마크 type=full_object_detection --> .part().x, .part().x 형식으로 뽑아내기
                 landmarks = MarkDetector.get_marks(frame, box_rect)
-                # MarkDetector.draw_marks(frame, landmarks, color=GREEN)    # 랜드마크 점 그려주기
+                pupil = haar_like.get_pupil(frame, landmarks)
+                # 랜드마크 type=full_object_detection --> .part().x, .part().x 형식으로 뽑아내기
 
-                landmarks = MarkDetector.full_object_detection_to_ndarray(landmarks)
-                if landmarks is not None or landmarks == ():
-                    # # ==================== # # 랜드마크 받는 부분 =============================================================== # #
-                    for i, land in enumerate([landmarks[36:42], landmarks[42:48]]):
-                        cimg = eye_crop_none_border(frame, land)
+                MarkDetector.draw_marks(view, landmarks, color=GREEN)    # 랜드마크 점 그려주기
 
-                else:
-                    print("랜드마크 없어서 예외처리가 나와야하지만 뭔가 이상하네요 에러 났을때 안나오네요")
+                # landmarks = MarkDetector.full_object_detection_to_ndarray(landmarks)
+                # if landmarks is not None or landmarks == ():
+                #     # # ==================== # # 랜드마크 받는 부분 =============================================================== # #
+                #     # for i, land in enumerate([landmarks[36:42], landmarks[42:48]]):
+                #     #     cimg = eye_crop_none_border(frame, land)
+
+                # else:
+                #     print("랜드마크 없어서 예외처리가 나와야하지만 뭔가 이상하네요 에러 났을때 안나오네요")
+                cv2.imshow("pupil", pupil)
             cv2.putText(view, f"fps:{int(1. / (time.time() - perv_time))}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                        WHITE,
-                        2)
+                        WHITE, 2)
             cv2.imshow('show_frame', view)
+        cv2.imshow("frame_preprocessing", frame)
     # if the `esc` key was pressed, break from the loop
     key = cv2.waitKey(1)
     if key == 27:

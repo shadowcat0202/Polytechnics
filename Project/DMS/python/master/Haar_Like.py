@@ -1,3 +1,5 @@
+import pprint
+
 import cv2
 import numpy as np
 import dlib
@@ -52,27 +54,38 @@ class Haar_like:
     #     except:
     #         pass  # TODO try에서 오류가 발생하면 pass
 
-    def get_pupil(self, img, rect, predictor, landmark):
+    def get_pupil(self, gray, landmark):
         """
+        :param gray: cv2.COLOR_BGR2GRAY로 변경한 이미지
         :param landmark: 랜드마크 리스트
-        :param img: 원본 이미지
-        :param rect: face detection rectangle
-        :param predictor: predictor()
         :return: 동공 검정으로 전처리한 이미지 (원본 이미지와 같은 shape)
         """
-        gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        shape = predictor(gray, rect)  # TODO 얼굴의 랜드마크 잡기
-        shape = self.shape_to_np(shape)  # TODO 얼굴 랜드마크를 np.array로 만들어줌
-        mask = np.zeros(img.shape[:2], dtype=np.uint8)  # TODO 프레임이랑 똑같은 크기의 검정 틀을 만든다
+        try:
+            if len(gray.shape) != 2:
+                raise Exception(f"get_pupil(gray) parameter shape length expected 2, but get {len(gray.shape)}")
+        except Exception as e:
+            print("shape size error:", e)
+            exit(1)
+
+        if isinstance(landmark, dlib.full_object_detection):    # nparray가 아닌경우 변경
+            landmark = self.shape_to_np(landmark)  # TODO 얼굴 랜드마크를 np.array로 만들어줌
+        mask = np.zeros(gray.shape[:2], dtype=np.uint8)  # TODO 프레임이랑 똑같은 크기의 검정 틀을 만든다
         mask = self.eye_on_mask(mask, [36, 37, 38, 39, 40, 41], landmark)  # TODO 왼쪽눈 좌표를 받아 흰색으로 채운 다각형 리턴
         mask = self.eye_on_mask(mask, [42, 43, 44, 45, 46, 47], landmark)  # TODO 오른쪽눈 좌표를 받아 흰색으로 채운 다각형 리턴
         # TODO cv2.dilate => 이미지 변환(객체 외각 팽창) (mask = 입력영상 / kernel = 구조 요소 커널(9, 9) / 5 = 반복해서 몇번 실행할지)
         mask = cv2.dilate(mask, self.kernel, 5)
         # TODO cv2.bitwise_and => 각 픽셀에 대해 AND연산, 프레임을 합쳐서 모두 흰곳만 흰곳으로 표현 (mask = 적용 영역 지정) /
         #  눈만 뽑아낸 mask를 합쳐 둘다 흰색으로 표현된 곳만 흰색으로 보임
-        eyes = cv2.bitwise_and(img, img, mask=mask)
-        mask = (eyes == [0, 0, 0]).all(axis=2)
-        eyes[mask] = [255, 255, 255]
+        eyes = cv2.bitwise_and(gray, gray, mask=mask)
+
+        # mask = (eyes == [0, 0, 0]).all(axis=2)
+        # eyes[mask] = [255, 255, 255]
+        mask = (eyes == 0).all()
+        eyes[mask] = 255
+
         eyes = cv2.GaussianBlur(eyes, (9, 9), 0)
-        _, threshold = cv2.threshold(cv2.cvtColor(eyes, cv2.COLOR_BGR2GRAY), 50, 255, cv2.THRESH_BINARY)
+
+        # _, threshold = cv2.threshold(cv2.cvtColor(eyes, cv2.COLOR_BGR2GRAY), 50, 255, cv2.THRESH_BINARY)
+        # _, threshold = cv2.threshold(eyes, 50, 255, cv2.THRESH_BINARY)
+        _, threshold = cv2.threshold(eyes, 50, 255, cv2.THRESH_BINARY)
         return threshold

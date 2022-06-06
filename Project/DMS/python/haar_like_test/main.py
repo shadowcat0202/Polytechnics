@@ -89,7 +89,7 @@ while (True):
     # show the image with the face detections + facial landmarks
     cv2.imshow('eyes', img)
     cv2.imshow("image", thresh)
-        if cv2.waitKey(1) & 0xFF == ord('q'):
+    if cv2.waitKey(1) & 0xFF == ord('q'):
         break
 
 cap.release()
