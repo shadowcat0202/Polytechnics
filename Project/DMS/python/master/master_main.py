@@ -12,6 +12,7 @@ from Look_CNN import look_cnn
 from Preprocessing import *
 from img_draw import imgMake
 from Haar_Like import Haar_like
+from make_test_case import my_make_test_case
 
 
 def eye_crop(img, eye_landmark):
@@ -90,15 +91,32 @@ MarkDetector = MarkDetector(save_model="../assets/shape_predictor_68_face_landma
 Tracker = Tracker()  # 트래킹 관련
 haar_like = Haar_like()
 iMake = imgMake()
+mtc = my_make_test_case()
 
+total_frame = 0
+hit = 0
+acc = 0
+Y = "center"
+
+pred_dir = [0,0,0]
 crop = None
 cap = None
 try:
     # 카메라 or 영상
-    cap = cv2.VideoCapture(1)
+    path_name = "D:/JEON/dataset/look_direction/vid/3/03-3.mp4"
+    num = path_name[path_name.rfind("/")-1]
+    if num == "1" or num == "4":
+        Y = "right"
+    elif num == "2" or num == "5":
+        Y = "center"
+    else:
+        Y = "left"
+    print(Y)
+    # cap = cv2.VideoCapture(1)
     # cap = cv2.VideoCapture("D:/mystudy/pholythec/Project/DMS/WIN_20220520_16_13_04_Pro.mp4")
     # cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220526_15_33_19_Pro.mp4")
-    # cap = cv2.VideoCapture("D:/JEON/dataset/look_direction/vid/5/04-5.mp4")
+    # cap = cv2.VideoCapture("D:/JEON/dataset/look_direction/vid/4/03-4.mp4")
+    cap = cv2.VideoCapture(path_name)
 
 
 except:
@@ -107,6 +125,7 @@ while cap.isOpened():
     perv_time = time.time()
     ret, frame = cap.read()
     if ret:
+        total_frame += 1
         frame = np.array(imutils.resize(frame, width=RES_W, height=RES_H))  # imutils cv2 경량화 보조 패키지
         view = frame    # 화면 출력용 view
         # frame = img_Preprocessing_v3(frame)
@@ -126,7 +145,24 @@ while cap.isOpened():
 
             if box_rect is not None:
                 landmarks = MarkDetector.get_marks(frame, box_rect)
+                landmarks_nparray = MarkDetector.full_object_detection_to_ndarray(landmarks)
                 pupil = haar_like.get_pupil(frame, landmarks)
+                # main ==============================================
+                crop_left_eye = eye_crop_none_border(pupil, landmarks_nparray[36:42])
+                crop_right_eye = eye_crop_none_border(pupil, landmarks_nparray[42:48])
+
+                # test =====================================================
+                # crop_left_eye = eye_crop_none_border(frame, landmarks_nparray[36:42])
+                # crop_right_eye = eye_crop_none_border(frame, landmarks_nparray[42:48])
+
+                direction = mtc.eye_dir(crop_left_eye, crop_right_eye)
+                if direction == "left":
+                    pred_dir[0] += 1
+                elif direction == "center":
+                    pred_dir[1] += 1
+                elif direction == "right":
+                    pred_dir[2] += 1
+                cv2.putText(view, f"{direction}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
                 # 랜드마크 type=full_object_detection --> .part().x, .part().x 형식으로 뽑아내기
 
                 MarkDetector.draw_marks(view, landmarks, color=GREEN)    # 랜드마크 점 그려주기
@@ -139,11 +175,13 @@ while cap.isOpened():
 
                 # else:
                 #     print("랜드마크 없어서 예외처리가 나와야하지만 뭔가 이상하네요 에러 났을때 안나오네요")
-                cv2.imshow("pupil", pupil)
-            cv2.putText(view, f"fps:{int(1. / (time.time() - perv_time))}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7,
-                        WHITE, 2)
-            cv2.imshow('show_frame', view)
-        cv2.imshow("frame_preprocessing", frame)
+                # cv2.imshow("pupil", pupil)
+        cv2.putText(view, f"fps:{int(1. / (time.time() - perv_time))}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+        cv2.imshow('show_frame', view)
+        # cv2.imshow("frame_preprocessing", frame)
+    else:
+        break
+    # print(total_frame)
     # if the `esc` key was pressed, break from the loop
     key = cv2.waitKey(1)
     if key == 27:
@@ -151,3 +189,12 @@ while cap.isOpened():
 
 cv2.destroyAllWindows()
 cap.release()
+print(f"{pred_dir}")
+print(f"{total_frame}")
+if Y == "left":
+    print("acc=", round(pred_dir[0]/total_frame * 100, 4))
+elif Y == "center":
+    print("acc=", round(pred_dir[1]/total_frame * 100, 4))
+elif Y == "right":
+    print("acc=", round(pred_dir[2]/total_frame * 100, 4))
+

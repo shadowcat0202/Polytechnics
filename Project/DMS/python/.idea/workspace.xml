@@ -8,8 +8,8 @@
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/python.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/haar_like_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/haar_like_test/main.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/master/Haar_Like.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/Haar_Like.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/make_test_case.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/make_test_case.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/master/master_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/master_main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -36,12 +36,12 @@
     </file-type-list>
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/branch_test1/calculation.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/branch_test1/main.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/master/mark_detector.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/master/pose_estimator.py" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/master/face_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/branch_test1/calculation.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/branch_test1/my_mark_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/pose_estimator.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/mark_detector.py" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/master/face_detector.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Previous_version_main.py" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/branch_test1/pose_estimator.py" root0="FORCE_HIGHLIGHTING" />
   </component>
@@ -58,7 +58,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/master" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../../학습데이터처리/Code" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
   </component>
   <component name="PyConsoleOptionsProvider">
@@ -85,7 +85,7 @@
       <recent name="D:\JEON\Polytechnics\Project\DMS\python\assets" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.make_test_case">
+  <component name="RunManager" selected="Python.master_main">
     <configuration name="Haar_Like" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -235,9 +235,9 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Python.make_test_case" />
         <item itemvalue="Python.master_main" />
         <item itemvalue="Python.Haar_Like" />
+        <item itemvalue="Python.make_test_case" />
         <item itemvalue="Python.main_sub" />
         <item itemvalue="Python.Look_CNN" />
       </list>

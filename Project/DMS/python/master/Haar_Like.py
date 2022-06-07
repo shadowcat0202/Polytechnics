@@ -9,6 +9,22 @@ class Haar_like:
     def __init__(self):
         self.kernel = np.ones((9, 9), np.uint8)  # TODO 9행 9열의 1으로 채워진 양수(0~255) array 생성
 
+    def flatten_array_remove_item(self, array, itemToPop):
+        array_flat = np.ndarray.flatten(array)
+        array_toPop = np.array(itemToPop)
+        array_refined = np.setdiff1d(array_flat, array_toPop)
+        return array_refined
+
+    def threshold(self, frame, quantile=0.5, maxValue=255, type=cv2.THRESH_BINARY_INV):
+        # test add =======================================
+        dl = cv2.dilate(frame, self.kernel, 3)
+        gb = cv2.GaussianBlur(dl, (9, 9), 0)
+        # =================================================
+        frame_values = self.flatten_array_remove_item(gb, 255)
+        thres = np.quantile(frame_values, quantile)
+        _, frame_thold = cv2.threshold(frame, thres, maxValue, type)
+        return frame_thold
+
     def shape_to_np(self, shape, dtype="int"):  # TODO 얼굴 랜드마크를 np.array로 만들어주는 함수
         """        
         :param shape: 랜드마크 전부
@@ -67,13 +83,13 @@ class Haar_like:
             print("shape size error:", e)
             exit(1)
 
-        if isinstance(landmark, dlib.full_object_detection):    # nparray가 아닌경우 변경
+        if isinstance(landmark, dlib.full_object_detection):  # nparray가 아닌경우 변경
             landmark = self.shape_to_np(landmark)  # TODO 얼굴 랜드마크를 np.array로 만들어줌
         mask = np.zeros(gray.shape[:2], dtype=np.uint8)  # TODO 프레임이랑 똑같은 크기의 검정 틀을 만든다
         mask = self.eye_on_mask(mask, [36, 37, 38, 39, 40, 41], landmark)  # TODO 왼쪽눈 좌표를 받아 흰색으로 채운 다각형 리턴
         mask = self.eye_on_mask(mask, [42, 43, 44, 45, 46, 47], landmark)  # TODO 오른쪽눈 좌표를 받아 흰색으로 채운 다각형 리턴
         # TODO cv2.dilate => 이미지 변환(객체 외각 팽창) (mask = 입력영상 / kernel = 구조 요소 커널(9, 9) / 5 = 반복해서 몇번 실행할지)
-        mask = cv2.dilate(mask, self.kernel, 5)
+        # mask = cv2.dilate(mask, self.kernel, 1)
         # TODO cv2.bitwise_and => 각 픽셀에 대해 AND연산, 프레임을 합쳐서 모두 흰곳만 흰곳으로 표현 (mask = 적용 영역 지정) /
         #  눈만 뽑아낸 mask를 합쳐 둘다 흰색으로 표현된 곳만 흰색으로 보임
         eyes = cv2.bitwise_and(gray, gray, mask=mask)
@@ -85,7 +101,5 @@ class Haar_like:
 
         eyes = cv2.GaussianBlur(eyes, (9, 9), 0)
 
-        # _, threshold = cv2.threshold(cv2.cvtColor(eyes, cv2.COLOR_BGR2GRAY), 50, 255, cv2.THRESH_BINARY)
-        # _, threshold = cv2.threshold(eyes, 50, 255, cv2.THRESH_BINARY)
-        _, threshold = cv2.threshold(eyes, 50, 255, cv2.THRESH_BINARY)
-        return threshold
+        _, thh = cv2.threshold(eyes, 60, 255, cv2.THRESH_BINARY)
+        return thh
