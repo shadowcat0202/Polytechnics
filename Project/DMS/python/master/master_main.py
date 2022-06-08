@@ -69,6 +69,49 @@ def eye_crop_none_border(img, eye_landmark):
     return result
 
 
+def eye_crop_border_to_center(img, eye_landmark):
+    W = [i[0] for i in eye_landmark]
+    H = [i[1] for i in eye_landmark]
+
+    W_min, W_max = min(W), max(W)
+    H_min, H_max = min(H), max(H)
+
+    H_btw = H_max - H_min
+    W_btw = W_max - W_min
+
+    center = (round(H_btw / 2), round(W_btw / 2))
+
+    H_border = round(H_btw * 0.5)
+    W_border = round(W_btw * 0.2)
+
+    result = img[H_min - H_border:H_max + H_border, W_min - W_border:W_max + W_border]
+    result = np.expand_dims(result, axis=-1)
+    return result
+
+
+def flatten_array_remove_item(array, itemToPop):
+    array_flat = np.ndarray.flatten(array)
+    array_toPop = np.array(itemToPop)
+    array_refined = np.setdiff1d(array_flat, array_toPop)
+    return array_refined
+
+
+def threshold(frame, quantile=0.95, maxValue=255, borderType=cv2.THRESH_BINARY_INV):
+    ED = cv2.erode(frame, np.ones((9, 9), np.uint8), 2)
+    gb = cv2.GaussianBlur(ED, (31, 31), 50)
+    frame_values = flatten_array_remove_item(gb, 255)
+    thres = np.quantile(frame_values, quantile)
+    _, frame_thold = cv2.threshold(frame, thres, maxValue, borderType)
+    return frame_thold
+
+def my_threshold(img, quantile=0.4, maxValue=255, borderType=cv2.THRESH_BINARY_INV):
+    EROD = cv2.erode(img, np.ones((9, 9), np.uint8), 2)
+    gaussian = cv2.GaussianBlur(EROD, (31, 31), 50)
+    img_values = flatten_array_remove_item(gaussian, 255)
+    thres = np.quantile(img_values, quantile)
+    _, img_thold = cv2.threshold(img, thres, maxValue, borderType)
+    return img_thold
+
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
 
@@ -98,13 +141,13 @@ hit = 0
 acc = 0
 Y = "center"
 
-pred_dir = [0,0,0]
+pred_dir = [0, 0, 0]
 crop = None
 cap = None
 try:
     # 카메라 or 영상
-    path_name = "D:/JEON/dataset/look_direction/vid/3/03-3.mp4"
-    num = path_name[path_name.rfind("/")-1]
+    path_name = "D:/Dataset/test_video.mp4"
+    num = path_name[path_name.rfind("/") - 1]
     if num == "1" or num == "4":
         Y = "right"
     elif num == "2" or num == "5":
@@ -112,7 +155,7 @@ try:
     else:
         Y = "left"
     print(Y)
-    # cap = cv2.VideoCapture(1)
+    # cap = cv2.VideoCapture(0)
     # cap = cv2.VideoCapture("D:/mystudy/pholythec/Project/DMS/WIN_20220520_16_13_04_Pro.mp4")
     # cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220526_15_33_19_Pro.mp4")
     # cap = cv2.VideoCapture("D:/JEON/dataset/look_direction/vid/4/03-4.mp4")
@@ -127,57 +170,47 @@ while cap.isOpened():
     if ret:
         total_frame += 1
         frame = np.array(imutils.resize(frame, width=RES_W, height=RES_H))  # imutils cv2 경량화 보조 패키지
-        view = frame    # 화면 출력용 view
         # frame = img_Preprocessing_v3(frame)
-        frame = img_gray_Preprocessing(frame)    # (H, W)
+        gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # (H, W)
 
-        if frame is None:
+        if gray is None:
             break
 
         if Tracker.track_number == 0:
-            Tracker.find_tracker(frame, FaceDetector)
+            Tracker.find_tracker(gray, FaceDetector)
         else:  # 트레킹 할 얼굴이 1명 이상 있다면(지금은 1명만 트레킹 하도록 작성함)
             box_rect = None
             if Tracker.frame_counter == 60:  # 60 프레임마다 한번씩 트래커 이탈 방지용 refaceDetection
-                box_rect = Tracker.find_tracker(frame, FaceDetector, re=True)
+                box_rect = Tracker.find_tracker(gray, FaceDetector, re=True)
             else:
-                box_rect = Tracker.tracking(frame)  # 네모 박스 처준다 원한다면 rectangle타입 반환도 가능
+                box_rect = Tracker.tracking(gray)  # 네모 박스 처준다 원한다면 rectangle타입 반환도 가능
 
             if box_rect is not None:
-                landmarks = MarkDetector.get_marks(frame, box_rect)
-                landmarks_nparray = MarkDetector.full_object_detection_to_ndarray(landmarks)
-                pupil = haar_like.get_pupil(frame, landmarks)
-                # main ==============================================
-                crop_left_eye = eye_crop_none_border(pupil, landmarks_nparray[36:42])
-                crop_right_eye = eye_crop_none_border(pupil, landmarks_nparray[42:48])
+                landmarks = MarkDetector.get_marks(gray, box_rect)
+                landmarks_ndarray = MarkDetector.full_object_detection_to_ndarray(landmarks)
+                # v1 ============================================
+                eyes = [eye_crop_none_border(gray, landmarks_ndarray[36:42]),
+                        eye_crop_none_border(gray, landmarks_ndarray[42:48])]
+                for i, eye in enumerate(eyes):
+                    eye = cv2.pyrUp(np.mean(eye, axis=2).astype("uint8"))
+                    eyes[i] = haar_like.threshold(eye)
 
-                # test =====================================================
-                # crop_left_eye = eye_crop_none_border(frame, landmarks_nparray[36:42])
-                # crop_right_eye = eye_crop_none_border(frame, landmarks_nparray[42:48])
+                cv2.putText(frame, f"{haar_like.eye_dir(eyes)}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                cv2.imshow("left", eyes[0])
+                cv2.imshow("right", eyes[1])
+                # v2 ============================================
+                # left_eye = eye_crop_none_border(gray, landmarks_ndarray[36:42])
+                # right_eye = eye_crop_none_border(gray, landmarks_ndarray[42:48])
+                # cv2.imshow("left", left_eye)
+                # cv2.imshow("right", right_eye)
 
-                direction = mtc.eye_dir(crop_left_eye, crop_right_eye)
-                if direction == "left":
-                    pred_dir[0] += 1
-                elif direction == "center":
-                    pred_dir[1] += 1
-                elif direction == "right":
-                    pred_dir[2] += 1
-                cv2.putText(view, f"{direction}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                MarkDetector.draw_marks(frame, landmarks, color=GREEN)  # 랜드마크 점 그려주기
+
                 # 랜드마크 type=full_object_detection --> .part().x, .part().x 형식으로 뽑아내기
-
-                MarkDetector.draw_marks(view, landmarks, color=GREEN)    # 랜드마크 점 그려주기
-
                 # landmarks = MarkDetector.full_object_detection_to_ndarray(landmarks)
-                # if landmarks is not None or landmarks == ():
-                #     # # ==================== # # 랜드마크 받는 부분 =============================================================== # #
-                #     # for i, land in enumerate([landmarks[36:42], landmarks[42:48]]):
-                #     #     cimg = eye_crop_none_border(frame, land)
 
-                # else:
-                #     print("랜드마크 없어서 예외처리가 나와야하지만 뭔가 이상하네요 에러 났을때 안나오네요")
-                # cv2.imshow("pupil", pupil)
-        cv2.putText(view, f"fps:{int(1. / (time.time() - perv_time))}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
-        cv2.imshow('show_frame', view)
+        cv2.putText(frame, f"fps:{int(1. / (time.time() - perv_time))}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+        cv2.imshow('show_frame', frame)
         # cv2.imshow("frame_preprocessing", frame)
     else:
         break
@@ -192,9 +225,8 @@ cap.release()
 print(f"{pred_dir}")
 print(f"{total_frame}")
 if Y == "left":
-    print("acc=", round(pred_dir[0]/total_frame * 100, 4))
+    print("acc=", round(pred_dir[0] / total_frame * 100, 4))
 elif Y == "center":
-    print("acc=", round(pred_dir[1]/total_frame * 100, 4))
+    print("acc=", round(pred_dir[1] / total_frame * 100, 4))
 elif Y == "right":
-    print("acc=", round(pred_dir[2]/total_frame * 100, 4))
-
+    print("acc=", round(pred_dir[2] / total_frame * 100, 4))

@@ -7,23 +7,30 @@ import dlib
 
 class Haar_like:
     def __init__(self):
-        self.kernel = np.ones((9, 9), np.uint8)  # TODO 9행 9열의 1으로 채워진 양수(0~255) array 생성
-
+        self.kernel = np.ones((13, 13), np.uint8)  # TODO 9행 9열의 1으로 채워진 양수(0~255) array 생성
+        self.pupil_brightness = 255
+        # self.LEFT = [[(0, 1), (0, 1)], [(0, 1), (1, 0)], [(1, 0), (0, 1)], [(1, 0), (1, 0)]]
+        # self.CENTER = [[(1, 2), (1, 2)], [(1, 2), (2, 1)], [(2, 1), (1, 2)], [(2, 1), (2, 1)]]
+        # self.RIGHT = [[(2, 3), (2, 3)], [(2, 3), (3, 2)], [(3, 2), (2, 3)], [(3, 2), (3, 2)]]
+        self.LEFT = [[0, 0], [0, 1], [1, 0]]
+        self.CENTER = [[1, 1], [1, 2], [2, 1], [2, 2]]
+        self.RIGHT = [[2, 3], [3, 3], [3, 2]]
     def flatten_array_remove_item(self, array, itemToPop):
         array_flat = np.ndarray.flatten(array)
         array_toPop = np.array(itemToPop)
         array_refined = np.setdiff1d(array_flat, array_toPop)
         return array_refined
 
-    def threshold(self, frame, quantile=0.5, maxValue=255, type=cv2.THRESH_BINARY_INV):
+    def threshold(self, frame, quantile=0.9, maxValue=255, type=cv2.THRESH_BINARY_INV):
         # test add =======================================
-        dl = cv2.dilate(frame, self.kernel, 3)
-        gb = cv2.GaussianBlur(dl, (9, 9), 0)
+        # ed = cv2.dilate(frame, self.kernel, 3)  # cv2.THRESH_BINARY
+        ed = cv2.erode(frame, self.kernel, 8)  # cv2.THRESH_BINARY_INV
+        gb = cv2.GaussianBlur(ed, (31, 31), 50)
         # =================================================
         frame_values = self.flatten_array_remove_item(gb, 255)
         thres = np.quantile(frame_values, quantile)
-        _, frame_thold = cv2.threshold(frame, thres, maxValue, type)
-        return frame_thold
+        _, result = cv2.threshold(frame, thres, maxValue, type)
+        return result
 
     def shape_to_np(self, shape, dtype="int"):  # TODO 얼굴 랜드마크를 np.array로 만들어주는 함수
         """        
@@ -103,3 +110,68 @@ class Haar_like:
 
         _, thh = cv2.threshold(eyes, 60, 255, cv2.THRESH_BINARY)
         return thh
+
+    def eye_pixel_count(self, eye):
+        side_pixel_add_rat = 0.25
+        pixel_count = [[0, 0], [1, 0], [2, 0], [3, 0]]
+
+        H = eye.shape[0]
+        ll = eye.shape[1] // 4
+        l = ll * 2
+        r = ll * 3
+        rr = eye.shape[1]
+
+        addition_pixel = round(H * ll * side_pixel_add_rat)
+        pixel_count[0][1] += addition_pixel
+        pixel_count[3][1] += addition_pixel
+        # print(f"left.shape{left.shape}, {W_1}, {W_2}")
+        for i in range(H):
+            for j in range(ll):
+                if eye[i][j] == self.pupil_brightness:
+                    pixel_count[0][1] += 1
+
+            for j in range(ll, l):
+                if eye[i][j] == self.pupil_brightness:
+                    pixel_count[1][1] += 1
+
+            for j in range(l, r):
+                if eye[i][j] == self.pupil_brightness:
+                    pixel_count[2][1] += 1
+
+            for j in range(r, rr):
+                if eye[i][j] == self.pupil_brightness:
+                    pixel_count[3][1] += 1
+
+        return pixel_count
+
+    def eye_dir_index(self, pixel_list):
+        # 2 가지 모두 체크 경우의 수가 너무 많다   ==============================
+        # sort_list = sorted(pixel_list, key=lambda x: -x[1])
+        # idx = (sort_list[0][0], sort_list[1][0])
+
+        # ================================================================
+        sort_list = sorted(pixel_list, key=lambda x:-x[1])
+        print(sort_list)
+        idx = sort_list[0][0]
+        return idx
+
+    def eye_dir(self, eyes):
+        left_eye_pixel_list = self.eye_pixel_count(eyes[0])
+        right_eye_pixel_list = self.eye_pixel_count(eyes[1])
+        # print(f"left:{left_eye_pixel_list}, right:{right_eye_pixel_list}")
+        check = [self.eye_dir_index(left_eye_pixel_list), self.eye_dir_index(right_eye_pixel_list)]
+        # print(f"l:{l}, r:{r}")
+        if check in self.LEFT:
+            return "left"
+        elif check in self.RIGHT:
+            return "right"
+        elif check in self.CENTER:
+            return "center"
+        else:
+            return "center"
+        # if (l == 0 and r == 0) or (l == 0 and r == 1) or (l == 1 and r == 0):
+        #     return "left"
+        # elif (l == 2 and r == 2) or (l == 1 and r == 2) or (l == 2 and r == 1):
+        #     return "right"
+        # else:
+        #     return "center"
