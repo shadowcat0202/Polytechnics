@@ -13,7 +13,7 @@ from Preprocessing import *
 from img_draw import imgMake
 from Haar_Like import Haar_like
 from make_test_case import my_make_test_case
-
+from Evaluation import evaluation
 
 def eye_crop(img, eye_landmark):
     """
@@ -135,6 +135,7 @@ Tracker = Tracker()  # 트래킹 관련
 haar_like = Haar_like()
 iMake = imgMake()
 mtc = my_make_test_case()
+eva = evaluation()
 
 total_frame = 0
 hit = 0
@@ -146,7 +147,7 @@ crop = None
 cap = None
 try:
     # 카메라 or 영상
-    path_name = "D:/Dataset/test_video.mp4"
+    path_name = "D:/JEON/dataset/look_direction/vid/4/02-4.mp4"
     num = path_name[path_name.rfind("/") - 1]
     if num == "1" or num == "4":
         Y = "right"
@@ -191,13 +192,24 @@ while cap.isOpened():
                 # v1 ============================================
                 eyes = [eye_crop_none_border(gray, landmarks_ndarray[36:42]),
                         eye_crop_none_border(gray, landmarks_ndarray[42:48])]
-                for i, eye in enumerate(eyes):
-                    eye = cv2.pyrUp(np.mean(eye, axis=2).astype("uint8"))
-                    eyes[i] = haar_like.threshold(eye)
 
-                cv2.putText(frame, f"{haar_like.eye_dir(eyes)}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+                for i, eye in enumerate(eyes):
+                    # eyes[i] = cv2.resize(eye, dsize=(eye.shape[1] * 3, eye.shape[0] * 3))
+                    for _ in range(1):
+                        eyes[i] = cv2.pyrUp(eyes[i])
+                    eyes[i] = haar_like.threshold(eyes[i])
+
+                pred = haar_like.eye_dir(eyes)
                 cv2.imshow("left", eyes[0])
                 cv2.imshow("right", eyes[1])
+                cv2.putText(frame, f"fps:{pred}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX,
+                            0.7, RED, 2)
+                eva.measurement(pred)
+
+                # eyes[0] = cv2.pyrUp(np.mean(eyes[0], axis=2).astype("uint8"))
+                # eyes[0] = np.expand_dims(eyes[0], axis=-1)
+
+
                 # v2 ============================================
                 # left_eye = eye_crop_none_border(gray, landmarks_ndarray[36:42])
                 # right_eye = eye_crop_none_border(gray, landmarks_ndarray[42:48])
@@ -222,11 +234,5 @@ while cap.isOpened():
 
 cv2.destroyAllWindows()
 cap.release()
-print(f"{pred_dir}")
-print(f"{total_frame}")
-if Y == "left":
-    print("acc=", round(pred_dir[0] / total_frame * 100, 4))
-elif Y == "center":
-    print("acc=", round(pred_dir[1] / total_frame * 100, 4))
-elif Y == "right":
-    print("acc=", round(pred_dir[2] / total_frame * 100, 4))
+eva.total_frame = total_frame
+eva.measurement_result()

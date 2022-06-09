@@ -7,7 +7,6 @@ class evaluation:
         self.close = 0
 
     def measurement(self, pred):
-        self.total_frame += 1
         if pred == "left":
             self.left += 1
         elif pred == "right":
@@ -20,5 +19,8 @@ class evaluation:
     def measurement_result(self):
         print(f"total frame : {self.total_frame}")
         print(f"left:{self.left}\ncenter:{self.center}\nright:{self.right}")
-        print(f"acc\tleft\tcenter\tright\tclose?")
-        print(f"\t{round(self.left/self.total_frame), 2}\t{round(self.center/self.total_frame), 2}\t{round(self.right/self.total_frame), 2}\t{round(self.close/self.total_frame), 2}")
+        print(f"=================== acc ============================")
+        print(f"left:{round(self.left/self.total_frame,2) * 100}%\n"
+              f"center:{round(self.center/self.total_frame, 2) * 100}%\n"
+              f"right:{round(self.right/self.total_frame, 2) * 100}%\n"
+              f"none:{round(self.close/self.total_frame, 2) * 100}%")

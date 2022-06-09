@@ -143,6 +143,12 @@ class Rect extends Shape{
         System.out.println("Rect");
     }
 }
+
+class OBJ<T>{
+    T val;
+    void set(T t) {this.val = t;}
+    T get(){return this.val;}
+}
 public class Main {
     public void dowhile(){
         char c = 'a';
@@ -194,11 +200,17 @@ public class Main {
     }
 
     public static void main(String[] args){
-        smartPhone phone = new smartPhone();
-        phone.play();
-        phone.receiveCall();
-        System.out.println(phone.calc(3,6));
-        phone.schedule();
+        OBJ<String> obj1 = new OBJ<String>();
+        obj1.set("hello");
+        System.out.println(obj1.get());
+
+        OBJ<Integer> obj2 = new OBJ<>();
+        obj2.set(10);
+        System.out.println(obj2.get());
+
+        OBJ<Float> obj3 = new OBJ<>();
+        obj3.set(3.14f);
+        System.out.println(obj3.get());
 
 
     }
