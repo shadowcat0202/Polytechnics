@@ -147,18 +147,48 @@ public class Main {
     }
 
     public static void main(String[] args){
-        int[][] map = {
-                {0, 1, 1, 0, 2, 0, 0},
-                {0, 1, 1, 0, 2, 0, 2},
-                {1, 1, 1, 0, 2, 0, 2},
-                {0, 0, 0, 0, 2, 2, 2},
-                {0, 3, 0, 0, 0, 0, 0},
-                {0, 3, 3, 3, 3, 3, 0},
-                {0, 3, 3, 3, 0, 0, 0}
-        };
+//        int[][] map = {
+//                {0, 1, 1, 0, 2, 0, 0},
+//                {0, 1, 1, 0, 2, 0, 2},
+//                {1, 1, 1, 0, 2, 0, 2},
+//                {0, 0, 0, 0, 2, 2, 2},
+//                {0, 3, 0, 0, 0, 0, 0},
+//                {0, 3, 3, 3, 3, 3, 0},
+//                {0, 3, 3, 3, 0, 0, 0}
+//        };
         Search sr = new Search();
-        int[] ans = sr.solution_use_recursive(map);
+//        int[] ans = sr.solution_use_recursive(map);
+//
+//        System.out.printf("영역의 개수: %d\n가장 큰 영역: %d",ans[0], ans[1]);
+//        int[] arr = {5,3,76,87,7,5,4,3,32,23,6,6};
+//
+//        Quick_sort q = new Quick_sort();
+//        int[] buf = Arrays.copyOf(arr, arr.length);
+//        q.quickSort(buf, 0, arr.length-1, false);
+//        System.out.println(Arrays.toString(buf));
+//
+//        buf = Arrays.copyOf(arr, arr.length);
+//        q.quickSort(buf, 0, arr.length-1, true);
+//        System.out.println(Arrays.toString(buf));
 
-        System.out.printf("영역의 개수: %d\n가장 큰 영역: %d",ans[0], ans[1]);
+        MyTree<String> tree = new MyTree<>();
+        tree.insert("-");
+        tree.insert("*");
+        tree.insert("/");
+        tree.insert("A");
+        tree.insert("B");
+        tree.insert("C");
+        tree.insert("D");
+
+        System.out.println("전위 Order: ");
+        tree.preorder();
+        System.out.println("\n중위 Order: ");
+        tree.inorder();
+        System.out.println("\n후위 Order: ");
+        tree.postorder();
+
+
+
+
     }
 }

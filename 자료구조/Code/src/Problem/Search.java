@@ -17,7 +17,7 @@ public class Search {
     public Search(){
     }
 
-    int[] dcol = {0,1,0,-1};
+    int[] dcol = { 0,1,0,-1};
     int[] drow = {-1,0,1,0};
 
 //    public int[] BFS_solution(int[][] picture){
@@ -71,6 +71,7 @@ public class Search {
         System.out.println(sb.toString());
         return new int[] {n_group, max_area};
     }
+
     private int vector(int startRow, int startCol, int[][] input, int[][] visited, int n_group){
         int area_size = 0;
         Stack<Pos> stack = new Stack<>();
