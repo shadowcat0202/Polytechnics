@@ -5,17 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="9de2fc36-516b-49fb-8286-72b7e59e37a0" name="Changes" comment="Changes">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/python.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/haar_like_test/eye_ball_my_tracking.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/haar_like_test/eye_ball_tracking.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/haar_like_test/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/haar_like_test/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/haar_like_test/test.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/Evaluation.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/Evaluation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/Haar_Like.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/Haar_Like.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/master/master_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/master_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../SW활용 및 코딩/Code/src/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/master/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/master/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../자료구조/Code/src/my_sort.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../자료구조/Code/src/my_sort.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +104,27 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
+    <configuration name="calc_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="python" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/master" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/master/calc_test.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="function_stub" type="PythonConfigurationType" factoryName="Python" nameIsGenerated="true">
       <module name="python" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -146,27 +159,6 @@
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="D:\JEON\Polytechnics\Project\DMS\python\original\main.py" />
-      <option name="PARAMETERS" value="" />
-      <option name="SHOW_COMMAND_LINE" value="false" />
-      <option name="EMULATE_TERMINAL" value="false" />
-      <option name="MODULE_MODE" value="false" />
-      <option name="REDIRECT_INPUT" value="false" />
-      <option name="INPUT_FILE" value="" />
-      <method v="2" />
-    </configuration>
-    <configuration name="main_sub" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
-      <module name="python" />
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs>
-        <env name="PYTHONUNBUFFERED" value="1" />
-      </envs>
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/master" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/master/main_sub.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -241,10 +233,10 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.test" />
+        <item itemvalue="Python.calc_test" />
         <item itemvalue="Python.master_main" />
         <item itemvalue="Python.Haar_Like" />
         <item itemvalue="Python.make_test_case" />
-        <item itemvalue="Python.main_sub" />
       </list>
     </recent_temporary>
   </component>

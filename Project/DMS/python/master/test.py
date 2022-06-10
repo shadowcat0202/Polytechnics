@@ -1,3 +1,5 @@
+import pprint
+
 import cv2
 import dlib
 import numpy as np
@@ -14,32 +16,62 @@ from img_draw import imgMake
 from Haar_Like import Haar_like
 from make_test_case import my_make_test_case
 from Evaluation import evaluation
+import matplotlib.pyplot as plt
 
 
 class HaarCascadeBlobCapture:
     def __init__(self):
         self.previous_blob_area = [1, 1]
         self.previous_keypoints = [None, None]
-        self.minArea = 100
+        self.blob_detector = None
+
+    def set_SimpleBlod_params(self, H, W, typ):
         detector_params = cv2.SimpleBlobDetector_Params()
+
         detector_params.filterByArea = True
-        detector_params.minArea = 300
+        detector_params.minArea = round(H * W * 0.2)
+
         detector_params.filterByColor = True
-        detector_params.blobColor = 255
+
+        detector_params.blobColor = (255 if typ == cv2.THRESH_BINARY_INV else 0)
+
         # detector_params.maxArea = 1500
+
         self.blob_detector = cv2.SimpleBlobDetector_create(detector_params)
 
-    def blob_track(self, img, prev_area=None, quantile=0.2, typ=cv2.THRESH_BINARY_INV):
+
+    def img_eye_processed(self, img):
+        thold = np.min(img) + np.std(img)
+        img = cv2.medianBlur(img, 3, 3)
+        img = np.where(img < thold, 255, 0).astype("uint8")
+        img = cv2.erode(img, None, iterations=3)
+        img = cv2.dilate(img, None, iterations=1)
+        return img
+
+    def blob_track(self, img, prev_area=None, quantile=0.3, typ=cv2.THRESH_BINARY_INV):
         if img is None:
             return None
-        flat = np.ndarray.flatten(img)
-        threshold = np.quantile(flat, quantile)
-        _, img = cv2.threshold(img, threshold, 255, typ)
-        img = cv2.erode(img, None, iterations=5)
-        img = cv2.dilate(img, np.ones((5, 5), np.uint8), iterations=7)
-        img = cv2.medianBlur(img, 5)
-        cv2.imshow("t_e_d_mB", img)
-
+        # original ===================================================================
+        # img = cv2.medianBlur(img, 5)
+        # # img = cv2.bilateralFilter(img, 9, 75, 75)
+        # # img = cv2.fastNlMeansDenoising(img, None, 15, 15, 5)
+        #
+        # flat = np.ndarray.flatten(img)
+        # threshold = np.quantile(flat, quantile)
+        # _, img = cv2.threshold(img, threshold, 255, typ)
+        # cv2.imshow("th", img)
+        # img = search(img)
+        # cv2.imshow("bfs:", img)
+        # plt.hist(flat)
+        # plt.show()
+        # img = cv2.erode(img, None, iterations=5)
+        # # img = cv2.dilate(img, np.ones((5, 5), np.uint8), iterations=7)
+        # img = cv2.dilate(img, None, iterations=5)
+        
+        # 시영씨 코드 =============================================================================
+        img = self.img_eye_processed(img)
+        # cv2.imshow("t_e_d_mB", img)
+        self.set_SimpleBlod_params(img.shape[0], img.shape[1], typ)
         keypoints = self.blob_detector.detect(img)
 
         ans = None
@@ -65,7 +97,7 @@ class HaarCascadeBlobCapture:
             (0, 0, 255),
             cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS,
         )
-        cv2.imshow("eye", d)
+        return d
 
 def eye_crop(img, eye_landmark):
     """
@@ -166,6 +198,49 @@ def my_threshold(img, quantile=0.4, maxValue=255, borderType=cv2.THRESH_BINARY_I
     return img_thold
 
 
+def search(img):
+    print(img.shape)
+    search_dir = [[-1, -1], [-1, 0], [-1, 1],
+                  [ 0, -1],          [ 0, 1],
+                  [ 1, -1], [ 1, 0], [ 1, 1]]
+    visited = np.full((img.shape[0], img.shape[1]), 0)
+    area_number = 0
+
+    big_area_idx = 0
+    big_area_size = 0
+    for row in range(img.shape[0]):
+        for col in range(img.shape[1]):
+            if visited[row][col] == 0 and img[row][col] == 255:
+                area_number += 1
+                cur_area_size = 0
+                queue = [[row, col]]
+                while len(queue) > 0:
+                    now_row = queue[0][0]
+                    now_col = queue[0][1]
+                    del queue[0]
+                    cur_area_size += 1
+                    for d in search_dir:
+                        next_row = now_row + d[0]
+                        next_col = now_col + d[1]
+                        if next_row < 0 or next_row >= img.shape[0] or next_col < 0 or next_col >= img.shape[1]:    continue
+                        if visited[next_row][next_col] > 0 or img[next_row][next_col] == 0:
+                            continue
+                        queue.append([next_row, next_col])
+                        visited[next_row][next_col] = area_number
+                if big_area_size < cur_area_size:
+                    big_area_idx = area_number
+                    big_area_size = cur_area_size
+    result = np.full((img.shape[0], img.shape[1]), 0)
+    for row in range(img.shape[0]):
+        for col in range(img.shape[1]):
+            if visited[row][col] == big_area_idx:
+                result[row][col] = 255
+    # result = np.expand_dims(result, axis=-1)
+    result = np.array(result, dtype=np.uint8)
+    return result
+
+
+
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
 
@@ -202,7 +277,7 @@ crop = None
 cap = None
 try:
     # 카메라 or 영상
-    path_name = "D:/JEON/dataset/look_direction/vid/4/04-4.mp4"
+    path_name = "D:/JEON/dataset/look_direction/vid/6/01-6.mp4"
     num = path_name[path_name.rfind("/") - 1]
     if num == "1" or num == "4":
         Y = "right"
@@ -211,11 +286,11 @@ try:
     else:
         Y = "left"
     print(Y)
-    cap = cv2.VideoCapture(0)
+    # cap = cv2.VideoCapture(0)
     # cap = cv2.VideoCapture("D:/mystudy/pholythec/Project/DMS/WIN_20220520_16_13_04_Pro.mp4")
     # cap = cv2.VideoCapture("D:/JEON/Polytechnics/Project/DMS/dataset/WIN_20220526_15_33_19_Pro.mp4")
     # cap = cv2.VideoCapture("D:/JEON/dataset/look_direction/vid/4/03-4.mp4")
-    # cap = cv2.VideoCapture(path_name)
+    cap = cv2.VideoCapture(path_name)
 
 
 except:
@@ -248,14 +323,17 @@ while cap.isOpened():
                     eyes = [eye_crop_none_border(gray, landmarks_ndarray[36:42]),
                             eye_crop_none_border(gray, landmarks_ndarray[42:48])]
                     for i in range(2):
-                        eyes[i] = cv2.pyrUp(eyes[i])
+                        for _ in range(2):
+                            eyes[i] = cv2.pyrUp(eyes[i])
                         key_points = HCBC.blob_track(eyes[i], HCBC.previous_blob_area[i])
                         kp = key_points or HCBC.previous_keypoints[i]
                         # if kp is not None:
                             # print(f"{i}: x:{kp[0].pt[0]} y:{kp[0].pt[1]}")
-                        HCBC.draw(eyes[i], kp, frame)
+                        eyes[i] = HCBC.draw(eyes[i], kp, frame)
                         # cv2.imshow(f"eyes[{i}]", eyes[i])
                         HCBC.previous_keypoints[i] = kp
+                    cv2.imshow("left", eyes[0])
+                    cv2.imshow("right", eyes[1])
 
                     MarkDetector.draw_marks(frame, landmarks, color=GREEN)  # 랜드마크 점 그려주기
 
