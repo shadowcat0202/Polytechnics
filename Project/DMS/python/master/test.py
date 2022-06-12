@@ -320,6 +320,7 @@ while cap.isOpened():
                 landmarks = MarkDetector.get_marks(gray, box_rect)
                 if landmarks is not None:
                     landmarks_ndarray = MarkDetector.full_object_detection_to_ndarray(landmarks)
+
                     eyes = [eye_crop_none_border(gray, landmarks_ndarray[36:42]),
                             eye_crop_none_border(gray, landmarks_ndarray[42:48])]
                     for i in range(2):
