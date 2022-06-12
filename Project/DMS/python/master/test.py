@@ -17,160 +17,7 @@ from Haar_Like import Haar_like
 from make_test_case import my_make_test_case
 from Evaluation import evaluation
 import matplotlib.pyplot as plt
-
-
-class HaarCascadeBlobCapture:
-    def __init__(self):
-        self.previous_blob_area = [1, 1]
-        self.previous_keypoints = [None, None]
-        self.blob_detector = None
-
-    def set_SimpleBlod_params(self, H, W, typ):
-        detector_params = cv2.SimpleBlobDetector_Params()
-
-        detector_params.filterByArea = True
-        detector_params.minArea = round(H * W * 0.2)
-
-        detector_params.filterByColor = True
-
-        detector_params.blobColor = (255 if typ == cv2.THRESH_BINARY_INV else 0)
-
-        # detector_params.maxArea = 1500
-
-        self.blob_detector = cv2.SimpleBlobDetector_create(detector_params)
-
-
-    def img_eye_processed(self, img):
-        thold = np.min(img) + np.std(img)
-        img = cv2.medianBlur(img, 3, 3)
-        img = np.where(img < thold, 255, 0).astype("uint8")
-        img = cv2.erode(img, None, iterations=3)
-        img = cv2.dilate(img, None, iterations=1)
-        return img
-
-    def blob_track(self, img, prev_area=None, quantile=0.3, typ=cv2.THRESH_BINARY_INV):
-        if img is None:
-            return None
-        # original ===================================================================
-        # img = cv2.medianBlur(img, 5)
-        # # img = cv2.bilateralFilter(img, 9, 75, 75)
-        # # img = cv2.fastNlMeansDenoising(img, None, 15, 15, 5)
-        #
-        # flat = np.ndarray.flatten(img)
-        # threshold = np.quantile(flat, quantile)
-        # _, img = cv2.threshold(img, threshold, 255, typ)
-        # cv2.imshow("th", img)
-        # img = search(img)
-        # cv2.imshow("bfs:", img)
-        # plt.hist(flat)
-        # plt.show()
-        # img = cv2.erode(img, None, iterations=5)
-        # # img = cv2.dilate(img, np.ones((5, 5), np.uint8), iterations=7)
-        # img = cv2.dilate(img, None, iterations=5)
-        
-        # 시영씨 코드 =============================================================================
-        img = self.img_eye_processed(img)
-        # cv2.imshow("t_e_d_mB", img)
-        self.set_SimpleBlod_params(img.shape[0], img.shape[1], typ)
-        keypoints = self.blob_detector.detect(img)
-
-        ans = None
-        if keypoints and len(keypoints) > 1:
-            tmp = 1000
-            for keypoint in keypoints:  # filter out odd blobs
-                if abs(keypoint.size - prev_area) < tmp:
-                    ans = keypoint
-                    tmp = abs(keypoint.size - prev_area)
-
-            keypoints = (ans,)
-        return keypoints
-
-    def draw(self, img, keypoints, dest=None):
-        if dest is None:
-            dest = img
-        if img is None:
-            return None
-        d = cv2.drawKeypoints(
-            img,
-            keypoints,
-            dest,
-            (0, 0, 255),
-            cv2.DRAW_MATCHES_FLAGS_DRAW_RICH_KEYPOINTS,
-        )
-        return d
-
-def eye_crop(img, eye_landmark):
-    """
-    :argument
-        img: 한 프레임(이미지)
-        eye_landmark: 눈의 랜드마크 좌표
-    :return
-        result: img에서 눈 영역의 이미지를 잘라서 반환
-        border: 잘라낸 눈의 영역의 [(p1.x, p1.y), (p2.x, p2.y)]
-    """
-    W = [i[0] for i in eye_landmark]
-    H = [i[1] for i in eye_landmark]
-
-    W_min, W_max = min(W), max(W)
-    H_min, H_max = min(H), max(H)
-
-    W_btw = W_max - W_min
-    H_btw = H_max - H_min
-
-    W_border_size = W_btw * 0.2
-    H_border_size = H_btw * 0.5
-
-    p1_W_border = int(W_min - W_border_size)
-    p1_H_border = int(H_min - H_border_size)
-    p2_W_border = int(W_max + W_border_size)
-    p2_H_border = int(H_max + H_border_size)
-
-    border = [
-        (p1_W_border, p1_H_border),
-        (p2_W_border, p2_H_border)
-    ]
-    result = np.array(img[p1_H_border:p2_H_border, p1_W_border:p2_W_border])
-    return result, border
-
-
-def eye_crop_none_border(img, eye_landmark):
-    """
-    :argument
-        img: 한 프레임(이미지)
-        eye_landmark: 눈의 랜드마크 좌표
-    :return
-        result: img에서 눈 영역의 이미지를 잘라서 반환
-        border: 잘라낸 눈의 영역의 [(p1.x, p1.y), (p2.x, p2.y)]
-    """
-    W = [i[0] for i in eye_landmark]
-    H = [i[1] for i in eye_landmark]
-
-    W_min, W_max = min(W), max(W)
-    H_min, H_max = min(H), max(H)
-
-    result = img[H_min:H_max, W_min:W_max]
-    result = np.expand_dims(result, axis=-1)
-    return result
-
-
-def eye_crop_border_to_center(img, eye_landmark):
-    W = [i[0] for i in eye_landmark]
-    H = [i[1] for i in eye_landmark]
-
-    W_min, W_max = min(W), max(W)
-    H_min, H_max = min(H), max(H)
-
-    H_btw = H_max - H_min
-    W_btw = W_max - W_min
-
-    center = (round(H_btw / 2), round(W_btw / 2))
-
-    H_border = round(H_btw * 0.5)
-    W_border = round(W_btw * 0.2)
-
-    result = img[H_min - H_border:H_max + H_border, W_min - W_border:W_max + W_border]
-    result = np.expand_dims(result, axis=-1)
-    return result
+from Eye import *
 
 
 def flatten_array_remove_item(array, itemToPop):
@@ -266,7 +113,6 @@ iMake = imgMake()
 mtc = my_make_test_case()
 eva = evaluation()
 HCBC = HaarCascadeBlobCapture()
-
 total_frame = 0
 hit = 0
 acc = 0
@@ -277,7 +123,7 @@ crop = None
 cap = None
 try:
     # 카메라 or 영상
-    path_name = "D:/JEON/dataset/look_direction/vid/6/01-6.mp4"
+    path_name = "D:/Dataset/test_video.mp4"
     num = path_name[path_name.rfind("/") - 1]
     if num == "1" or num == "4":
         Y = "right"
@@ -297,13 +143,12 @@ except:
     print("Error opening video stream or file")
 while cap.isOpened():
     perv_time = time.time()
-    ret, frame = cap.read()
+    ret, frame = cap.read(1)
     if ret:
         total_frame += 1
         frame = np.array(imutils.resize(frame, width=RES_W, height=RES_H))  # imutils cv2 경량화 보조 패키지
         # frame = img_Preprocessing_v3(frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)  # (H, W)
-
         if gray is None:
             break
 
@@ -320,20 +165,8 @@ while cap.isOpened():
                 landmarks = MarkDetector.get_marks(gray, box_rect)
                 if landmarks is not None:
                     landmarks_ndarray = MarkDetector.full_object_detection_to_ndarray(landmarks)
-                    eyes = [eye_crop_none_border(gray, landmarks_ndarray[36:42]),
-                            eye_crop_none_border(gray, landmarks_ndarray[42:48])]
-                    for i in range(2):
-                        for _ in range(2):
-                            eyes[i] = cv2.pyrUp(eyes[i])
-                        key_points = HCBC.blob_track(eyes[i], HCBC.previous_blob_area[i])
-                        kp = key_points or HCBC.previous_keypoints[i]
-                        # if kp is not None:
-                            # print(f"{i}: x:{kp[0].pt[0]} y:{kp[0].pt[1]}")
-                        eyes[i] = HCBC.draw(eyes[i], kp, frame)
-                        # cv2.imshow(f"eyes[{i}]", eyes[i])
-                        HCBC.previous_keypoints[i] = kp
-                    cv2.imshow("left", eyes[0])
-                    cv2.imshow("right", eyes[1])
+                    check = HCBC.eye_direction_process(gray, landmarks_ndarray)
+                    cv2.putText(frame, f"{check}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
 
                     MarkDetector.draw_marks(frame, landmarks, color=GREEN)  # 랜드마크 점 그려주기
 
