@@ -1,10 +1,12 @@
-from tensorflow.keras.datasets import mnist
-from keras.utils import np_utils
-
-import numpy
+# from tensorflow.keras.datasets import mnist
+# from keras.utils import np_utils
+import cv2
+import numpy as np
 import os
 
 import tensorflow as tf
+from sklearn.model_selection import train_test_split
+import matplotlib.pyplot as plt
 
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense
@@ -70,9 +72,13 @@ def train(model, X, Y):
 
 device = tf.device('cuda')
 
-numpy.random.seed(0)
+np.random.seed(0)
 
-(train_set, train_label), (test_set, test_label) = load_dataset()
+# (train_set, train_label), (test_set, test_label) = load_dataset()
+train_set = np.load("dataset/mnist_X_new.npz.npy")
+train_label = np.load("dataset/mnist_Y_new.npz.npy")
+train_set = 255 - train_set
+X_train, X_test, y_train, y_test = train_test_split(train_set, train_label, test_size=0.2, shuffle=True, random_state=1004)
 
 # NN으로 할때 1차원으로 만들어주어야 하기 때문에
 # train_set_1d = train_set.reshape(len(train_set), train_set.shape[1] * train_set.shape[2])
@@ -86,9 +92,9 @@ train_data_2d = train_set.reshape(train_set.shape[0], train_set.shape[1], train_
 train(model, train_data_2d, train_label)
 
 from tensorflow.keras.models import load_model
-
-filename = "model/cnn_e(20).h5"
+#
+filename = "model/cnn_e(10).h5"
 cnn = load_model(filename)
-test_data_2d = test_set.reshape(test_set.shape[0], test_set.shape[1], test_set.shape[2], 1)
-test_label = tf.keras.utils.to_categorical(test_label, 10)
+test_data_2d = X_test.reshape(X_test.shape[0], X_test.shape[1], X_test.shape[2], 1)
+test_label = tf.keras.utils.to_categorical(y_test, 10)
 cnn.evaluate(test_data_2d, test_label)
