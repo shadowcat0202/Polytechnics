@@ -137,7 +137,7 @@ for look_num in save_look_number:
                         # 눈 계산 + 예측(분명 학습은 잘 한거같은데 왜 직접 사용하면 뭔가 이상함)=========================================================
                         landmarks = MarkDetector.full_object_detection_to_ndarray(landmarks)
                         for i, land in enumerate([landmarks[42:48], landmarks[36:42]]):
-                            # close_open_check[i], bpnt = eye.eye_predict(frame, land)
+                            close_open_check[i], bpnt = eye.eye_predict(frame, land)
                             if i == 0:  # 사람 기준 왼쪽눈
                                 spl_img, _ = eye_img_split(frame, land)
                                 spl_img = np.expand_dims(spl_img, axis=-1)
