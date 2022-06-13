@@ -165,6 +165,7 @@ while cap.isOpened():
                 landmarks = MarkDetector.get_marks(gray, box_rect)
                 if landmarks is not None:
                     landmarks_ndarray = MarkDetector.full_object_detection_to_ndarray(landmarks)
+<<<<<<< HEAD
 
 
                     eyes = [eye_crop_none_border(gray, landmarks_ndarray[36:42]),
@@ -181,6 +182,10 @@ while cap.isOpened():
                         HCBC.previous_keypoints[i] = kp
                     cv2.imshow("left", eyes[0])
                     cv2.imshow("right", eyes[1])
+=======
+                    check = HCBC.eye_direction_process(gray, landmarks_ndarray)
+                    cv2.putText(frame, f"{check}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
+>>>>>>> 52539ab3f5152fde0fa09173ccc2d600bcec7c1b
 
                     # check = HCBC.eye_direction_process(gray, landmarks_ndarray)
                     # cv2.putText(frame, f"{check}", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, RED, 2)
