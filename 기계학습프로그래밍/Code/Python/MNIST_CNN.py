@@ -61,7 +61,7 @@ def make_model_CNN():
 
 
 def train(model, X, Y):
-    MY_EPOCH = 10
+    MY_EPOCH = 5
     MY_BATCHSIZE = 200
     Y = tf.keras.utils.to_categorical(Y, 10)
     history = model.fit(X, Y, epochs=MY_EPOCH, batch_size=MY_BATCHSIZE)
@@ -75,8 +75,8 @@ device = tf.device('cuda')
 np.random.seed(0)
 
 # (train_set, train_label), (test_set, test_label) = load_dataset()
-train_set = np.load("dataset/mnist_X_new.npz.npy")
-train_label = np.load("dataset/mnist_Y_new.npz.npy")
+train_set = np.load("dataset/mnist_X_new_v2_rotation.npy")
+train_label = np.load("dataset/mnist_Y_new_v2_rotation.npy")
 train_set = 255 - train_set
 X_train, X_test, y_train, y_test = train_test_split(train_set, train_label, test_size=0.2, shuffle=True, random_state=1004)
 
@@ -86,14 +86,14 @@ X_train, X_test, y_train, y_test = train_test_split(train_set, train_label, test
 # model = make_model_CNN()
 # his = train(model, train_set_1d, train_label)
 
-model = make_model_CNN()
+# model = make_model_CNN()
 # CNN은 2차원 배열(이미지)를 그대로 해주어야 한다
-train_data_2d = train_set.reshape(train_set.shape[0], train_set.shape[1], train_set.shape[2], 1)
-train(model, train_data_2d, train_label)
+# train_data_2d = train_set.reshape(train_set.shape[0], train_set.shape[1], train_set.shape[2], 1)
+# train(model, train_data_2d, train_label)
 
 from tensorflow.keras.models import load_model
 #
-filename = "model/cnn_e(10).h5"
+filename = "model/cnn_e(5).h5"
 cnn = load_model(filename)
 test_data_2d = X_test.reshape(X_test.shape[0], X_test.shape[1], X_test.shape[2], 1)
 test_label = tf.keras.utils.to_categorical(y_test, 10)
