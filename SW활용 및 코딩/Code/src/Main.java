@@ -143,6 +143,18 @@ class Rect extends Shape{
         System.out.println("Rect");
     }
 }
+class test1{
+    protected int x = 5;
+    public void f(){
+        x++;
+        System.out.println(x);
+    }
+}
+class test2 extends test1{
+    public void f(){
+        System.out.println(super.x);
+    }
+}
 
 class OBJ<T>{
     T val;
@@ -200,17 +212,17 @@ public class Main {
     }
 
     public static void main(String[] args){
-        OBJ<String> obj1 = new OBJ<String>();
-        obj1.set("hello");
-        System.out.println(obj1.get());
-
-        OBJ<Integer> obj2 = new OBJ<>();
-        obj2.set(10);
-        System.out.println(obj2.get());
-
-        OBJ<Float> obj3 = new OBJ<>();
-        obj3.set(3.14f);
-        System.out.println(obj3.get());
+        int sum = 0, i = 1;
+        while(i < 100){
+            if(i%3 != 0){
+                i++;
+                continue;
+            }
+            else
+                sum += i;
+            i++;
+        }
+        System.out.println(sum);
 
 
     }
