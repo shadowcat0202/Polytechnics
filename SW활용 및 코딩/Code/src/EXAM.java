@@ -1,7 +1,10 @@
 import java.util.InputMismatchException;
 import java.util.Scanner;
-
-class TV{
+interface Device{
+    void on();
+    void off();
+}
+class TV implements Device{
     protected String manufacture;
     protected int makeYear;
     protected int inch;
@@ -25,16 +28,45 @@ class TV{
     public void show(){
         System.out.println(this.manufacture + "에서 만든 " + this.makeYear + "년형 " + this.inch + "인치 TV");
     }
+
+
+    public void on() {
+        System.out.println("켜졌습니다.");
+    }
+
+    public void off() {
+        System.out.println("종료합니다.");
+    }
+    public void watch(){
+        System.out.println("방송중입니다.");
+    }
 }
 class ColorTv extends TV{
     private int colors;
     private int size;
-    public ColorTv(int _color, int _size){
+    public ColorTv(int _size, int _color){
         super();
         this.colors = _color;
         this.size = _size;
     }
+    public void printProperty(){
+        System.out.println(this.size + "인치 " + this.colors + "컬러");
+        
+    }
 }
+class IPTV extends ColorTv{
+    private String ip;
+    public IPTV(String ip, int _size, int _color) {
+        super(_size, _color);
+        this.ip = ip;
+    }
+    public void printProperty(){
+        System.out.print("나의 IPTV는 " + this.ip + " 주소의 ");
+        super.printProperty();
+
+    }
+}
+
 class A{
     private int a;
     protected A(int i){this.a=i;}
@@ -47,6 +79,7 @@ class B extends A{
         b = 0;
     }
 }
+
 class Grade{
     private int mat = 0;
     private int sci = 0;
@@ -61,6 +94,7 @@ class Grade{
         return Math.round((mat + sci + eng) / 3.0f);
     }
 }
+
 class Song{
     private final String title;
     private final String artist;
@@ -156,6 +190,7 @@ class MonthSchedule{
         System.out.println("프로그램을 종료합니다.");
     }
 }
+
 class Pen{
     private int amount;
     public int getAmount(){return this.amount;}
@@ -175,6 +210,7 @@ class BallPen extends ColorPen{}
 class FountainPen extends ColorPen{
     public void refill(int n){setAmount(n);}
 }
+
 abstract class OddDetector{
     protected int n;
     public OddDetector(int _n){
@@ -182,16 +218,62 @@ abstract class OddDetector{
     }
     public abstract boolean isOdd();
 }
-public class C extends OddDetector{
+class C extends OddDetector{
     public C(int _n){
         super(_n);
     }
     public boolean isOdd(){
-        if(this.n % 2 == 0)
-            return false;
-        else return true;
+        return this.n % 2 != 0;
     }
 }
+
+abstract class Shape_1{
+    public void paint(){draw();}
+    abstract public void draw();
+}
+class Circle_1 extends Shape_1{
+    private int radius;
+    public Circle_1(int radius){this.radius = radius;}
+    double getArea(){return 3.14 * radius * radius;}
+    public void draw(){
+        System.out.println("반지름=" + this.radius);
+    }
+}
+
+
+
+abstract class Converter{
+    abstract protected double convert(double src);
+    abstract protected String getSrcString();
+    abstract protected String getDestString();
+    protected double ratio;
+
+    public void run(){
+        Scanner sc = new Scanner(System.in);
+        System.out.println(getSrcString() + "을 " + getDestString() + "로 바꿉니다.");
+        System.out.println(getSrcString() + "을 입력하세요>>");
+        double val = sc.nextDouble();
+        double res = convert(val);
+        System.out.println("변환 결과 : " + res + getDestString() + "입니다.");
+        sc.close();
+    }
+}
+class Won2Dollar extends Converter{
+    public Won2Dollar(double ratio){this.ratio = ratio;}
+    @Override
+    protected double convert(double src) {
+        return src / ratio;
+    }
+    @Override
+    protected String getSrcString() {
+        return "원";
+    }
+    @Override
+    protected String getDestString() {
+        return "달러";
+    }
+}
+
 
 public class EXAM {
     public void silsoup1(){
@@ -225,11 +307,34 @@ public class EXAM {
 
     }
     public void silsoup6(){
-
+        C c = new C(11);
+        System.out.println(c.isOdd());
+    }
+    public void silsoup7(){
+        Circle_1 c = new Circle_1(10);
+        c.paint();
+    }
+    public void silsoup8(){
+        TV t = new TV();
+        t.on();
+        t.watch();
+        t.off();
+    }
+    public void silsoup9(){
+        ColorTv mytv = new ColorTv(32, 1024);
+        mytv.printProperty();
+    }
+    public void silsoup10(){
+        IPTV mytv = new IPTV("192.1.1.2",32, 1024);
+        mytv.printProperty();
+    }
+    public void silsoup11(){
+        Won2Dollar toDollar = new Won2Dollar(1200);
+        toDollar.run();
     }
     public static void main(String[] args){
         EXAM exam = new EXAM();
-        exam.silsoup5();
+        exam.silsoup11();
 
     }
 }
