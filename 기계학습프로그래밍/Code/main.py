@@ -154,11 +154,15 @@ def practice3():
 
     img = cv2.cvtColor(src, cv2.COLOR_BGR2GRAY)  # (a,b)
     # cv2.imshow("gray", img)
-    _, img = cv2.threshold(img, 50, 500, cv2.THRESH_TOZERO)  # (a,b)
+
+    # _, img = cv2.threshold(img, 50, 255, cv2.THRESH_TOZERO)  # (a,b)
     # _, img = cv2.threshold(img, 230, 255, cv2.THRESH_TRUNC)  # (a,b)
     # cv2.imshow("trunc", img)
+
     _, img = cv2.threshold(img, 50, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)  # (a,b)
+    # _, img = cv2.threshold(img, 50, 255, cv2.THRESH_BINARY_INV)  # (a,b)
     # cv2.imshow("binary+otsu", img)
+
     img = cv2.dilate(img, None, iterations=3)
     # plt.imshow(img)
     # plt.show()
