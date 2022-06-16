@@ -161,11 +161,11 @@ def practice3():
 
     _, img = cv2.threshold(img, 50, 255, cv2.THRESH_BINARY_INV + cv2.THRESH_OTSU)  # (a,b)
     # _, img = cv2.threshold(img, 50, 255, cv2.THRESH_BINARY_INV)  # (a,b)
-    # cv2.imshow("binary+otsu", img)
+    cv2.imshow("binary+otsu", img)
 
     img = cv2.dilate(img, None, iterations=3)
-    # plt.imshow(img)
-    # plt.show()
+    plt.imshow(img)
+    plt.show()
 
     n_blod, label_img, stats, centroids = cv2.connectedComponentsWithStats(img)
 
