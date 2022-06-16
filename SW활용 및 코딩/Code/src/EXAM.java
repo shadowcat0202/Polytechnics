@@ -240,8 +240,6 @@ class Circle_1 extends Shape_1{
     }
 }
 
-
-
 abstract class Converter{
     abstract protected double convert(double src);
     abstract protected String getSrcString();
@@ -332,9 +330,12 @@ public class EXAM {
         Won2Dollar toDollar = new Won2Dollar(1200);
         toDollar.run();
     }
+
     public static void main(String[] args){
-        EXAM exam = new EXAM();
-        exam.silsoup11();
+//        EXAM exam = new EXAM();
+//        exam.silsoup11();
+        System.out.println(Math.sqrt(4));
+
 
     }
 }
