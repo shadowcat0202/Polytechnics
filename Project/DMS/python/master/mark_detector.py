@@ -1,185 +1,69 @@
-"""Human facial landmark detector based on Convolutional Neural Network."""
-import pprint
-
 import cv2
-import numpy as np
-import tensorflow as tf
-from tensorflow import keras
 import dlib
-
-
-class FaceDetector:
-    """Detect human face from image"""
-
-    def __init__(self,
-                 dnn_proto_text='../assets/deploy.prototxt',
-                 dnn_model='../assets/res10_300x300_ssd_iter_140000.caffemodel'):
-
-        """Initialization"""
-        self.face_net = cv2.dnn.readNetFromCaffe(dnn_proto_text, dnn_model)
-        print("face_net")
-        pprint.pprint(self.face_net)
-        self.detection_result = None
-
-    def get_faceboxes(self, image, threshold=0.5):
-        """
-        Get the bounding box of faces in image using dnn.
-        """
-        rows, cols, _ = image.shape
-
-        confidences = []
-        faceboxes = []
-
-        self.face_net.setInput(cv2.dnn.blobFromImage(
-            image, 1.0, (300, 300), (104.0, 177.0, 123.0), False, False))
-        detections = self.face_net.forward()
-
-        for result in detections[0, 0, :, :]:
-            confidence = result[2]
-            if confidence > threshold:
-                x_left_bottom = int(result[3] * cols)
-                y_left_bottom = int(result[4] * rows)
-                x_right_top = int(result[5] * cols)
-                y_right_top = int(result[6] * rows)
-                confidences.append(confidence)
-                faceboxes.append(
-                    [x_left_bottom, y_left_bottom, x_right_top, y_right_top])
-
-        self.detection_result = [faceboxes, confidences]
-
-        return confidences, faceboxes
-
-    def draw_all_result(self, image):
-        """Draw the detection result on image"""
-        for facebox, conf in self.detection_result:
-            cv2.rectangle(image, (facebox[0], facebox[1]),
-                          (facebox[2], facebox[3]), (0, 255, 0))
-            label = "face: %.4f" % conf
-            label_size, base_line = cv2.getTextSize(
-                label, cv2.FONT_HERSHEY_SIMPLEX, 0.5, 1)
-
-            cv2.rectangle(image, (facebox[0], facebox[1] - label_size[1]),
-                          (facebox[0] + label_size[0],
-                           facebox[1] + base_line),
-                          (0, 255, 0), cv2.FILLED)
-            cv2.putText(image, label, (facebox[0], facebox[1]),
-                        cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0, 0, 0))
-
+import numpy as np
 
 class MarkDetector:
-    """Facial landmark detector by Convolutional Neural Network"""
+    __NOTHING = list(range(0, 0))
 
-    def __init__(self, saved_model='../assets/pose_model'):
-        """Initialization"""
-        # A face detector is required for mark detection.
-        self.face_detector = FaceDetector()
+    __ALL = list(range(0, 68))
 
-        self.cnn_input_size = 128
-        self.marks = None
+    __FACE_OUTLINE = list(range(0, 17))
 
-        # Restore model from the saved_model file.
-        self.model = keras.models.load_model(saved_model)
+    __LEFT_EYEBROW = list(range(17, 22))
+    __RIGHT_EYEBROW = list(range(22, 27))
 
-    @staticmethod
-    def draw_box(image, boxes, box_color=(255, 255, 255)):
+    __NOSE = list(range(27, 36))
+
+    __LEFT_EYE = list(range(36, 42))
+    __RIGHT_EYE = list(range(42, 48))
+
+    __MOUTH_OUTLINE = list(range(48, 60))
+    __MOUTH_INLINE = list(range(60, 68))
+
+    __MARK_INDEX = __RIGHT_EYE + __LEFT_EYE + __MOUTH_INLINE
+
+    def __init__(self, save_model="./assets/shape_predictor_68_face_landmarks.dat"):
+
+        print(f"stub loading facial landmark predictor {save_model}...")
+        self.shape_predictor = dlib.shape_predictor(save_model)
+        print(f"complete loading facial landmark predictor!")
+
+    def get_marks(self, image, detect):
+        # print(type(detect)) # <class '_dlib_pybind11.rectangles'> 인데?
+        # detect인자는 <class _dlib_pybind11.full_object_detection> 타입으로 입력해야함 이라고 오류 나는데
+        # 다른 파일에서는 <class '_dlib_pybind11.rectangle'> 로 shape_predictor가능한데? 뭐지? 날 화나게 하는건가?
+        # 와 코드랑 싸울뻔 했다 (결론 본인이 멍청 했던 걸로)
+        shape = self.shape_predictor(image, detect)
+        return shape
+
+    def draw_marks(self, image, marks, color=(225, 255, 255)):
+        for i in self.__MARK_INDEX:
+            cv2.circle(image, (marks.part(i).x, marks.part(i).y), 1, color, -1, cv2.LINE_AA)
+
+    def draw_box(self, image, rect, box_color=(255, 255, 255)):
         """Draw square boxes on image"""
-        for box in boxes:
+        for box in rect:
             cv2.rectangle(image,
-                          (box[0], box[1]),
-                          (box[2], box[3]), box_color, 3)
+                          (box[0], box[1]), (box[2], box[3]),
+                          box_color, 3)
 
-    @staticmethod
-    def move_box(box, offset):
-        """Move the box to direction specified by vector offset"""
-        left_x = box[0] + offset[0]
-        top_y = box[1] + offset[1]
-        right_x = box[2] + offset[0]
-        bottom_y = box[3] + offset[1]
-        return [left_x, top_y, right_x, bottom_y]
+    def full_object_detection_to_ndarray(self, full_object):
+        result = [[p.x, p.y] for p in full_object.parts()]
+        result = np.array(result)
+        return result
+    
+    def changeMarkIndex(self, key):
+        # TODO: 랜드마크 보여주는거 변경하는거 뭐지? ㅎ
+        if key == 1:
+            self.__MARK_INDEX = self.__NOTHING
+        elif key == 2:
+            self.__MARK_INDEX = self.__LEFT_EYEBROW + self.__RIGHT_EYEBROW
+        elif key == 3:
+            self.__MARK_INDEX = self.__LEFT_EYE + self.__RIGHT_EYE
+        elif key == 4:
+            self.__MARK_INDEX = self.__NOSE
+        elif key == 5:
+            self.__MARK_INDEX = self.__MOUTH_INLINE + self.__MOUTH_OUTLINE
+        elif key == 6:
+            self.__MARK_INDEX = self.__FACE_OUTLINE
 
-    @staticmethod
-    def get_square_box(box):
-        """Get a square box out of the given box, by expanding it."""
-        left_x = box[0]
-        top_y = box[1]
-        right_x = box[2]
-        bottom_y = box[3]
-
-        box_width = right_x - left_x
-        box_height = bottom_y - top_y
-
-        # Check if box is already a square. If not, make it a square.
-        diff = box_height - box_width
-        delta = int(abs(diff) / 2)
-
-        if diff == 0:                   # Already a square.
-            return box
-        elif diff > 0:                  # Height > width, a slim box.
-            left_x -= delta
-            right_x += delta
-            if diff % 2 == 1:
-                right_x += 1
-        else:                           # Width > height, a short box.
-            top_y -= delta
-            bottom_y += delta
-            if diff % 2 == 1:
-                bottom_y += 1
-
-        # Make sure box is always square.
-        assert ((right_x - left_x) == (bottom_y - top_y)), 'Box is not square.'
-
-        return [left_x, top_y, right_x, bottom_y]
-
-    @staticmethod
-    def box_in_image(box, image):
-        """Check if the box is in image"""
-        rows = image.shape[0]
-        cols = image.shape[1]
-        return box[0] >= 0 and box[1] >= 0 and box[2] <= cols and box[3] <= rows
-
-    def extract_cnn_facebox(self, image):
-        """Extract face area from image."""
-        _, raw_boxes = self.face_detector.get_faceboxes(
-            image=image, threshold=0.9)
-
-        for box in raw_boxes:
-            # Move box down.
-            offset_y = int(abs((box[3] - box[1]) * 0.12))
-            box_moved = self.move_box(box, [0, offset_y])
-
-            # Make box square.
-            facebox = self.get_square_box(box_moved)
-
-            if self.box_in_image(facebox, image):
-                return facebox
-
-        return None
-
-    def detect_marks(self, image):
-        """Detect facial marks from an face image.
-        
-        Args:
-            image: a face image.
-            
-        Returns:
-            marks: the facial marks as a numpy array of shape [N, 2].
-        """
-        # Resize the image into fix size.
-        image = cv2.resize(image, (128, 128))
-        image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        inputs = tf.expand_dims(image, axis=0)
-
-        # Actual detection.
-        marks = self.model.predict(inputs)
-
-        # Convert predictions to landmarks.
-        marks = np.reshape(marks, (-1, 2))
-
-        return marks
-
-    @staticmethod
-    def draw_marks(image, marks, color=(255, 255, 255)):
-        """Draw mark points on image"""
-        for mark in marks:
-            cv2.circle(image, (int(mark[0]), int(
-                mark[1])), 1, color, -1, cv2.LINE_AA)
