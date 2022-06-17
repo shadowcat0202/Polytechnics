@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=EUC-KR"
+<%@ page language="java" contentType="text/html; charset=utf-8"
     pageEncoding="EUC-KR"%>
 <%@ page import="java.util.Date"%>
 <!DOCTYPE html>
@@ -10,14 +10,7 @@
 <title>Welcome</title>
 </head>
 <body>
-	<nav class = "navbar navbar-expend navbar-dark bg-dark">
-		<div class = "container">
-			<div class = "navbar-header">
-				<a class = "navbar-brand" href = "./welcom.jsp">Home</a>
-			</div>
-		</div>
-	</nav>
-	
+	<jsp:include page="menu.jsp"/>	
 	<%!String greeting = "웹 쇼핑몰에 오신 것을 환영합니다";
 	String tagline = "Welcome to Web Market!";%>
 	<div class = "jumbtron">
@@ -49,8 +42,6 @@
 			%>
 		</div>
 	</main>	
-	<footer class = "container">
-		<p>&copy; WebMarket</p>
-	</footer>
+	<jsp:include page="footer.jsp"></jsp:include>
 </body>
 </html>
