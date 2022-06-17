@@ -1,6 +1,6 @@
 import cv2
+import dlib
 import numpy as np
-
 
 def eye_crop_border(img, eye_landmark):
     """
@@ -95,7 +95,7 @@ class HaarCascadeBlobCapture:
 
         self.blob_detector = cv2.SimpleBlobDetector_create(detector_params)
 
-    def img_eye_processed(self, img):
+    def img_eye_preprocessing(self, img):
         img = cv2.pyrUp(img)
         thold = np.min(img) + np.std(img)
         img = cv2.medianBlur(img, 3, 3)
@@ -125,8 +125,8 @@ class HaarCascadeBlobCapture:
         # img = cv2.dilate(img, None, iterations=5)
 
         # 시영씨 코드 =============================================================================
-        img = self.img_eye_processed(img)
-        cv2.imshow("t_e_d_mB", img)
+        img = self.img_eye_preprocessing(img)
+        # cv2.imshow("t_e_d_mB", img)
         self.set_SimpleBlod_params(img.shape[0], img.shape[1], typ)
         keypoints = self.blob_detector.detect(img)
         # =============================================================================
@@ -156,6 +156,11 @@ class HaarCascadeBlobCapture:
         )
         return d
 
+    def __full_object_detection_to_ndarray(self, full_object):
+        result = [[p.x, p.y] for p in full_object.parts()]
+        result = np.array(result)
+        return result
+
     def eye_direction_process(self, img, mark):
         try:
             if len(img.shape) != 2:
@@ -164,16 +169,20 @@ class HaarCascadeBlobCapture:
                 raise Exception(f"landmark should be ndarray, but get {type(mark)}")
         except Exception as e:
             print(e)
-            exit(1)
+            exit()
+        if isinstance(mark, dlib.full_object_detection):
+            mark = self.__full_object_detection_to_ndarray(mark)
 
-        eyes = [eye_crop_none_border(img, mark[36:42]), eye_crop_none_border(img, mark[42:48])]
+
+        eyes = [cv2.pyrUp(eye_crop_none_border(img, mark[36:42])),
+                cv2.pyrUp(eye_crop_none_border(img, mark[42:48]))]
         eye_looking = ["", ""]
         for i in range(len(eyes)):
             key_points = self.blob_track(eyes[i], self.previous_blob_area[i])
             self.previous_keypoints[i] = key_points or self.previous_keypoints[i]
             if self.previous_keypoints[i] is not None:
-                print(f"({self.previous_keypoints[i][0].pt[0]}, {self.previous_keypoints[i][0].pt[1]})")
-                d =self.draw(eyes[i], self.previous_keypoints[i])
+                # print(f"({self.previous_keypoints[i][0].pt[0]}, {self.previous_keypoints[i][0].pt[1]})")
+                d = self.draw(eyes[i], self.previous_keypoints[i])
                 cv2.imshow("left" if i == 0 else "right", d)
                 look_percent = self.previous_keypoints[i][0].pt[0] / eyes[i].shape[1]
                 if look_percent < 0.35:
@@ -189,3 +198,8 @@ class HaarCascadeBlobCapture:
             return "right"
         else:
             return "center"
+
+    def eyeCloseProcess(self, img, mark):
+        eyes = [cv2.pyrUp(eye_crop_none_border(img, mark[36:42])),
+                cv2.pyrUp(eye_crop_none_border(img, mark[42:48]))]
+

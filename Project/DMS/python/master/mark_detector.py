@@ -2,6 +2,7 @@ import cv2
 import dlib
 import numpy as np
 
+
 class MarkDetector:
     __NOTHING = list(range(0, 0))
 
@@ -21,6 +22,7 @@ class MarkDetector:
     __MOUTH_INLINE = list(range(60, 68))
 
     __MARK_INDEX = __RIGHT_EYE + __LEFT_EYE + __MOUTH_INLINE
+    # __MARK_INDEX = __ALL
 
     def __init__(self, save_model="./assets/shape_predictor_68_face_landmarks.dat"):
 
@@ -37,8 +39,12 @@ class MarkDetector:
         return shape
 
     def draw_marks(self, image, marks, color=(225, 255, 255)):
-        for i in self.__MARK_INDEX:
-            cv2.circle(image, (marks.part(i).x, marks.part(i).y), 1, color, -1, cv2.LINE_AA)
+        if isinstance(marks, np.ndarray):
+            for i in self.__MARK_INDEX:
+                cv2.circle(image, (marks[i][0], marks[i][1]), 1, color, -1, cv2.LINE_AA)
+        elif isinstance(marks, dlib.full_object_detection):
+            for i in self.__MARK_INDEX:
+                cv2.circle(image, (marks.part(i).x, marks.part(i).y), 1, color, -1, cv2.LINE_AA)
 
     def draw_box(self, image, rect, box_color=(255, 255, 255)):
         """Draw square boxes on image"""
@@ -51,7 +57,37 @@ class MarkDetector:
         result = [[p.x, p.y] for p in full_object.parts()]
         result = np.array(result)
         return result
-    
+
+    def landMarkPutOnlyRectangle(self, img, rect):
+        """
+        :param img: 원본 이미지
+        :param rect: 얼굴 detection : dlib._dlib_pybind11.rectangle
+        :return: rect에 roi된 이미지, rect roi에 맞춘 랜드마크
+        """
+        landmark = self.get_marks(img, rect)
+        rectImg = img[rect.top():rect.bottom(), rect.left():rect.right()]
+        # print(x1, y1)
+
+        landmark = self.full_object_detection_to_ndarray(landmark)  # (x, y)
+        landmark[:, 0] -= rect.left()
+        landmark[:, 1] -= rect.top()
+
+        return rectImg, landmark
+
+    def pyrUpWithLandmark(self, img, landmark, iterator=1):
+        """
+        :param img: 원본 이미지
+        :param landmark: 원본 이미지에 매칭되는 랜드마크
+        :param iterator: 피라미드 횟수(default=1)
+        :return: 피라미드 업 한 이미지, 피라미드 업 된 이미지에 맞춘 랜드마크
+        """
+        sizeUpImg = img.copy()
+        for _ in range(iterator):
+            sizeUpImg = cv2.pyrUp(sizeUpImg)
+
+        sizeUpLandmark = landmark * 2**iterator
+        return sizeUpImg, sizeUpLandmark
+
     def changeMarkIndex(self, key):
         # TODO: 랜드마크 보여주는거 변경하는거 뭐지? ㅎ
         if key == 1:
@@ -66,4 +102,3 @@ class MarkDetector:
             self.__MARK_INDEX = self.__MOUTH_INLINE + self.__MOUTH_OUTLINE
         elif key == 6:
             self.__MARK_INDEX = self.__FACE_OUTLINE
-
