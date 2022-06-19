@@ -9,11 +9,44 @@ from face_detector import *  # 얼굴 detector
 from mark_detector import *  # 랜드마크 detector
 from Eye import *
 
+def testPreprocessing(img):
+    size = (35,35)
+    # 커널 모양
+    kernel = []
+    kernel.append(cv2.getStructuringElement(cv2.MORPH_RECT, size))  # 네모(avg)
+    kernel.append(cv2.getStructuringElement(cv2.MORPH_ELLIPSE, size))  # 타원(best!!
+    kernel.append(cv2.getStructuringElement(cv2.MORPH_CROSS, size)) # 십자가(worst)
+    thold = np.min(img) + np.std(img)
+    img = cv2.medianBlur(img, 3, 3)
+    img = np.where(img < thold, 255, 0).astype("uint8")
+    # img = cv2.erode(img, (5, 5), iterations=9)
+    a = []
+    a.append(img)
+    a.append(cv2.erode(img, kernel[0]))
+    a = np.hstack(a)
+    b = []
+    b.append(cv2.erode(img, kernel[1]))
+    b.append(cv2.erode(img, kernel[2]))
+    b = np.hstack(b)
+    return np.vstack([a,b])
+
+def Preprocessing(img):
+    size = (30,30)
+    # 커널 모양
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, size)  # 네모(avg)
+    thold = np.min(img) + np.std(img)
+    img = cv2.medianBlur(img, 3, 3)
+    img = np.where(img < thold, 255, 0).astype("uint8")
+    result = cv2.erode(img, kernel)
+    cv2.imshow("prep", result)
+    return result
+
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
 
 # cm = Camera()
-cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
+# cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
+cm = Camera(path="D:/Dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
 tk = Tracker()
 fd = FaceDetector()
 md = MarkDetector()
@@ -36,13 +69,26 @@ while cm.cap.isOpened():
         if rect is not None:
             gray, landmarks = md.landMarkPutOnlyRectangle(gray, rect)
             gray, landmarks = md.pyrUpWithLandmark(gray, landmarks, iterator=2)
-            md.draw_marks(gray, landmarks, color=cm.getWhite())
-            landmarks = md.full_object_detection_to_ndarray(landmarks)
+            # roi부분의 랜드마크에서 눈 부분만 가져오기
+            left = eye_crop_none_border(gray, landmarks[36:42])
+            right = eye_crop_none_border(gray, landmarks[42:48])
+            avg_H = (left.shape[0] + right.shape[0])
+            avg_W = (left.shape[1] + right.shape[1])
+            left = cv2.resize(left, dsize=(avg_W, avg_H))
+            right = cv2.resize(right, dsize=(avg_W, avg_H))
+            eyes = [Preprocessing(left), Preprocessing(right)]
+            cv2.imshow("wow", eyes[0])
+
+            ey.eyesBlobTrack(eyes)
+
+            # md.draw_marks(gray, landmarks, color=cm.getWhite())
+            # landmarks = md.full_object_detection_to_ndarray(landmarks)
             ey.eye_direction_process(gray, landmarks)
 
             cv2.imshow("img_gray", gray)
     else:
+        cv2.destroyAllWindows()
+        cm.cap.release()
         break
 
-cv2.destroyAllWindows()
-cm.cap.release()
+

@@ -96,7 +96,7 @@ class HaarCascadeBlobCapture:
         self.blob_detector = cv2.SimpleBlobDetector_create(detector_params)
 
     def img_eye_preprocessing(self, img):
-        img = cv2.pyrUp(img)
+        # img = cv2.pyrUp(img)
         thold = np.min(img) + np.std(img)
         img = cv2.medianBlur(img, 3, 3)
         img = np.where(img < thold, 255, 0).astype("uint8")
@@ -126,7 +126,6 @@ class HaarCascadeBlobCapture:
 
         # 시영씨 코드 =============================================================================
         img = self.img_eye_preprocessing(img)
-        # cv2.imshow("t_e_d_mB", img)
         self.set_SimpleBlod_params(img.shape[0], img.shape[1], typ)
         keypoints = self.blob_detector.detect(img)
         # =============================================================================
@@ -161,15 +160,23 @@ class HaarCascadeBlobCapture:
         result = np.array(result)
         return result
 
+    def eyesBlobTrack(self, eyes):
+        for i in range(2):
+            keyPoints = self.blob_track(eyes[i], self.previous_blob_area[i])
+            self.previous_keypoints[i] = keyPoints or self.previous_keypoints[i]
+            if self.previous_keypoints[i] is not None:
+                # print(f"({self.previous_keypoints[i][0].pt[0]}, {self.previous_keypoints[i][0].pt[1]})")
+                d = self.draw(eyes[i], self.previous_keypoints[i])
+                cv2.imshow("left" if i == 0 else "right", d)
+
     def eye_direction_process(self, img, mark):
         try:
             if len(img.shape) != 2:
                 raise Exception(f"get_pupil(gray) parameter shape length expected 2, but get {len(img.shape)}")
-            if type(mark) == np.array:
-                raise Exception(f"landmark should be ndarray, but get {type(mark)}")
         except Exception as e:
             print(e)
             exit()
+
         if isinstance(mark, dlib.full_object_detection):
             mark = self.__full_object_detection_to_ndarray(mark)
 
@@ -193,10 +200,13 @@ class HaarCascadeBlobCapture:
                     eye_looking[i] = "center"
 
         if eye_looking[0] == "left" or eye_looking[1] == "left":
+            cv2.putText(img, "LEFT", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
             return "left"
         elif eye_looking[1] == "right" or  eye_looking[0] == "right":
+            cv2.putText(img, "RIGHT", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
             return "right"
         else:
+            cv2.putText(img, "CENTER", (10, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 255), 2)
             return "center"
 
     def eyeCloseProcess(self, img, mark):
