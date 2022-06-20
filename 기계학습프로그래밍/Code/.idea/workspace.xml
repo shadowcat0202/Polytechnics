@@ -5,10 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="54393a3d-d365-4db0-9f69-1e27cdf71328" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/python.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/python.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../Project/DMS/python/master/test.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../Project/DMS/python/master/test.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/my_ML_Regression.py" beforeDir="false" afterPath="$PROJECT_DIR$/../../AI기초프로그래밍/Code/my_ML_Regression.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -206,5 +204,16 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/main.py</url>
+          <line>8</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
