@@ -49,13 +49,13 @@ print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
 
 # cm = Camera()
-# cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
-cm = Camera(path="D:/Dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
+cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
+# cm = Camera(path="D:/Dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
 tk = Tracker()
 fd = dlib.get_frontal_face_detector()
 md = dlib.shape_predictor("./assets/shape_predictor_68_face_landmarks.dat")
 # ey = HaarCascadeBlobCapture()
-ey = GazeTracking(fd, md)  # 응시 트래킹
+gaze = GazeTracking(fd, md)  # 응시 트래킹
 
 while cm.cap.isOpened():
     ret, frame = cm.cap.read()  # 영상 프레임 받기
@@ -65,26 +65,26 @@ while cm.cap.isOpened():
     # md.changeMarkIndex(key)  # 랜드마크 점 종류를 바꾸고 싶다면 활성화 (미완성)
 
     if ret:
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         frame = cm.getFrameResize2ndarray(frame)
-        ey.refresh(frame)
-        frame = ey.annotated_frame()
+        gaze.refresh(frame)
+        frame = gaze.annotated_frame()
         text = ""
 
-        if ey.is_blinking():
+        if gaze.is_blinking():
             text = "BLINKING"
-        elif ey.is_right():
+        elif gaze.is_right():
             text = "RIGHT"
-        elif ey.is_left():
+        elif gaze.is_left():
             text = "LEFT"
-        elif ey.is_center():
+        elif gaze.is_center():
             text = "CENTER"
 
         cv2.putText(frame, text, (90, 60), cv2.FONT_HERSHEY_DUPLEX, 1.6, (147, 58, 31), 2)
-        left_pupil = ey.pupil_left_coords()
-        right_pupil = ey.pupil_right_coords()
-        cv2.putText(frame, "Left pupil:  " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
-        cv2.putText(frame, "Right pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31),
-                    1)
+        left_pupil = gaze.pupil_left_coords()
+        right_pupil = gaze.pupil_right_coords()
+        cv2.putText(frame, "L pupil: " + str(left_pupil), (90, 130), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
+        cv2.putText(frame, "R pupil: " + str(right_pupil), (90, 165), cv2.FONT_HERSHEY_DUPLEX, 0.9, (147, 58, 31), 1)
 
         cv2.imshow("Demo", frame)
     else:

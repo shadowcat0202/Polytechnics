@@ -14,6 +14,7 @@ class test{
     }
 }
 public class Main {
+    enum Week {MON, TUE, WED, THU, FRI, SAT, SUN}
     public int[] make_iarr(int arr_size, int max_value){
         int[] arr = new int[arr_size];
         for(int i = 0; i < arr_size; i++){
@@ -146,6 +147,17 @@ public class Main {
         System.out.println(ans);
     }
 
+    public static int[] arrMinMax(int[] arr){
+        int min = Integer.MAX_VALUE;
+        int max = Integer.MIN_VALUE;
+
+        for(int v : arr){
+            if(max < v) max = v;
+            if(min > v) min = v;
+        }
+        return new int[] {min, max};
+    }
+
     public static void main(String[] args){
 //        int[][] map = {
 //                {0, 1, 1, 0, 2, 0, 0},
@@ -171,23 +183,27 @@ public class Main {
 //        q.quickSort(buf, 0, arr.length-1, true);
 //        System.out.println(Arrays.toString(buf));
 
-        MyTree<String> tree = new MyTree<>();
-        tree.insert("-");
-        tree.insert("*");
-        tree.insert("/");
-        tree.insert("A");
-        tree.insert("B");
-        tree.insert("C");
-        tree.insert("D");
+//        MyTree<String> tree = new MyTree<>();
+//        tree.insert("-");
+//        tree.insert("*");
+//        tree.insert("/");
+//        tree.insert("A");
+//        tree.insert("B");
+//        tree.insert("C");
+//        tree.insert("D");
+//
+//        System.out.println("전위 Order: ");
+//        tree.preorder();
+//        System.out.println("\n중위 Order: ");
+//        tree.inorder();
+//        System.out.println("\n후위 Order: ");
+//        tree.postorder();
 
-        System.out.println("전위 Order: ");
-        tree.preorder();
-        System.out.println("\n중위 Order: ");
-        tree.inorder();
-        System.out.println("\n후위 Order: ");
-        tree.postorder();
-
-
+        Week today = Week.valueOf("TUE");
+        System.out.println(today);
+        int[] arr = {1,2,3,4,5,6};
+        int[] result = arrMinMax(arr);
+        System.out.println(result[0]+ ","+ result[1]);
 
 
     }
