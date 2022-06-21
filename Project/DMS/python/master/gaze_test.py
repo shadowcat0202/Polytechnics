@@ -8,7 +8,7 @@ from tracker import *  # 트래킹
 from face_detector import *  # 얼굴 detector
 from mark_detector import *  # 랜드마크 detector
 from Eye import *
-from eye_traking.eye_traiking import GazeTracking
+from gaze_sub.eye_traiking import GazeTracking
 
 
 def testPreprocessing(img):
@@ -65,7 +65,9 @@ while cm.cap.isOpened():
     # md.changeMarkIndex(key)  # 랜드마크 점 종류를 바꾸고 싶다면 활성화 (미완성)
 
     if ret:
-        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        # rect = tk.getRectangle(frame, fd)  # 트래킹 하는것과 동시에 face detect 반환
+        # gray, landmarks = md.landMarkPutOnlyRectangle(frame, rect)
         frame = cm.getFrameResize2ndarray(frame)
         gaze.refresh(frame)
         frame = gaze.annotated_frame()
