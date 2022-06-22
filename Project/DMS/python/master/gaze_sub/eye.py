@@ -29,7 +29,7 @@ class Eye(object):
             p1 (dlib.point): First point
             p2 (dlib.point): Second point
         """
-        x = int((p1.x + p2.x) / 2)
+        x = int((p1.x + p2.x) / 2)  # 제곱의 합 
         y = int((p1.y + p2.y) / 2)
         return (x, y)
 
@@ -78,7 +78,7 @@ class Eye(object):
         top = self._middle_point(landmarks.part(points[1]), landmarks.part(points[2]))
         bottom = self._middle_point(landmarks.part(points[5]), landmarks.part(points[4]))
 
-        eye_width = math.hypot((left[0] - right[0]), (left[1] - right[1]))
+        eye_width = math.hypot((left[0] - right[0]), (left[1] - right[1]))  # 제곱의 합(오버플로우 언더플로우 방지)
         eye_height = math.hypot((top[0] - bottom[0]), (top[1] - bottom[1]))
 
         try:
@@ -97,6 +97,7 @@ class Eye(object):
             side: Indicates whether it's the left eye (0) or the right eye (1)
             calibration (calibration.Calibration): Manages the binarization threshold value
         """
+        # side에 따라 왼쪽눈 오른쪽눈 랜드마크 번호(points)
         if side == 0:
             points = self.LEFT_EYE_POINTS
         elif side == 1:
@@ -104,7 +105,7 @@ class Eye(object):
         else:
             return
 
-        self.blinking = self._blinking_ratio(landmarks, points)
+        self.blinking = self._blinking_ratio(landmarks, points) # 눈 높이 / 넓이 -> 그냥 단순 계산으로? blinking > 3.8로 설정되어있다
         self._isolate(original_frame, landmarks, points)
 
         if not calibration.is_complete():

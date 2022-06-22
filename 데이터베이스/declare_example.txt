@@ -1,0 +1,37 @@
+SQL>set serveroutput on
+
+SQL>
+declare
+v_jumsu number(3) := '&Jumsu';
+v_result varchar2(20);
+begin
+if v_jumsu >= 90 then
+v_result := '수';
+elsif v_jumsu >= 80 then
+v_result := '우';
+elsif v_jumsu >= 70 then
+v_result := '미';
+elsif v_jumsu >= 60 then
+v_result := '양';
+else
+v_result := '가';
+end if;
+
+dbms_output.put_line('점수:'||v_jumsu);
+dbms_output.put_line('결과:'||v_result);
+end;
+/
+
+SQL>
+declare
+i number(3) := 0;
+begin
+    loop
+        i:= i+1;
+        if i >=3 then
+            exit;
+        end if;
+        dbms_output.put_line(i);
+    end loop;
+end;
+/

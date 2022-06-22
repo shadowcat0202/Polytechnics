@@ -17,6 +17,7 @@ class GazeTracking(object):
         self.frame = None
         self.eye_left = None
         self.eye_right = None
+        self.landmarks = None
         self.calibration = Calibration()
 
         # _face_detector is used to detect faces
@@ -44,19 +45,20 @@ class GazeTracking(object):
 
         try:
             landmarks = self._predictor(frame, faces[0])
-            self.eye_left = Eye(frame, landmarks, 0, self.calibration)
-            self.eye_right = Eye(frame, landmarks, 1, self.calibration)
+            self.eye_left = Eye(self.frame, self.landmarks, 0, self.calibration)
+            self.eye_right = Eye(self.frame, self.landmarks, 1, self.calibration)
 
         except IndexError:
             self.eye_left = None
             self.eye_right = None
 
-    def refresh(self, frame):
+    def refresh(self, frame, landmarks):
         """Refreshes the frame and analyzes it.
         Arguments:
             frame (numpy.ndarray): The frame to analyze
         """
         self.frame = frame
+        self.landmarks = landmarks
         self._analyze()
 
     def pupil_left_coords(self):

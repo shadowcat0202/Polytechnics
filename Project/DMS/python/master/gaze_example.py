@@ -8,7 +8,7 @@ from tracker import *  # 트래킹
 from face_detector import *  # 얼굴 detector
 from mark_detector import *  # 랜드마크 detector
 from Eye import *
-from eye_traking.eye_traiking import GazeTracking
+from gaze_original.eye_traiking import GazeTracking
 
 
 def testPreprocessing(img):
