@@ -8,6 +8,10 @@ from tracker import *  # 트래킹
 from face_detector import *  # 얼굴 detector
 from mark_detector import *  # 랜드마크 detector
 from Eye import *
+from pose_estimator import *
+from myHead import *
+from myMouth import *
+
 
 def testPreprocessing(img):
     size = (35,35)
@@ -51,6 +55,9 @@ tk = Tracker()
 fd = FaceDetector()
 md = MarkDetector()
 ey = HaarCascadeBlobCapture()
+pe = PoseEstimator()
+head = myHead()
+mouth = myMouth()
 
 while cm.cap.isOpened():
     ret, frame = cm.cap.read()  # 영상 프레임 받기
@@ -84,6 +91,18 @@ while cm.cap.isOpened():
             # md.draw_marks(gray, landmarks, color=cm.getWhite())
             # landmarks = md.full_object_detection_to_ndarray(landmarks)
             ey.eye_direction_process(gray, landmarks)
+
+            head.lowerHeadText(landmarks, gray)  # 수정했습니다 (class pose_estimator file_name= 부분)
+            mouth.openMouthText(landmarks, gray)
+            # x, y, z 축 보고 싶다면?
+            landmarks_32 = np.array(landmarks, dtype=np.float32)
+            pose = pe.solve_pose_by_68_points(landmarks_32)
+            axis = pe.get_axis(gray, pose[0], pose[1])
+            # axis = [[[RED_x RED_y]],[[GREEN_x GREEN_y]],[[BLUE_x BLUE_y]],[[CENTER_x CENTER_y]]]
+            # --> BLUE(정면) GREEN(아래) RED(좌측) CENTER(중심)
+            if axis is not None:
+                pe.draw_axes(gray, pose[0], pose[1])
+                head.directionText(axis, gray)
 
             cv2.imshow("img_gray", gray)
     else:
