@@ -40,11 +40,11 @@ class GazeTracking(object):
 
     def _analyze(self):
         """Detects the face and initialize Eye objects"""
-        frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
-        faces = self._face_detector(frame)
+        # frame = cv2.cvtColor(self.frame, cv2.COLOR_BGR2GRAY)
+        # faces = self._face_detector(frame)
 
         try:
-            landmarks = self._predictor(frame, faces[0])
+            # landmarks = self._predictor(frame, faces[0])
             self.eye_left = Eye(self.frame, self.landmarks, 0, self.calibration)
             self.eye_right = Eye(self.frame, self.landmarks, 1, self.calibration)
 
@@ -124,9 +124,13 @@ class GazeTracking(object):
             color = (0, 255, 0)
             x_left, y_left = self.pupil_left_coords()
             x_right, y_right = self.pupil_right_coords()
+            print(x_left, y_left, x_right, y_right)
             cv2.line(frame, (x_left - 5, y_left), (x_left + 5, y_left), color)
             cv2.line(frame, (x_left, y_left - 5), (x_left, y_left + 5), color)
             cv2.line(frame, (x_right - 5, y_right), (x_right + 5, y_right), color)
             cv2.line(frame, (x_right, y_right - 5), (x_right, y_right + 5), color)
 
         return frame
+
+    def getFrameShow(self):
+        cv2.imshow("self.frame", self.frame)

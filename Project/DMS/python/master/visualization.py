@@ -19,9 +19,9 @@ class Camera:
 
     def __init__(self, path=0):
         self.PIXEL_NUMBER = 0
-        self.RES_W = self.__PIXELS[1][0]
-        self.RES_H = self.__PIXELS[1][1]
-        print(f"pixel set ({self.__PIXELS[1][1]},{self.__PIXELS[1][0]})")
+        self.RES_W = self.__PIXELS[self.PIXEL_NUMBER][0]
+        self.RES_H = self.__PIXELS[self.PIXEL_NUMBER][1]
+        print(f"pixel set ({self.__PIXELS[self.PIXEL_NUMBER][1]},{self.__PIXELS[self.PIXEL_NUMBER][0]})")
         try:
             self.cap = cv2.VideoCapture(path)
         except:

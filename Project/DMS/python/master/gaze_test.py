@@ -65,7 +65,7 @@ def landMarkPutOnlyRectangle(img, rect, md):
 
 def draw_marks(image, marks, color=(225, 255, 255)):
     for i in range(36, 48):
-        cv2.circle(image, (marks.part(i).y, marks.part(i).x), 1, color, -1, cv2.LINE_AA)
+        cv2.circle(image, (marks.part(i).x, marks.part(i).y), 1, color, -1, cv2.LINE_AA)
 
 
 print(__doc__)
@@ -90,15 +90,16 @@ while cm.cap.isOpened():
     # md.changeMarkIndex(key)  # 랜드마크 점 종류를 바꾸고 싶다면 활성화 (미완성)
 
     if ret:
+        frame = cm.getFrameResize2ndarray(frame)
         gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
         rect = tk.getRectangle(gray, fd)  # 트래킹 하는것과 동시에 face detect 반환
 
         if rect is not None:
-            gray, landmarks = landMarkPutOnlyRectangle(gray, rect, md)
-            draw_marks(gray, landmarks)
-            cv2.imshow("gray", gray)
-        # frame = cm.getFrameResize2ndarray(frame)
-        # gaze.refresh(frame, landmarks)
+            # gray, landmarks = landMarkPutOnlyRectangle(gray, rect, md)
+            landmarks = md(gray, rect)
+            gaze.refresh(gray, landmarks)
+            gray = gaze.annotated_frame()
+
         # frame = gaze.annotated_frame()
         # text = ""
         #

@@ -105,10 +105,10 @@ class Eye(object):
             return
 
         self.blinking = self._blinking_ratio(landmarks, points)
-        self._isolate(original_frame, landmarks, points)
+        self._isolate(original_frame, landmarks, points)    #
 
-        if not calibration.is_complete():
-            calibration.evaluate(self.frame, side)
+        if not calibration.is_complete():   # thresholds 누적이 20보다 덜 채워졌을때
+            calibration.evaluate(self.frame, side)  # 최소 20개 할때까지 append
 
-        threshold = calibration.threshold(side)
+        threshold = calibration.threshold(side) # 왼쪽 오름쪽 각각 thresholds 평균
         self.pupil = Pupil(self.frame, threshold)

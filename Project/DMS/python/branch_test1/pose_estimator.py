@@ -8,7 +8,7 @@ import numpy as np
 class PoseEstimator:
     """Estimate head pose according to the facial landmarks"""
 
-    def __init__(self, img_size=(480, 640), model_path='assets/model.txt'):
+    def __init__(self, img_size=(480, 640), model_path='assets/pose_model.txt'):
         self.size = img_size
 
         # 3D model points.
@@ -52,7 +52,7 @@ class PoseEstimator:
         self.r_vec = None
         self.t_vec = None
 
-    def _get_full_model_points(self, filename='assets/model.txt'):
+    def _get_full_model_points(self, filename='assets/pose_model.txt'):
         """Get all 68 3D model points from file"""
         raw_value = []
         with open(filename) as file:

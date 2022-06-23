@@ -39,7 +39,7 @@ class PoseEstimator:
         # self.r_vec = None
         # self.t_vec = None
 
-    def _get_full_model_points(self, filename='/home/robin/Developer/head-pose-estimation(main references)/assets/model.txt'):
+    def _get_full_model_points(self, filename='/home/robin/Developer/head-pose-estimation(main references)/assets/pose_model.txt'):
         """Get all 68 3D model points from file"""
         raw_value = []
         with open(filename) as file:

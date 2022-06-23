@@ -90,6 +90,7 @@ while cm.cap.isOpened():
 
         cv2.imshow("Demo", frame)
     else:
-        cv2.destroyAllWindows()
-        cm.cap.release()
+
         break
+cv2.destroyAllWindows()
+cm.cap.release()

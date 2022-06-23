@@ -27,7 +27,6 @@ arr_minlmax = np.array([[1000.0, -1000.0],[1000.0, -1000.0],[1000.0, -1000.0],[1
 arr_ratios = np.array([[], [], [], []])
 # [min, max]
 # [ L_facetoEye, L_eyeHeightToWidth, R_facetoEye, R_eyeHeightToWidth]
-
 ###
 
 while cm.cap.isOpened():

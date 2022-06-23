@@ -71,3 +71,5 @@ class myHead:
             cv2.putText(frame, "FACADE", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
         elif self.directionCheck(axis) == 1:
             cv2.putText(frame, "LEFT", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
+
+
