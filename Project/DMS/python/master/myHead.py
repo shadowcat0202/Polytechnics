@@ -20,11 +20,8 @@ class myHead:
         a = 1.5 / 5
         # 고개 숙였을 때 (1초 뒤)
         b = self.distance(mark[27], mark[30]) / self.distance(mark[30], mark[8])
-
-        if (b > a * 1.8):
-            return 1
-        else:
-            return 0
+        # print(f"b{b}, a{a}")
+        return b > a * 1.8
 
     def lowerHeadText(self, landmarks, frame):
         """
@@ -33,15 +30,19 @@ class myHead:
         :param frame: 글씨 적을 frame 넣어줌
         :return: 없음
         """
-        self.count_head.append(self.lowerHeadCheck(landmarks))
-        if (sum(self.count_head)) > 0:
+        sleepHead = False
+        lower = self.lowerHeadCheck(landmarks)
+        self.count_head.append(lower)
+        if (self.count_head.count(True)) > 0:
             cv2.putText(frame, "lower_head!!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
-            self.count_sleep.append(1)
-            if (sum(self.count_sleep)) > 20:
+            self.count_sleep.append(True)
+            if (self.count_sleep.count(True)) > 20:
+                sleepHead = True
                 cv2.putText(frame, "sleep_head!!", (50, 70), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
         else:
-            if sum(self.count_sleep) > 0:
+            if self.count_sleep.count(True) > 0:
                 self.count_sleep.pop()
+        return sleepHead
 
     def directionCheck(self, axis):
         """

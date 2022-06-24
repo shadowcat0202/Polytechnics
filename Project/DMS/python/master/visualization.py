@@ -15,10 +15,10 @@ class Camera:
     __BLACK = (0, 0, 0)
 
     # Resolution
-    __PIXELS = [(1280, 720), (640, 480), (256, 144), (320, 240), (480, 360)]
+    __PIXELS = [(1920, 1080), (1440, 980),(1280, 720), (1040, 680), (900, 600), (640, 480)] # 해상도 픽셀수가 커질수록 좋다(프레임 차이는 거의 없는거 같다)
 
     def __init__(self, path=0):
-        self.PIXEL_NUMBER = 0
+        self.PIXEL_NUMBER = 2
         self.RES_W = self.__PIXELS[self.PIXEL_NUMBER][0]
         self.RES_H = self.__PIXELS[self.PIXEL_NUMBER][1]
         print(f"pixel set ({self.__PIXELS[self.PIXEL_NUMBER][1]},{self.__PIXELS[self.PIXEL_NUMBER][0]})")

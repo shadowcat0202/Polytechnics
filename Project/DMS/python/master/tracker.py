@@ -32,15 +32,6 @@ class Tracker:
         # self.draw_rectangle(img, rect)
         return rect
 
-    def dlib_corr_tracker_to_rectangle(self, corr):
-        pos = corr.get_position()
-        rect = dlib.rectangle(int(pos.left()), int(pos.top()), int(pos.right()), int(pos.bottom()))
-        return rect
-
-    def draw_rectangle(self, frame, tracker, color=(0, 255, 0)):
-        cv2.rectangle(frame, (tracker.left(), tracker.top()),
-                      (tracker.right(), tracker.bottom()), color, 3)
-
     def getRectangle(self, img, facedetector):
         detect = None
         if self.track_number == 0:
@@ -52,3 +43,12 @@ class Tracker:
             else:
                 detect = self.tracking(img)
         return detect
+
+    def dlib_corr_tracker_to_rectangle(self, corr):
+        pos = corr.get_position()
+        rect = dlib.rectangle(int(pos.left()), int(pos.top()), int(pos.right()), int(pos.bottom()))
+        return rect
+
+    def draw_rectangle(self, frame, tracker, color=(0, 255, 0)):
+        cv2.rectangle(frame, (self.tracker.left(), self.tracker.top()),
+                      (tracker.right(), tracker.bottom()), color, 3)

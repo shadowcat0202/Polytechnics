@@ -16,6 +16,7 @@ from pose_estimator import *
 from myHead import *
 from myMouth import *
 
+from output_signal_model import OutputSignalModel
 
 def testPreprocessing(img):
     size = (35,35)
@@ -53,8 +54,9 @@ print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
 
 # cm = Camera()
-# cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
-cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
+cm = Camera()  # path를 안하면 카메라 하면 영상
+# cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영s상
+
 tk = Tracker()
 fd = FaceDetector()
 md = MarkDetector()
@@ -62,6 +64,7 @@ ey = HaarCascadeBlobCapture()
 pe = PoseEstimator()
 head = myHead()
 mouth = myMouth()
+outputModel = OutputSignalModel()
 
 ###
 arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
@@ -78,10 +81,8 @@ while cm.cap.isOpened():
     # md.changeMarkIndex(key)  # 랜드마크 점 종류를 바꾸고 싶다면 활성화 (미완성)
 
     if ret:
-        # 전처리 구간 ==========================================================
         imgNdarray = cm.getFrameResize2ndarray(frame)  # frame to ndarray
         gray = cv2.cvtColor(imgNdarray, cv2.COLOR_BGR2GRAY)  # (H, W)
-        # ==================================================================
 
         rect = tk.getRectangle(gray, fd)  # 트래킹 하는것과 동시에 face detect 반환
         if rect is not None:
@@ -148,7 +149,7 @@ while cm.cap.isOpened():
             """
             headPose estimation start
             """
-            head.lowerHeadText(landmarks, gray)  # 수정했습니다 (class pose_estimator file_name= 부분)
+            sleepHead = head.lowerHeadText(landmarks, gray)  # 수정했습니다 (class pose_estimator file_name= 부분)
             mouth.openMouthText(landmarks, gray)
             # x, y, z 축 보고 싶다면?
             landmarks_32 = np.array(landmarks, dtype=np.float32)
@@ -167,6 +168,8 @@ while cm.cap.isOpened():
             #     head.directionText(axis, imgNdarray)
             # cv2.imshow("imgNdarray", imgNdarray)
             # # =============================================================================
+            outputModel.analyze(status, sleepHead)
+            outputModel.drawResult(imgNdarray)
             cv2.imshow("output", imgNdarray)
     else:
         cv2.destroyAllWindows()
