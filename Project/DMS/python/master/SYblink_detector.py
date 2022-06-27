@@ -3,167 +3,116 @@ import numpy as np
 import matplotlib.pyplot as plt
 from mark_detector import *
 from SYcommon_calculator import *
+import timeit
+from visualization import*
 
+cm = Camera()
 
 class BlinkDetector():
     def __init__(self, view, img_ip, allLandmarks):
         self.view = view
         self.img_ip = img_ip
-        self.ldmk_all = allLandmarks
-        self.ldmk_face_outl = allLandmarks[0:17]
-        self.ldmk_lftE0, self.ldmk_lftE1, self.ldmk_lftE2, self.ldmk_lftE3, self.ldmk_lftE4, self.ldmk_lftE5, = self.ldmk_lftE_outl = allLandmarks[
-                                                                                                                                      36:42]
-        self.ldmk_rytE0, self.ldmk_rytE1, self.ldmk_rytE2, self.ldmk_rytE3, self.ldmk_rytE4, self.ldmk_rytE5, = self.ldmk_rytE_outl = allLandmarks[
-                                                                                                                                      42:48]
+        self.ldmk_EEF = self.ldmk_lftE, self.ldmk_rytE, self.ldmk_face = [allLandmarks[36:42], allLandmarks[42:48], allLandmarks[0:17]]
+        self.ldmk_Eyes = [self.ldmk_lftE, self.ldmk_rytE]
+        self.topLft_EEF = self.xy_topLeft_ofEEF()
+        self.crp_lftE, self.crp_rytE, self.crp_face = self.crp_EEF = self.cropped_images_ofEEF()
+        self.msk_lftE, self.msk_rytE, self.msk_face = self.msk_EEF = self.cropped_mask_ofEEF()
+        self.ratios = self.ratios_E2Fx2_H2W()
 
-    def get_xy_min_max_ofLandmark(self, landmarks):
-        x_ldmks = [loc[0] for loc in landmarks]
-        y_ldmks = [loc[1] for loc in landmarks]
-        range_x = (np.min(x_ldmks), np.max(x_ldmks))
-        range_y = (np.min(y_ldmks), np.max(y_ldmks))
+    def compare_functions(self, f1, f2):
+        time_f1 = timeit.timeit(f1)
+        time_f2 = timeit.timeit(f2)
 
-        return range_x, range_y
+        func = 1 if time_f1<time_f2 else 2
+        diff = abs(time_f1-time_f2)
+        times = time_f2/time_f2 if time_f1<time_f2 else time_f1/time_f2
 
-    def crop_image_ofLandmark(self, image, landmarks):
+        msg = f"f1 is faster ({time_f2/time_f2:.2f})" if time_f1<time_f2 else f"f2 is faster ({time_f1/time_f2:.2f})"
+        print(msg)
 
-        (x_min, x_max), (y_min, y_max) = range_x, range_y = self.get_xy_min_max_ofLandmark(landmarks)
+        return (func, diff, times)
+
+    def time_it(self, f1):
+        time_f1 = timeit.timeit(f1)
+
+
+        print(time_f1)
+
+        # return time_f1
+
+
+    """ COMMON METHODS START HERE"""
+    def minlmax_xy_ofLandmarks(self, landmarks):
+        x_ldmks, y_ldmks = [loc[0] for loc in landmarks], [loc[1] for loc in landmarks]
+        range_xy = np.array([np.min(x_ldmks), np.max(x_ldmks), np.min(y_ldmks), np.max(y_ldmks)])
+        # print(f"range_xy = {range_xy}")
+
+        return range_xy
+
+    def minlmax_xy_ofLandmarks_v2(self, landmarks):
+        sorted_byX = sorted(landmarks, key=lambda  ldmk: ldmk[0])
+        sorted_byY = sorted(landmarks, key=lambda  ldmk: ldmk[1])
+
+
+
+
+        x_ldmks, y_ldmks = [loc[0] for loc in landmarks], [loc[1] for loc in landmarks]
+        range_xy = np.array([np.min(x_ldmks), np.max(x_ldmks), np.min(y_ldmks), np.max(y_ldmks)])
+        # print(f"range_xy = {range_xy}")
+
+        return range_xy
+
+
+
+    def fromTo_range_ofLandmarks(self, landmarks):
         px_pd = 5
-
+        x_min, x_max, y_min, y_max = self.minlmax_xy_ofLandmarks(landmarks)
         y_from, y_to = y_min - px_pd, y_max + px_pd
         x_from, x_to = x_min - px_pd, x_max + px_pd
 
-        img_crop = image[y_from:y_to, x_from:x_to]
-        xy_topLft = (x_from, y_from)
+        list_fromTo = [y_from, y_to, x_from, x_to]
+        arr_fromTo = np.array(list_fromTo)
 
-        return img_crop, xy_topLft
+        return arr_fromTo
 
-    def get_area_ofLandmark(self, landmarks):
-        # mask_blackout = np.zeros(, dtype=np.uint8)
-        image = self.img_ip
-        mask_blackout = np.zeros_like(image, dtype=np.uint8)
-        mask_shape = cv2.fillConvexPoly(mask_blackout, landmarks, 255)
-        mask_crop, _ = self.crop_image_ofLandmark(mask_shape, landmarks)
-        contours, _ = cv2.findContours(mask_crop, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    def pupil_xy_inOriginal(self, image, topLeft, show):
+        x_topLft, y_topLft = topLeft
+        contours, _ = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=lambda x: cv2.contourArea(x),
                           reverse=True)  # Print the contour with the biggest area first.
-        area = cv2.contourArea(contours[0])
-        # Visualization
-        # for cnt in contours:
-        #     (x, y, w, h) = cv2.boundingRect(cnt)
-        #     cv2.drawContours(mask_crop, [cnt], -1, (0, 255, 0), -1)
-        #     break
-        # cv2.imshow("CONTOURS", mask_crop)
-        # cv2.imshow("CONTOURS", mask_shape)
+        for cnt in contours:
+            (x, y, w, h) = cv2.boundingRect(cnt)
+            x_pupl_CRP, y_pupl_CRP = (2 * x + w) / 2, (2 * y + h) / 2
+            xy_crpPupl = (round(x_topLft + x_pupl_CRP, 0), round(y_topLft + y_pupl_CRP, 0))  # 크롭 이미지 내 좌표를 원본좌표에 맞춤
 
-        return area
+            if show is True:
+                cv2.drawContours(self.view, [cnt], -1, (0, 255, 0), 1)
+                cv2.circle(self.view, (int(xy_crpPupl[0]), int(xy_crpPupl[1])), int(h / 2), (255, 0, 0), -1)
+            break
 
-    def get_ratio_eye_to_face(self):
-        area_lftE = self.get_area_ofLandmark(self.ldmk_lftE_outl)
-        area_rytE = self.get_area_ofLandmark(self.ldmk_rytE_outl)
-        area_face = self.get_area_ofLandmark(self.ldmk_face_outl)
-        # print(f"area eye(L/R) = {ar_lftE}/{ar_rytE}")
+        return xy_crpPupl
 
-        ratio_L_E2F = area_lftE / area_face
-        ratio_R_E2F = area_rytE / area_face
-        # print(f"ratio E2F(L/R) = {ratio_L}/{ratio_R}")
+    def processed_image(self, image, mask):
+        img, msk = image, mask
+        size_filter = (5, 5)
 
-        return ratio_L_E2F, ratio_R_E2F
+        msk = 255 - msk
+        img = cv2.bitwise_not(img, img, mask=msk)
+        img = cv2.medianBlur(img, 5)
+        thold = np.min(img)
+        img = np.where(img <= thold, 255, 0).astype('uint8')
+        img = cv2.dilate(img, size_filter, iterations=2)
+        img = cv2.erode(img, size_filter, iterations=1)
 
-    def get_ratio_eye_height_to_width(self):
-        (x_min_L, x_max_L), (y_min_L, y_max_L) = range_x_lftE, range_y_lftE = self.get_xy_min_max_ofLandmark(
-            self.ldmk_lftE_outl)
-        (x_min_R, x_max_R), (y_min_R, y_max_R) = range_x_rytE, range_y_rytE = self.get_xy_min_max_ofLandmark(
-            self.ldmk_rytE_outl)
-
-        ratio_L_H2W = (y_max_L - y_min_L) / (x_max_L - x_min_L)
-        ratio_R_H2W = (y_max_R - y_min_R) / (x_max_R - x_min_R)
-
-        return ratio_L_H2W, ratio_R_H2W
-
-    def get_two_ratios_from_LR_eyes(self):
-        L_E2F, R_E2F = self.get_ratio_eye_to_face()
-        L_H2W, R_H2W = self.get_ratio_eye_height_to_width()
-
-        multiply1 = 10000
-        L_E2F, R_E2F = L_E2F * multiply1, R_E2F * multiply1
-
-        multiply2 = 100
-        L_H2W, R_H2W = L_H2W * multiply2, R_H2W * multiply2
-
-        list_ratios = [L_E2F, R_E2F, L_H2W, R_H2W]
-        list_ratios = [round(ratio, 4) for ratio in list_ratios]
-        # print(f"list_ratio = {list_ratios}")
-
-        array_ratios = np.array(list_ratios)
-        # print(f"array_ratio = {array_ratios}")
-        # array_ratios = np.round(array_ratios, 3)
-        # print(f"array_ratios = {array_ratios}")
-
-        return array_ratios
-
-    def update_min_max_then_get_normalized_ratios(self, ratios_minlmax):
-        ratios = self.get_two_ratios_from_LR_eyes()
-        # print(f"loaded ratios = {ratios}")
-        minlmax = ratios_minlmax
-        # print(f"loaded min/max = {minlmax}")
-
-        ratios_normalized = []
-        for idx in range(len(ratios)):
-            if ratios[idx] < minlmax[idx][0]:
-                minlmax[idx][0] = ratios[idx]
-                # print(f"min updated as {ratios[idx]}/{minlmax[idx][0]}(check:{minlmax[idx][0] == ratios[idx]})")
-                # print(f"min updated as {ratios[idx]}/{minlmax[idx][0]}(check:{minlmax[idx][0]==ratios[idx]})")
-            if ratios[idx] > minlmax[idx][1]:
-                minlmax[idx][1] = ratios[idx]
-                # print(f"max updated as {ratios[idx]}/{minlmax[idx][1]}(check:{minlmax[idx][1] == ratios[idx]})")
-
-            # print(f"minlmax[{idx}] = {minlmax[idx]}")
-            # print(f"isSame = ")
-            if (minlmax[idx][1] == minlmax[idx][0]) or (minlmax[idx][0] == ratios[idx]):
-                ratios_normalized.append(np.NAN)
-            else:
-                range_ratio = round(minlmax[idx][1] - minlmax[idx][0], 4)
-                # print(f"range_ratio = {range_ratio} = ({ratios[idx]}")
-                # print(f"ratio[{idx}] = {ratios[idx]}")
-                ratio_NM = round((ratios[idx] - minlmax[idx][0]) / range_ratio, 4)
-                ratios_normalized.append(ratio_NM)
-                # print(f"ratio_NM[{idx}] == {ratio_NM} appended")
-        # print(f"updated min/max = {minlmax}")
-        # print(f"ratios_normalized = {ratios_normalized}")
-        return minlmax, ratios_normalized
-
-    def is_open(self, ratios_NM):
-        ratios_NM = ratios_NM
-        thold = 0.4
-        results = [1 if ratio > thold else 0 for ratio in ratios_NM]
-
-        output = 1 if results.count(1) > results.count(0) else 0
-
-        return results, output
-
-    def preprocess_img(self, image):
-
-        img = image
-        thold = np.min(img) + np.std(img)
-        img = cv2.GaussianBlur(img, (5, 5), 2)
-        img = np.where(img < thold, 255 - img * np.std(img) * 1, 0)
-        _, img = cv2.threshold(img, np.median(img), 255, cv2.THRESH_BINARY)
-        img = cv2.erode(img, None, 2)
-        img = cv2.dilate(img, None, 1)
         img_prcd = img
+
         return img_prcd
 
     def classify_gaze_direcetion(self, x_min, x_max, x_pupil):
-        min = x_min
-        mid = (x_max + x_min) / 2
-        max = x_max
+        x_minlcenterlmax = x_min, (x_max + x_min) / 2, x_max
 
-        distance_toMin = abs(min - x_pupil)
-        distance_toMid = abs(mid - x_pupil)
-        distance_toMax = abs(max - x_pupil)
-
-        arr_distance = np.array([distance_toMin, distance_toMid, distance_toMax])
-
+        list_distance = [abs(to-x_pupil) for to in x_minlcenterlmax]
+        arr_distance = np.array(list_distance)
         index_direction = np.argmin(arr_distance)
         # print(f"min/max/pupl = {x_min}/{x_max}/{x_pupil}")
         # print(f"list_distance = {arr_distance}")
@@ -171,90 +120,192 @@ class BlinkDetector():
 
         return index_direction
 
-    def get_pupil_location_and_direction(self, show=True):
 
-        # lftE =  self.crop_image_ofLandmark(self.img_ip, self.ldmk_lftE_outl)
-        # rytE =  self.crop_image_ofLandmark(self.img_ip, self.ldmk_rytE_outl)
+    """ COMMON METHODS END HERE"""
 
-        landmarks = [self.ldmk_lftE_outl, self.ldmk_rytE_outl]
+    #  #  #  #  #  #  #
+
+    """ 
+    METHODS FOR EEF(Lft Eye, Ryt Eye, Face) START HERE
+    """
+    def xy_topLeft_ofEEF(self):
+        list_topLft = []
+        for part in self.ldmk_EEF:
+            arr_fromTo = self.fromTo_range_ofLandmarks(part) # returns x_min, x_max, y_min, y_max
+            xy_topLeft = [arr_fromTo[2], arr_fromTo[0]] # x_min, y_min
+            list_topLft.append(xy_topLeft) # save each toplft loc in the list.
+
+        arr_topLft = np.array(list_topLft)
+        return arr_topLft
+
+    def cropped_images_ofEEF(self):
+        images = [] #list where images will be saved together.
+        for part in self.ldmk_EEF: # [ldk_lftE, ldk_rytE, ldk_face]
+            image = self.img_ip # grayscale image
+            y_from, y_to, x_from, x_to = self.fromTo_range_ofLandmarks(part) #range from/to which the image is cropped.
+            img_crop = image[y_from:y_to, x_from:x_to] # image cropped
+            images.append(img_crop) # save each image in list.
+
+        crops_EEF = np.array(images[0]), np.array(images[1]), np.array(images[2])
+        # ToDo - Delete
+        # cv2.imshow("L", crop_EEF[0])
+        # cv2.imshow("R", crop_EEF[1])
+        # cv2.imshow("F", crop_EEF[2])
+
+        return crops_EEF
+
+    def cropped_mask_ofEEF(self):
+        # load left eye/right eye/ face images
+        images = self.cropped_images_ofEEF()
+        arr_topLft_EEF = self.topLft_EEF # locations of top/left of leftE, rightE, face
+        ldmk_EEF = self.ldmk_EEF
+        # print(f"arr_topLft_EEF = {arr_topLft_EEF}")
+        # print(f"ldmk_EEF = {ldmk_EEF}")
+        # print(arr_topLft)
+        list_masks = []
+        for idx, image in enumerate(images):
+            # mask_blackout = np.zeros(, dtype=np.uint8)
+            # print(f"len(landmarks) = {len(landmarks)}")
+            # print(f"landmarks(before-np) = {ldmk_EEF[idx]}")
+            # print(f"topleft = {arr_topLft_EEF[idx]}")
+            ldmk_EEF[idx] = np.subtract(ldmk_EEF[idx], arr_topLft_EEF[idx])
+
+            # print(f"landmarks(after-np) = {ldmk_EEF[idx]}")
+            mask_blackout = np.zeros_like(image, dtype=np.uint8)
+            mask_shape = cv2.fillConvexPoly(mask_blackout, ldmk_EEF[idx], 255)
+            mask = cv2.dilate(mask_shape, None, 1)
+            list_masks.append(mask)
+
+        masks_EEF = np.array(list_masks[0]), np.array(list_masks[1]), np.array(list_masks[2])
+        # cv2.imshow("L", masks_EEF[0])
+        # cv2.imshow("R", masks_EEF[1])
+        # cv2.imshow("F", masks_EEF[2])
+
+        return masks_EEF
+
+    def ratios_E2Fx2_H2W(self):
+        ### Area Ratios (L/R)
+        multiply_E2F, multiply_H2W = 1000, 100
+        list_area, list_ratios = [], []
+
+        for idx, mask in enumerate(self.msk_EEF):
+            area = (mask == 255).sum()
+            list_area.append(area)
+
+        ratios_E2F = [round(list_area[idx]/list_area[2]*multiply_E2F, 4) for idx in range(2)]
+        """
+        ratios_E2F
+        area_eye / area_face * adj(multiply) >>> round, 0 >> repeat for 2 
+        """
+        list_ratios.append(ratios_E2F[0])
+        list_ratios.append(ratios_E2F[1])
+
+        ldmk_eyes = [self.ldmk_lftE, self.ldmk_rytE]
+        for eye in ldmk_eyes:
+            x_min, x_max, y_min, y_max = self.minlmax_xy_ofLandmarks(eye)
+            hgt, wth = y_max-y_min, x_max-x_min
+            ratio_H2W = round(hgt/wth*multiply_H2W, 4)
+            list_ratios.append(ratio_H2W)
+
+        arr_ratios = np.array(list_ratios)
+        # print(f"list_ratios = {list_ratios}")
+
+        return arr_ratios
+
+    def new_minlmax_and_normalized_ratios(self, ratios_minlmax):
+        arr_ratios = self.ratios_E2Fx2_H2W()
+        arr_minlmax = ratios_minlmax
+        # print(f"[loaded] arr_ratios = {arr_ratios}/type: {type(arr_ratios)}")
+        # print(f"[loaded] arr_minlmax = {arr_minlmax}/type: {type(arr_minlmax)}")
+        list_NMratios = []
+
+        # START OF FOR LOOP
+        for idx in range(len(arr_ratios)):
+            # print(f"len(arr_ratios) = {len(arr_ratios)}")
+            # print(f"arr_minlmax[{idx}](before) = {arr_minlmax[idx]}")
+            """ min/max update """ # min[idx], max[idx] = arr_minlmax[idx][0], arr_minlmax[idx][1]
+            arr_minlmax[idx][0] = arr_ratios[idx] if (arr_ratios[idx]<arr_minlmax[idx][0]) else arr_minlmax[idx][0] # min update
+            arr_minlmax[idx][1] = arr_ratios[idx] if (arr_ratios[idx]>arr_minlmax[idx][1]) else arr_minlmax[idx][1] # max update
+            # print(f"minlmax[{idx}](after) = {arr_minlmax[idx]}")
+
+
+            """ calculate normalized ratios / exception """
+            range_ratio = arr_minlmax[idx][1] - arr_minlmax[idx][0] # range calculated.
+            # print(f"range_ratio = {range_ratio}")
+            # print(f"arr_ratios[idx] = {arr_ratios[idx]}")
+            nmRatio = (arr_ratios[idx]-arr_minlmax[idx][0])/range_ratio if range_ratio!=0 else np.nan # normalized ratio or nan
+            # print(f"nmRatio = {nmRatio}")
+            list_NMratios.append(nmRatio) # save the ratio in list
+        # END OF FOR LOOP
+
+        arr_ratios_NM = np.array(list_NMratios)
+        # print(f"[final] arr_ratios_NM = {arr_ratios_NM}")
+        # print(f"[final] arr_minlmax = {arr_minlmax}")
+        # print("ONE CYCLE")
+        return arr_minlmax, arr_ratios_NM
+
+    def eye_status_open(self, arr_nmRatios):
+        thold = 0.4
+        results = [1 if ratio > thold else 0 for ratio in arr_nmRatios]
+        status = 1 if results.count(1) > results.count(0) else 0
+
+        return results, status
+
+    def display_eye_status(self,results_close, status):
+
+        msg = "OPEN" if status == 1 else "CLOSED"  # 이미지에 표기할 메시지
+
+        cv2.putText(self.view, f"{msg}", (500, 300), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=cm.getGreen(),
+                    thickness=2)
+        # cv2.putText(self.view, f"Dicrection?{direction}", (620, 330), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=cm.getBlue())
+        cv2.putText(self.view, f"results_close: {results_close}", (400, 330), cv2.FONT_HERSHEY_PLAIN, fontScale=1,
+                    color=cm.getRed(), thickness=1)
+
+    """ 
+    METHODS FOR EEF(Lft Eye, Ryt Eye, Face) START HERE
+    """
+
+    # # # # #
+
+    """ 
+    METHODS FOR [GAZE ESTIMATION] START HERE
+    """
+
+    def eye_gaze_estimation(self, show=True):
+        xy_orgPupl = []
+        indice_direction = []
+        """ pupil xy concersion to original image"""
 
         ### Contour 계산 및
-        xy_pupil_ORG = []
-        indice_direction = []
-        for side in landmarks:
-            eye = self.crop_image_ofLandmark(self.img_ip, side)
-            img_eye = self.preprocess_img(eye[0]).astype('uint8')
-            x_topLft, y_topLft = eye[1]
-            contours, _ = cv2.findContours(img_eye, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-            contours = sorted(contours, key=lambda x: cv2.contourArea(x),
-                              reverse=True)  # Print the contour with the biggest area first.
-            for cnt in contours:
-                (x, y, w, h) = cv2.boundingRect(cnt)
-                x_pupl_CRP, y_pupl_CRP = (2 * x + w) / 2, (2 * y + h) / 2
-                xy_pupil = (round(x_topLft + x_pupl_CRP, 0), round(y_topLft + y_pupl_CRP, 0))
+        for i, eye in enumerate(self.ldmk_Eyes):
+            xy_topLft = self.topLft_EEF[i]
+            crop_eye, mask_eye = self.crp_EEF[i], self.msk_EEF[i]
+            img_eye = self.processed_image(crop_eye, mask_eye)
 
-                if show is True:
-                    # print(f"xy_pupil[0]/[1] = {xy_pupil[0]}/{xy_pupil[1]}")
-                    cv2.drawContours(self.view, [cnt], -1, (0, 255, 0), 1)
-                    cv2.circle(self.view, (int(xy_pupil[0]), int(xy_pupil[1])), int(h / 2), (255, 0, 0), -1)
-                xy_pupil_ORG.append(xy_pupil)
+            xy_crpPupl = self.pupil_xy_inOriginal(img_eye, xy_topLft, show=show)
+            xy_orgPupl.append(xy_crpPupl)
 
-                x_minlmax, _ = self.get_xy_min_max_ofLandmark(side)
-                x_min, x_max = x_minlmax
-                # print(f"x_min/max = {x_minlmax}")
-                idx_direction = self.classify_gaze_direcetion(x_min, x_max, xy_pupil[0])
-                indice_direction.append(idx_direction)
-                # print("ONESIDE DONE")
-                break
+            # 좌표 비교 기준점 (좌, 중, 우) 도출 후 각 눈의 예측값을 0, 1, 2 형태로 도출
+            x_min, x_max, *_ = self.minlmax_xy_ofLandmarks(eye)
+            idx_direction = self.classify_gaze_direcetion(x_min, x_max, xy_crpPupl[0])
+            indice_direction.append(idx_direction)
+            # print("ONESIDE DONE")
 
+        if sum(indice_direction) <= 1:
+            msg = "LEFT"
+        elif sum(indice_direction) == 2:
+            msg = "CENTRE"
+        elif sum(indice_direction) >= 3:
+            msg = "RIGHT"
+        else:
+            msg = "ERROR"
 
+        return indice_direction, msg
 
-        return xy_pupil_ORG, indice_direction
+    def display_gaze_estimation(self,results_direction, direction):
 
-
-    def decide_on_gaze_direction(self, indice_direction):
-        # print(f"indice_direction = {indice_direction}")
-
-        if len(indice_direction)==2:
-            prd_L, prd_R = indice_direction[0], indice_direction[1]
-
-            if (prd_L == 0 and prd_R == 0) or (prd_L == 0 and prd_R == 1) or (prd_L == 1 and prd_R == 0):
-                direction = "LEFT"
-            elif (prd_L == 2 and prd_R == 2) or (prd_L == 1 and prd_R == 2) or (prd_L == 2 and prd_R == 1):
-                direction = "RIGHT"
-            elif (prd_L == 1 and prd_R == 1):
-                direction = "CENTRE"
-            else:
-                direction = "Err"
-
-            # cv2.putText(self.view, f"{direction}", self.ldmk_all[33], cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-            cv2.putText(self.view, f"{direction}", (620, 360), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (0, 0, 255), 2)
-
-"""
-# for eye in [lftE, rytE]:
-#     img_eye = self.preprocess_img(eye[0]).astype('uint8')
-#     x_topLft, y_topLft = eye[1]
-#     contours, _ = cv2.findContours(img_eye, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
-#     contours = sorted(contours, key=lambda x: cv2.contourArea(x),
-#                       reverse=True)  # Print the contour with the biggest area first.
-#     for cnt in contours:
-#         (x, y, w, h) = cv2.boundingRect(cnt)
-#         x_pupl_CRP, y_pupl_CRP = (2 * x + w) / 2, (2 * y + h) / 2
-#         xy_pupil = (round(x_topLft+x_pupl_CRP,0), round(y_topLft+y_pupl_CRP,0))
-#         VISUALIZATION
-#         # Cropped Image
-#         plt.imshow(img_eye)
-#         plt.scatter(xy_ctr[0], xy_ctr[1])
-#         plt.show()
-#
-#         # Original Image
-#         plt.imshow(self.view)
-#         plt.scatter(xy_pupil[0], xy_pupil[1])
-#         plt.show()
-#
-#         # print(f"xy_pupil[0]/[1] = {xy_pupil[0]}/{xy_pupil[1]}")
-#         cv2.drawContours(self.view, [cnt], -1, (0, 255, 0), 1)
-#         cv2.circle(self.view, (int(xy_pupil[0]), int(xy_pupil[1])), int(h/2), (255, 0, 0), -1)
-#         xy_pupil_ORG.append(xy_pupil)
-#         break
-"""
+        cv2.putText(self.view, f"{direction}", (700, 300), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=cm.getGreen(),
+                    thickness=2)
+        # cv2.putText(self.view, f"Dicrection?{direction}", (620, 330), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=cm.getBlue())
+        cv2.putText(self.view, f"results_direction: {results_direction}", (700, 330), cv2.FONT_HERSHEY_PLAIN, fontScale=1,
+                    color=cm.getRed(), thickness=1)

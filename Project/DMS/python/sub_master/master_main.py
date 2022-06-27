@@ -142,7 +142,7 @@ crop = None
 cap = None
 try:
     # 카메라 or 영상
-    path_name = "D:/JEON/dataset/look_direction/vid/4/02-4.mp4"
+    path_name = "D:/JEON/dataset/drive-download-20220627T050141Z-001/WIN_20220624_15_58_44_Pro.mp4"
     num = path_name[path_name.rfind("/") - 1]
     if num == "1" or num == "4":
         Y = "right"

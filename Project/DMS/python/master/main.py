@@ -16,7 +16,7 @@ from pose_estimator import *
 from myHead import *
 from myMouth import *
 
-from output_signal_model import OutputSignalModel
+from DecisionModel import *
 
 def testPreprocessing(img):
     size = (35,35)
@@ -42,7 +42,7 @@ def testPreprocessing(img):
 def Preprocessing(img):
     size = (30,30)
     # 커널 모양
-    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, size)  # 네모(avg)
+    kernel = cv2.getStructuringElement(cv2.MORPH_RECT, size)  # 세모(avg)
     thold = np.min(img) + np.std(img)
     img = cv2.medianBlur(img, 3, 3)
     img = np.where(img < thold, 255, 0).astype("uint8")
@@ -53,9 +53,9 @@ def Preprocessing(img):
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
 
-# cm = Camera()
-cm = Camera()  # path를 안하면 카메라 하면 영상
-# cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영s상
+# cm = Camera()  # path를 안하면 카메라 하면 영상
+# cm = Camera(path="D:/JEON/dataset/dataset_ver1.1.mp4")  # path를 안하면 카메라 하면 영상
+cm = Camera(path="D:/JEON/dataset/drive-download-20220627T050141Z-001/WIN_20220624_15_58_44_Pro.mp4")  # path를 안하면 카메라 하면 영상
 
 tk = Tracker()
 fd = FaceDetector()
@@ -64,7 +64,7 @@ ey = HaarCascadeBlobCapture()
 pe = PoseEstimator()
 head = myHead()
 mouth = myMouth()
-outputModel = OutputSignalModel()
+dm = DecisionModel()
 
 ###
 arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
@@ -157,19 +157,13 @@ while cm.cap.isOpened():
             axis = pe.get_axis(gray, pose[0], pose[1])
             # axis = [[[RED_x RED_y]],[[GREEN_x GREEN_y]],[[BLUE_x BLUE_y]],[[CENTER_x CENTER_y]]]
             # --> BLUE(정면) GREEN(아래) RED(좌측) CENTER(중심)
-            # >>> head ===========================================================================
             if axis is not None:
                 pe.draw_axes(gray, pose[0], pose[1])
                 head.directionText(axis, imgNdarray)
             # cv2.imshow("img_gray", gray)
-            # >>> test ==========================================================================
-            # if axis is not None:
-            #     pe.draw_axes(imgNdarray, pose[0], pose[1])
-            #     head.directionText(axis, imgNdarray)
-            # cv2.imshow("imgNdarray", imgNdarray)
-            # # =============================================================================
-            outputModel.analyze(status, sleepHead)
-            outputModel.drawResult(imgNdarray)
+
+            dm.analyze_v1(status, sleepHead)
+            dm.drawResult(imgNdarray)
             cv2.imshow("output", imgNdarray)
     else:
         cv2.destroyAllWindows()
