@@ -1,120 +1,352 @@
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.Stack;
 
 class Card{
-    String shape;
+    enum SHAPE {Spade, Heart, Diamond, Club};
+    SHAPE shape ;
     int number;
 
-    public Card(String _shape, int _number){
+    public Card(SHAPE _shape, int _number){
         this.shape = _shape;
         this.number = _number;
     }
+    void show(){
+        String alphaNumber = "";
+        if(number == 1) alphaNumber = "A";
+        else if(number == 11) alphaNumber = "J";
+        else if(number == 12) alphaNumber = "Q";
+        else if(number == 13) alphaNumber = "K";
+        else alphaNumber = Integer.toString(number);
+
+        System.out.print("[" + shape + ", " + alphaNumber + "]");
+    }
+
+
 }
 class Player{
-    protected ArrayList<Card> cards;  // 추가 확장성을 위한 변수
-    protected int sum;    // 강의 자료에서 요구한대로 짜기 위한 최소한의 변수
-    protected boolean stay;
-    protected boolean dead;
-    protected int money;
-
-
-    Player(){
-        this.cards = new ArrayList<>();
-        this.sum = 0;
-        this.stay = false;
-        this.dead = false;
-        this.money = 1000;
+    private String name;
+    private int credit;
+    private int betMoney;
+    private LinkedList<Card> cardsInHand;
+    Player(String name, int credit){
+        this.name = name;
+        this.credit = credit;
+        cardsInHand = new LinkedList<>();
     }
 
-    void hit(Card card){
-        this.cards.add(card);
-        this.sum += card.number;
-    }
-    void stay(){}
-
-    boolean isBurst(){
-        return this.sum > 21;
-    }
-    public void HitOrStay(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("continue = 0 or Stay = 1");
-        this.stay = sc.nextBoolean();
-    }
-    public int batting(){
-        Scanner sc = new Scanner(System.in);
-        System.out.println("배팅할 금액을 입력하세요");
-        return sc.nextInt();
+    public String getName() {
+        return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int getCredit() {
+        return credit;
+    }
+
+    public void setCredit(int credit) {
+        this.credit = credit;
+    }
+
+    public int getBetMoney() {
+        return betMoney;
+    }
+    public LinkedList<Card> getCardsInHand(){
+        return cardsInHand;
+    }
+    public void setBetMoney(int betMoney) {
+        this.betMoney = betMoney;
+    }
+
+
+    void clearHand(){
+        cardsInHand.clear();
+    }
+    void getCard(Card c){
+        cardsInHand.add(c);
+    }
+    void showPlayInfo(){
+        System.out.println("=====================");
+        System.out.println("Player:" + name + "\n보유금액:" + credit);
+        for(Card c : cardsInHand){
+            c.show();
+        }
+        System.out.println("\n=======================");
+    }
+
+    void bet(int money){
+        if(money > credit){
+            System.out.println("보유 금액 부족");
+            System.out.println("All in으로 간주합니다.");
+            betMoney = credit;
+        }
+        else{
+            betMoney = money;
+        }
+    }
+    int getScore(){
+        int score = 0;
+        int num_of_ace = 0;
+
+        for(Card c : cardsInHand){
+            if(c.number == 1) ++num_of_ace;
+//            else if(c.number > 10)  score += 10;
+//            else score += c.number;
+            else score += Math.min(c.number, 10);
+        }
+
+        if(num_of_ace > 0){
+            int max = 11 + num_of_ace - 1;
+
+            if((score + max) < 22) score += max;
+            else score += num_of_ace;
+        }
+        return score;
+    }
+
+    public void win() {
+        credit += getBetMoney();
+    }
+
+    public void lose() {
+        credit -= getBetMoney();
+    }
 }
-
-
 class Dealer extends Player{
-    public Stack<Card> deck;
+    private LinkedList<Card> deck;
 
-    Dealer(){
-        this.deck = new Stack<>();
-        String[] shape = {"Spade", "Heart", "Diamond", "Clover"};
-        int[] number = {1,2,3,4,5,6,7,8,9,10,10,10,10};
-        for(String s : shape){
-            for(int n : number){
-                this.deck.push(new Card(s, n));
+    Dealer(String name, int credit){
+        super(name, credit);
+        deck = new LinkedList<>();
+    }
+    void makeDeck(){
+        deck.clear();
+        for(Card.SHAPE s: Card.SHAPE.values()){
+            for(int i=1; i <= 13; i++){
+                Card c = new Card(s, i);
+                deck.add(c);
             }
         }
-        Collections.shuffle((List<?>) this.deck);
+        Collections.shuffle(deck);
     }
+    Card deal(){
+        return deck.pop();
+    }
+    void showPlayInfo(){
+        System.out.println("=====================");
+        System.out.println(getName() + "\n보유금액:" + getCredit());
+        for(Card c : getCardsInHand()){
+            c.show();
+        }
+        System.out.println("\n=======================");
+    }
+
+    void dealerRule(){
+        int score = getScore();
+        if(score < 17){
+            getCard(deal());
+        }
+    }
+
+
 }
 
 public class BlackJack {
-    static void run(){
-        int player_number = 0;
-        while(true){
-            System.out.print("플레이어 수를 입력해라:");
-            Scanner sc = new Scanner(System.in);
-            player_number = sc.nextInt();
-            if (player_number <= 0 || player_number > 5){
-                System.out.println("딜러 혼자 못하는데?");
-            }else{
-                break;
+    enum GameStatus {INIT, MAKEUP, PLAY, CAL_SCORE, CONTINUE, END};
+    private GameStatus status;
+    private Dealer dealer;
+    private ArrayList<Player> players;
+    private final int MAX_PLAYER = 4;
+    private
+    BlackJack(){
+        status = GameStatus.INIT;
+        dealer = new Dealer("Dealer", 1000);
+        players = new ArrayList<>();
+    }
+    boolean nameExist(String name){
+        for(Player p : players){
+            if(p.getName().equals(name))    return true;
+        }
+        return false;
+    }
+    void init(){
+        System.out.println("init game");
+        dealer.makeDeck();
+        dealer.clearHand();
+        for (Player p : players){
+            p.clearHand();
+        }
+        status = GameStatus.MAKEUP;
+    }
+    void makeUp(){
+        System.out.println("makeUp");
+        Scanner sc = new Scanner(System.in);
+
+        while(players.size() < MAX_PLAYER){
+            int slot = MAX_PLAYER - players.size();
+            System.out.println("남은 자리:" + slot);
+            System.out.println("참가자 추가? (y/n):");
+            String ans = sc.next();
+
+            if(ans.equals("N") || ans.equals("n"))  break;
+
+            System.out.print("사용자 이름:");
+            String name = sc.next();
+            if(nameExist(name)) {
+                System.out.println("플레이어 이름이 존재합니다 다른 이름을 사용해 주세요.");
+                continue;
+            }
+            System.out.print("보유 금액:");
+            int credit = sc.nextInt();
+
+            players.add(new Player(name, credit));
+            System.out.println("플레이어 [" + name + "]님이 참가 하였습니다.");
+        }
+        if(players.size() > 0) {
+            status = GameStatus.PLAY;
+        }
+        else{
+            System.out.println("참가자가 없어서 종료합니다.");
+            status = GameStatus.END;
+        }
+    }
+
+    void play(){
+        System.out.println("play");
+
+        Scanner sc = new Scanner(System.in);
+        for(Player p : players){
+            System.out.print("플레이어 " + p.getName() + " 베팅 금액을 입력하세요:");
+            int bet = sc.nextInt();
+            p.bet(bet);
+        }
+
+        status = GameStatus.CAL_SCORE;
+        for(Player p : players){
+            p.getCard(dealer.deal());
+            p.getCard(dealer.deal());
+        }
+        dealer.getCard(dealer.deal());
+        dealer.getCard(dealer.deal());
+
+        dealer.showPlayInfo();
+
+        for(Player p : players){
+            p.showPlayInfo();
+            String ans = "";
+            do{
+                System.out.println("플레이어 " + p.getName() + " Hit or Stay?(h/s):");
+                ans = sc.next();
+                if(ans.equals("s") || ans.equals("S"))  break;
+
+                p.getCard(dealer.deal());
+                p.showPlayInfo();
+                int score = p.getScore();
+                if(score > 21){
+                    System.out.println("21 초과");
+                    break;
+                }
+            }while(ans.equals("H") || ans.equals("h"));
+        }
+        dealer.dealerRule();
+    }
+
+    void calScore(){
+        int dealerScore = dealer.getScore();
+        System.out.println("딜러의 점수는 " + dealerScore);
+        if(dealerScore > 21){
+            System.out.println("모든 플레이어가 승리");
+            for(Player p : players) p.win();
+        }
+        else{
+            for(Player p : players){
+                int playScore = p.getScore();
+                if (playScore > 21) {
+                    System.out.println("플레이어 " + p.getName() + " 버스트입니다.");
+                    p.lose();
+                }
+                else {
+                    if (playScore > dealerScore) {
+                        System.out.println("플레이어 " + p.getName() + " win");
+                        p.win();
+                    }
+                    else if (dealerScore > playScore) {
+                        System.out.println("플레이어 " + p.getName() + " lose");
+                        p.lose();
+                    }
+                    else {
+                        System.out.println("플레이어 " + p.getName() + " 무승부");
+                    }
+                }
+
             }
         }
 
-        Player[] players = new Player[player_number];
-        Dealer dealer = new Dealer();
-        for(Player p : players){
-            p.hit(dealer.deck.pop());
-            p.hit(dealer.deck.pop());
-        }
-        dealer.hit(dealer.deck.pop());
-        dealer.hit(dealer.deck.pop());
-        while(dealer.sum <= 16){
-            dealer.hit(dealer.deck.pop());
-        }
+        status = GameStatus.CONTINUE;
+    }
 
-
-
-
-
-
-        boolean playing = true;
-        while(playing){
-            for(Player p : players){
-                if(p.stay)  continue;
-                p.hit(dealer.deck.pop());
-                if(p.isBurst()){
-                    p.dead = true;
+    void checkContinue(){
+        Iterator<Player> iter = players.iterator();
+        Scanner sc = new Scanner(System.in);
+        while(iter.hasNext()){
+            Player next = iter.next();
+            if(next.getCredit() <= 0){
+                System.out.println("[" + next.getName() + "]님은 크래딧이 부족하여 플레이 할 수 없습니다.");
+                iter.remove();
+            }
+            else{
+                System.out.println("["+next.getName()+"]님의 남은 크래딧 " + next.getCredit() + " 입니다.");
+                System.out.println("계속 하시겠습니까?(y/n)");
+                String ans = sc.next();
+                if(ans.equals("n") || ans.equals("N")){
+                    System.out.println("["+next.getName() + "]님은 나가셨습니다.");
+                    iter.remove();
                 }
             }
         }
 
+        if(players.size() > 0){
+            status = GameStatus.INIT;
+            System.out.println("플레이어가 남아있어 게임을 계속합니다.");
+        }
+        else{
+            System.out.print("남은 플레이어가 없습니다 추가 플레이어를 받으시겠습니까? (y/n)");
+            String ans = sc.next();
+            if(ans.equals("n") || ans.equals("N"))
+                status = GameStatus.END;
+            else
+                status = GameStatus.INIT;
+        }
 
+    }
+    void startGame(){
+        System.out.println("Game Start");
+        while(status != GameStatus.END){
+            switch (status){
+                case INIT:
+                    init();
+                    break;
+                case MAKEUP:
+                    makeUp();
+                    break;
+                case PLAY:
+                    play();
+                    break;
+                case CAL_SCORE:
+                    calScore();
+                    break;
+                case CONTINUE:
+                    checkContinue();
+                    break;
 
+            }
+        }
 
     }
     public static void main(String[] args){
-        run();
+        BlackJack bj = new BlackJack();
+        bj.startGame();
     }
 }
