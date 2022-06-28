@@ -38,7 +38,7 @@ class Tracker:
             self.find_tracker(img, facedetector)
             detect = None
         else:
-            if self.frame_counter == 60:
+            if self.frame_counter == 10:
                 detect = self.find_tracker(img, facedetector, re=True)
             else:
                 detect = self.tracking(img)

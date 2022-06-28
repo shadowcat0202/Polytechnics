@@ -21,7 +21,7 @@ class myHead:
         # 고개 숙였을 때 (1초 뒤)
         b = self.distance(mark[27], mark[30]) / self.distance(mark[30], mark[8])
         # print(f"b{b}, a{a}")
-        return b > a * 1.8
+        return b, b > a * 1.8
 
     def lowerHeadText(self, landmarks, frame):
         """
@@ -31,7 +31,7 @@ class myHead:
         :return: 없음
         """
         sleepHead = False
-        lower = self.lowerHeadCheck(landmarks)
+        _, lower = self.lowerHeadCheck(landmarks)
         self.count_head.append(lower)
         if (self.count_head.count(True)) > 0:
             cv2.putText(frame, "lower_head!!", (50, 50), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
@@ -67,10 +67,13 @@ class myHead:
         """
         axis = axis.tolist()  # numpy array를 list로 변환
         if self.directionCheck(axis) == 0:
-            cv2.putText(frame, "RIGHT", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
+            return "LEFT"
+            # cv2.putText(frame, "LEFT", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
         elif self.directionCheck(axis) == 2:
-            cv2.putText(frame, "FACADE", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
+            return "FACADE"
+            # cv2.putText(frame, "FACADE", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
         elif self.directionCheck(axis) == 1:
-            cv2.putText(frame, "LEFT", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
+            return "RIGHT"
+            # cv2.putText(frame, "RIGHT", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
 
 

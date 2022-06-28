@@ -23,7 +23,7 @@ class BlinkDetector():
         time_f1 = timeit.timeit(f1)
         time_f2 = timeit.timeit(f2)
 
-        func = 1 if time_f1<time_f2 else 2
+        func = 1 if time_f1 < time_f2 else 2
         diff = abs(time_f1-time_f2)
         times = time_f2/time_f2 if time_f1<time_f2 else time_f1/time_f2
 
@@ -50,11 +50,8 @@ class BlinkDetector():
         return range_xy
 
     def minlmax_xy_ofLandmarks_v2(self, landmarks):
-        sorted_byX = sorted(landmarks, key=lambda  ldmk: ldmk[0])
-        sorted_byY = sorted(landmarks, key=lambda  ldmk: ldmk[1])
-
-
-
+        sorted_byX = sorted(landmarks, key=lambda ldmk: ldmk[0])
+        sorted_byY = sorted(landmarks, key=lambda ldmk: ldmk[1])
 
         x_ldmks, y_ldmks = [loc[0] for loc in landmarks], [loc[1] for loc in landmarks]
         range_xy = np.array([np.min(x_ldmks), np.max(x_ldmks), np.min(y_ldmks), np.max(y_ldmks)])
@@ -76,6 +73,7 @@ class BlinkDetector():
         return arr_fromTo
 
     def pupil_xy_inOriginal(self, image, topLeft, show):
+        xy_crpPupl = None
         x_topLft, y_topLft = topLeft
         contours, _ = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=lambda x: cv2.contourArea(x),
@@ -85,9 +83,9 @@ class BlinkDetector():
             x_pupl_CRP, y_pupl_CRP = (2 * x + w) / 2, (2 * y + h) / 2
             xy_crpPupl = (round(x_topLft + x_pupl_CRP, 0), round(y_topLft + y_pupl_CRP, 0))  # 크롭 이미지 내 좌표를 원본좌표에 맞춤
 
-            if show is True:
-                cv2.drawContours(self.view, [cnt], -1, (0, 255, 0), 1)
-                cv2.circle(self.view, (int(xy_crpPupl[0]), int(xy_crpPupl[1])), int(h / 2), (255, 0, 0), -1)
+            # if show is True:
+            #     cv2.drawContours(self.view, [cnt], -1, (0, 255, 0), 1)
+            #     cv2.circle(self.view, (int(xy_crpPupl[0]), int(xy_crpPupl[1])), int(h / 2), (255, 0, 0), -1)
             break
 
         return xy_crpPupl
@@ -98,11 +96,20 @@ class BlinkDetector():
 
         msk = 255 - msk
         img = cv2.bitwise_not(img, img, mask=msk)
+        # bitwise_not = cv2.pyrUp(img.copy())
+
         img = cv2.medianBlur(img, 5)
+        # medianblur = cv2.pyrUp(img.copy())
+
         thold = np.min(img)
         img = np.where(img <= thold, 255, 0).astype('uint8')
         img = cv2.dilate(img, size_filter, iterations=2)
+        # dilate = cv2.pyrUp(img.copy())
+
         img = cv2.erode(img, size_filter, iterations=1)
+        # erode = cv2.pyrUp(img.copy())
+
+        # cv2.imshow("test", np.hstack([bitwise_not, medianblur, dilate, erode]))
 
         img_prcd = img
 
