@@ -84,10 +84,11 @@ def ROIinWindow(r, h, w):
 
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
-path = "D:/JEON/dataset/drive-download-20220627T050141Z-001/"
+# path = "D:/JEON/dataset/drive-download-20220627T050141Z-001/"
+path = "D:/JEON/dataset/"
 filename = ["WIN_20220624_15_58_44_Pro.mp4", "WIN_20220624_15_49_03_Pro.mp4", "WIN_20220624_15_40_21_Pro.mp4",
-            "WIN_20220624_15_29_33_Pro.mp4"]
-loop = 0
+            "WIN_20220624_15_29_33_Pro.mp4", "dataset_ver1.1.mp4"]
+loop = 4
 key = None
 while True:
     video = path + filename[loop]
@@ -100,29 +101,44 @@ while True:
     # cm = Camera(
     #     path="D:/JEON/dataset/drive-download-20220627T050141Z-001/WIN_20220624_15_40_21_Pro.mp4")  # path를 안하면 카메라 하면 영상
 
+
+    frame_control = 150
+
+
     tk = Tracker()
     fd = FaceDetector()
     md = MarkDetector()
     ey = HaarCascadeBlobCapture()
     pe = PoseEstimator()
-    head = myHead()
+    head = myHead(frame_control)
     mouth = myMouth()
     dm2 = DecisionModel()
 
     ###
     arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
     arr_ratios = np.array([[], [], [], []])
+    arr_ratios_H = np.array([])
+    arr_ratios_Havg = np.array([])
+    arr_ratios_Hstd = np.array([])
+    arr_Havg_log = np.array([])
+    arr_Hstd_log = np.array([])
+    arr_headDown_log = np.array([])
+
     # [min, max]
     # [ L_facetoEye, L_eyeHeightToWidth, R_facetoEye, R_eyeHeightToWidth]
     ###
+    cnt_frm = 0
+    head_down = None
     while cm.cap.isOpened():
         ret, frame = cm.cap.read()  # 영상 프레임 받기
         key = cv2.waitKey(1)
         if key == ord('n') or key == 27:
+            cv2.destroyAllWindows()
+            cm.cap.release()
             break
         # md.changeMarkIndex(key)  # 랜드마크 점 종류를 바꾸고 싶다면 활성화 (미완성)
-
         if ret:
+            # frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
             imgNdarray = cm.getFrameResize2ndarray(frame)  # frame to ndarray
             gray = cv2.cvtColor(imgNdarray, cv2.COLOR_BGR2GRAY)  # (H, W)
 
@@ -130,7 +146,7 @@ while True:
             if rect is not None and ROIinWindow(rect, cm.RES_H, cm.RES_W):
                 landmarks = md.get_marks(gray, rect)
                 landmarks = md.full_object_detection_to_ndarray(landmarks)
-                # md.draw_marks(imgNdarray, landmarks, color=cm.getRed())
+                # md.draw_marks(imgNdarray, landmarks, color=cm.getGreen())
 
                 """
                 Blinking Test Starts Here
@@ -173,31 +189,80 @@ while True:
                 """
                 headPose estimation start
                 """
+                # lowerheadRasio, _ = head.lowerHeadCheck(landmarks)
+                # sleepHead = head.lowerHeadText(landmarks, gray)  # 수정했습니다 (class pose_estimator file_name= 부분)
+                # mouth.openMouthText(landmarks, gray)
+                # # x, y, z 축 보고 싶다면?
+                # landmarks_32 = np.array(landmarks, dtype=np.float32)
+                # pose = pe.solve_pose_by_68_points(landmarks_32)
+                # axis = pe.get_axis(gray, pose[0], pose[1])
+                # # axis = [[[RED_x RED_y]],[[GREEN_x GREEN_y]],[[BLUE_x BLUE_y]],[[CENTER_x CENTER_y]]]
+                # # --> BLUE(정면) GREEN(아래) RED(좌측) CENTER(중심)
+                # if axis is not None:
+                #     pe.draw_axes(gray, pose[0], pose[1])
+                #     headDirection = head.directionText(axis, imgNdarray)
+                #     cv2.putText(imgNdarray, f"{headDirection}",
+                #                 (rect.right() + 30, rect.top() + 30),
+                #                 cv2.FONT_HERSHEY_PLAIN,
+                #                 fontScale=2, color=(0, 0, 255), thickness=3)
+                """
+                시영 코드
+                """
+                """ SY - HEAD NORMALIZED STARTS HERE """
                 lowerheadRasio, _ = head.lowerHeadCheck(landmarks)
-                sleepHead = head.lowerHeadText(landmarks, gray)  # 수정했습니다 (class pose_estimator file_name= 부분)
-                mouth.openMouthText(landmarks, gray)
-                # x, y, z 축 보고 싶다면?
-                landmarks_32 = np.array(landmarks, dtype=np.float32)
-                pose = pe.solve_pose_by_68_points(landmarks_32)
-                axis = pe.get_axis(gray, pose[0], pose[1])
-                # axis = [[[RED_x RED_y]],[[GREEN_x GREEN_y]],[[BLUE_x BLUE_y]],[[CENTER_x CENTER_y]]]
-                # --> BLUE(정면) GREEN(아래) RED(좌측) CENTER(중심)
-                if axis is not None:
-                    pe.draw_axes(gray, pose[0], pose[1])
-                    headDirection = head.directionText(axis, imgNdarray)
-                    cv2.putText(imgNdarray, f"{headDirection}",
-                                (rect.right() + 30, rect.top() + 30),
-                                cv2.FONT_HERSHEY_PLAIN,
-                                fontScale=2, color=(0, 0, 255), thickness=3)
+                # print(f"lowerheadRasio = {lowerheadRasio}")
+                arr_ratios_H = head.update_array(arr_ratios_H, lowerheadRasio)  # head ratio 값들 저장
+                # print(f"arr_ratios_H = {arr_ratios_H}")
+                arr_ratios_Havg = head.update_array(arr_ratios_Havg, np.mean(arr_ratios_H))  # head ratio average값들 저장
+                arr_ratios_Hstd = head.update_array(arr_ratios_Hstd, np.std(arr_ratios_H)) # head ratio 표준편차값들 저장
+                # print(f"arr_ratios_Havg = {arr_ratios_Havg}")
+                # print(f"arr_ratios_Hstd = {arr_ratios_Hstd}")
+
+                print(f"arr_ratios_Havg={arr_ratios_Havg.shape}")
+                # print(f"arr_ratios_Hstd = {arr_ratios_Hstd}")
+                print(f"arr_ratios_Hstd = {arr_ratios_Hstd.shape}")
+                if cnt_frm < frame_control:
+                    pass
+                else:
+                    head_down = head.head_down(arr_Havg_log, arr_Hstd_log*2 , lowerheadRasio)  # 판단
+                    print(f"판단기준: avg+std = {arr_Havg_log}+{arr_Hstd_log} = {arr_Havg_log+arr_Hstd_log}")
+                    arr_headDown_log = head.update_array(arr_headDown_log, head_down)  # 각 프레임의 판단 결과를 저장
+
+                cnt_frm += 1
+
+                if cnt_frm % frame_control == 0:
+                    # plt.figure(figsize=(12, 4))
+                    # # print(f"최근 300 프레임 체크 기준점 avg+std : {arr_Havg_log}")
+                    # print(f"arr_ratios_Havg = {arr_ratios_Havg}")
+                    # print(f"arr_ratios_Hstd = {arr_ratios_Hstd}")
+                    # print(f"arr_Havg_log = {arr_Havg_log}")
+                    #
+                    # ax1, ax2 = plt.gca(), plt.gca()
+                    #
+                    # ax1.plot(arr_ratios_H, color='blue', label='ratio')
+                    # ax1.plot(arr_ratios_Havg, color='black', label='mean')
+                    # ax1.plot(arr_ratios_Hstd, color="green")
+                    # ax2.plot(arr_headDown_log, color='red')
+                    # plt.show()
+                #
+                    arr_Havg_log = np.append(arr_Havg_log, arr_ratios_Havg[-1])  # 평균값 저장된 배열의 마지막 값을 저장
+                    arr_Hstd_log = np.append(arr_Hstd_log, arr_ratios_Hstd[-1])
+                    arr_ratios_Havg = np.array([])  # 평균값들이 저장된 배열 초기화
+                    arr_ratios_Hstd = np.array([])  # 평균값들이 저장된 배열 초기화
+                    arr_Havg_log = np.mean(arr_Havg_log)  # 평균값 저장된 배열 내 값들을 평균
+                    arr_Hstd_log = np.mean(arr_Hstd_log)  # 평균값 저장된 배열 내 값들을 평균
 
                 """
                 analyze_v2
                 """
-                sleeping = dm2.Update(imgNdarray, status, lowerheadRasio, 0)
-                imgNdarray = drawCornerRect(imgNdarray, rect, sleeping, color)
+                sleeping = dm2.Update(imgNdarray, status, lowerheadRasio, dirctn)
+                # imgNdarray = drawCornerRect(imgNdarray, rect, sleeping, color)
 
                 cv2.putText(imgNdarray, f"{sleeping}",
                             (rect.right() + 30, rect.top()), cv2.FONT_HERSHEY_PLAIN,
+                            fontScale=2, color=(0, 0, 255), thickness=3)
+                cv2.putText(imgNdarray, f"{head_down}",
+                            (rect.right() + 30, rect.top() + 30), cv2.FONT_HERSHEY_PLAIN,
                             fontScale=2, color=(0, 0, 255), thickness=3)
                 cv2.putText(imgNdarray, f"{dirctn}",
                             (rect.right() + 30, rect.top() + 60), cv2.FONT_HERSHEY_PLAIN,

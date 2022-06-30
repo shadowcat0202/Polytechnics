@@ -1,10 +1,13 @@
 from collections import deque
 import cv2
+import numpy as np
+
 
 class myHead:
-    def __init__(self):
+    def __init__(self, frame_control):
         self.count_head = deque(maxlen=1)
         self.count_sleep = deque(maxlen=30)
+        self.frame_control = frame_control
 
     # (두 점 사이의 유클리드 거리 계산)
     def distance(self, p1, p2):
@@ -76,4 +79,59 @@ class myHead:
             return "RIGHT"
             # cv2.putText(frame, "RIGHT", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
 
+    """ SY """
 
+    def new_minlmax_and_normalized_ratios(self, head_ratio, ratio_minlmax):
+
+        ratio = head_ratio
+        arr_minlmax = ratio_minlmax
+
+        """ min/max update """
+        arr_minlmax[0] = ratio if (ratio < arr_minlmax[0]) else arr_minlmax[0]  # min update
+        arr_minlmax[1] = ratio if (ratio > arr_minlmax[1]) else arr_minlmax[1]  # max update
+
+        """ calculate normalized ratios / exception """
+        # formula for nomalization = (observed value - min) / range
+        # range = max - min
+        range_ratio = arr_minlmax[1] - arr_minlmax[0]  # range calculated.
+        nmRatio = (ratio - arr_minlmax[0]) / range_ratio if range_ratio != 0 else np.nan  # normalized ratio or nan
+
+        return arr_minlmax, nmRatio
+
+    def append_headRto(self, arr, val):
+        array_updated = np.append(arr, val)
+
+        return array_updated
+
+    def delete_then_append_head(self, arr, val):
+        array_deleted = np.delete(arr, 0)
+        array_updated = np.append(array_deleted, val)
+        return array_updated
+
+    def update_array(self, arr, val):
+        frame_control = self.frame_control
+        num_data = len(arr)
+        # print(f"data to load = {val}")
+        # print(f"array to load in = {arr}")
+        array_updated = self.append_headRto(arr, val) if num_data < frame_control else self.delete_then_append_head(arr,
+                                                                                                                    val)
+        # print(f"array after load = {array_updated}")
+        # print(f"array_updated(head) = {array_updated}")
+
+        return array_updated
+
+    #
+    # def array_headRatios_forFrames(self, arr, val):
+    #     val = val*100
+    #     # print(f"len(arr_hdRto) = {len(self.arr_hdRto)}")
+    #     num_data = len(arr)
+    #     # print(f"new_ratio(head) = {self.rto_head}")
+    #     array_updated = self.append_headRto(arr, val)
+    #     # array_updated = self.append_headRto(arr, val) if num_data<=300 else self.delete_then_append_head(arr, val)
+    #     # print(f"array_updated(head) = {array_updated}")
+    #
+    #     return array_updated
+    def head_down(self, avg, std, ratio):
+        output = 1 if ratio > avg+std else 0
+
+        return output

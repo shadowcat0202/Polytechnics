@@ -21,7 +21,8 @@ class MarkDetector:
     __MOUTH_OUTLINE = list(range(48, 60))
     __MOUTH_INLINE = list(range(60, 68))
 
-    __MARK_INDEX = __RIGHT_EYE + __LEFT_EYE + __MOUTH_INLINE
+    # __MARK_INDEX = __RIGHT_EYE + __LEFT_EYE + __MOUTH_INLINE
+    __MARK_INDEX = __ALL
     # __MARK_INDEX = __ALL
 
     def __init__(self, save_model="./assets/shape_predictor_68_face_landmarks.dat"):

@@ -300,10 +300,13 @@ class BlinkDetector():
 
         if sum(indice_direction) <= 1:
             msg = "LEFT"
+            msg = 1
         elif sum(indice_direction) == 2:
             msg = "CENTRE"
+            msg = 0
         elif sum(indice_direction) >= 3:
             msg = "RIGHT"
+            msg = 1
         else:
             msg = "ERROR"
 
