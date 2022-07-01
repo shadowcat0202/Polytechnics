@@ -8,7 +8,6 @@ class FaceDetector:
         self.face_detector = dlib.get_frontal_face_detector()
 
     def front_detection(self, squares):
-        print("front_detection")
         most_front_detection_index = 0
         max_size_area = 0
         for i, sq in enumerate(squares):

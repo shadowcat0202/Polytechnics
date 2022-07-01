@@ -1,3 +1,5 @@
+import timeit
+
 import cv2
 import dlib
 import numpy as np
@@ -16,7 +18,6 @@ from myHead import *
 from myMouth import *
 
 from DecisionModel_v2 import *
-
 
 def testPreprocessing(img):
     size = (35, 35)
@@ -84,15 +85,20 @@ def ROIinWindow(r, h, w):
 
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
-# path = "D:/JEON/dataset/drive-download-20220627T050141Z-001/"
-path = "D:/JEON/dataset/"
-filename = ["WIN_20220624_15_58_44_Pro.mp4", "WIN_20220624_15_49_03_Pro.mp4", "WIN_20220624_15_40_21_Pro.mp4",
-            "WIN_20220624_15_29_33_Pro.mp4", "dataset_ver1.1.mp4"]
-loop = 4
+path = "D:/JEON/dataset/drive-download-20220627T050141Z-001/"
+# path = "D:/JEON/dataset/"
+filename = ["WIN_20220624_15_58_44_Pro", "WIN_20220624_15_49_03_Pro", "WIN_20220624_15_40_21_Pro",
+            "WIN_20220624_15_29_33_Pro"]    # , "dataset_ver1.1"
+TF = [14134, 13257, 12778, 10281]
+
+
+
+loop = 0
 key = None
 while True:
-    video = path + filename[loop]
-    loop += 1
+    test_y = path + filename[loop] + "._final.txt"
+    video = path + filename[loop] + ".mp4"
+
     if loop % len(filename) == 0:
         loop = 0
     color = (0, 255, 0)
@@ -114,15 +120,23 @@ while True:
     mouth = myMouth()
     dm2 = DecisionModel()
 
+    start_time = None
+    end_time = None
+    total_frame = 0
+    detection_frame = 0
+    dfps = []
+    hit = 0
+    miss = 0
+    acc = 0
+    file = open(test_y, "r")
+
     ###
     arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
     arr_ratios = np.array([[], [], [], []])
-    arr_ratios_H = np.array([])
-    arr_ratios_Havg = np.array([])
-    arr_ratios_Hstd = np.array([])
-    arr_Havg_log = np.array([])
-    arr_Hstd_log = np.array([])
-    arr_headDown_log = np.array([])
+    head_log = {}
+    headStatus_log = np.array([])
+    arr_headRatios = np.array([])
+    arr_headThold = np.array([])
 
     # [min, max]
     # [ L_facetoEye, L_eyeHeightToWidth, R_facetoEye, R_eyeHeightToWidth]
@@ -138,12 +152,16 @@ while True:
             break
         # md.changeMarkIndex(key)  # 랜드마크 점 종류를 바꾸고 싶다면 활성화 (미완성)
         if ret:
+            total_frame += 1
+            start_time = timeit.default_timer()
+            line = file.readline()
             # frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
             imgNdarray = cm.getFrameResize2ndarray(frame)  # frame to ndarray
             gray = cv2.cvtColor(imgNdarray, cv2.COLOR_BGR2GRAY)  # (H, W)
 
             rect = tk.getRectangle(gray, fd)  # 트래킹 하는것과 동시에 face detect 반환
             if rect is not None and ROIinWindow(rect, cm.RES_H, cm.RES_W):
+                detection_frame += 1
                 landmarks = md.get_marks(gray, rect)
                 landmarks = md.full_object_detection_to_ndarray(landmarks)
                 # md.draw_marks(imgNdarray, landmarks, color=cm.getGreen())
@@ -179,11 +197,11 @@ while True:
                 """
                 Gaze Estimation Starts Here
                 """
-                dirctn = ""
+                eye_gaze = None
                 if status == 0:
                     pass
                 else:
-                    results_pred, dirctn = blk.eye_gaze_estimation(show=True)  # 동공표시 True
+                    results_pred, dirctn, eye_gaze = blk.eye_gaze_estimation(show=True)  # 동공표시 True
                     # blk.display_gaze_estimation(results_pred, dirctn)
 
                 """
@@ -193,14 +211,15 @@ while True:
                 # sleepHead = head.lowerHeadText(landmarks, gray)  # 수정했습니다 (class pose_estimator file_name= 부분)
                 # mouth.openMouthText(landmarks, gray)
                 # # x, y, z 축 보고 싶다면?
-                # landmarks_32 = np.array(landmarks, dtype=np.float32)
-                # pose = pe.solve_pose_by_68_points(landmarks_32)
-                # axis = pe.get_axis(gray, pose[0], pose[1])
+                landmarks_32 = np.array(landmarks, dtype=np.float32)
+                pose = pe.solve_pose_by_68_points(landmarks_32)
+                axis = pe.get_axis(gray, pose[0], pose[1])
                 # # axis = [[[RED_x RED_y]],[[GREEN_x GREEN_y]],[[BLUE_x BLUE_y]],[[CENTER_x CENTER_y]]]
                 # # --> BLUE(정면) GREEN(아래) RED(좌측) CENTER(중심)
-                # if axis is not None:
-                #     pe.draw_axes(gray, pose[0], pose[1])
-                #     headDirection = head.directionText(axis, imgNdarray)
+                headDirection = None
+                if axis is not None:
+                    # pe.draw_axes(gray, pose[0], pose[1])
+                    headDirection = head.directionText(axis, imgNdarray)
                 #     cv2.putText(imgNdarray, f"{headDirection}",
                 #                 (rect.right() + 30, rect.top() + 30),
                 #                 cv2.FONT_HERSHEY_PLAIN,
@@ -210,72 +229,70 @@ while True:
                 """
                 """ SY - HEAD NORMALIZED STARTS HERE """
                 lowerheadRasio, _ = head.lowerHeadCheck(landmarks)
-                # print(f"lowerheadRasio = {lowerheadRasio}")
-                arr_ratios_H = head.update_array(arr_ratios_H, lowerheadRasio)  # head ratio 값들 저장
-                # print(f"arr_ratios_H = {arr_ratios_H}")
-                arr_ratios_Havg = head.update_array(arr_ratios_Havg, np.mean(arr_ratios_H))  # head ratio average값들 저장
-                arr_ratios_Hstd = head.update_array(arr_ratios_Hstd, np.std(arr_ratios_H)) # head ratio 표준편차값들 저장
-                # print(f"arr_ratios_Havg = {arr_ratios_Havg}")
-                # print(f"arr_ratios_Hstd = {arr_ratios_Hstd}")
+                # 두 자리 정수로 ratio 변환
+                headRatio = round(lowerheadRasio * 100, 0).astype('int8')
 
-                print(f"arr_ratios_Havg={arr_ratios_Havg.shape}")
-                # print(f"arr_ratios_Hstd = {arr_ratios_Hstd}")
-                print(f"arr_ratios_Hstd = {arr_ratios_Hstd.shape}")
-                if cnt_frm < frame_control:
-                    pass
-                else:
-                    head_down = head.head_down(arr_Havg_log, arr_Hstd_log*2 , lowerheadRasio)  # 판단
-                    print(f"판단기준: avg+std = {arr_Havg_log}+{arr_Hstd_log} = {arr_Havg_log+arr_Hstd_log}")
-                    arr_headDown_log = head.update_array(arr_headDown_log, head_down)  # 각 프레임의 판단 결과를 저장
+                # ratio 관련 정보 저장/계산
+                head_log, headRatio_mode, headThold = head.updatedLog_modeRatio_tholdRatio(head_log, headRatio)
+                # head_log = ratio값과 1(카운트)을 저장하는 딕셔너리
+                # head_headRatio_mode = 딕셔너리 내 최빈값 (발생빈도가 가장 높은 ratio)
+                # headThold = 고개 숙였다를 판단하는 기준척도. (최빈값 이후 카운트가 가장 낮아지는 지점)
 
-                cnt_frm += 1
+                # 고개 숙였는지 판단
+                head_down = head.head_down(headRatio, headThold)
 
-                if cnt_frm % frame_control == 0:
-                    # plt.figure(figsize=(12, 4))
-                    # # print(f"최근 300 프레임 체크 기준점 avg+std : {arr_Havg_log}")
-                    # print(f"arr_ratios_Havg = {arr_ratios_Havg}")
-                    # print(f"arr_ratios_Hstd = {arr_ratios_Hstd}")
-                    # print(f"arr_Havg_log = {arr_Havg_log}")
-                    #
-                    # ax1, ax2 = plt.gca(), plt.gca()
-                    #
-                    # ax1.plot(arr_ratios_H, color='blue', label='ratio')
-                    # ax1.plot(arr_ratios_Havg, color='black', label='mean')
-                    # ax1.plot(arr_ratios_Hstd, color="green")
-                    # ax2.plot(arr_headDown_log, color='red')
-                    # plt.show()
-                #
-                    arr_Havg_log = np.append(arr_Havg_log, arr_ratios_Havg[-1])  # 평균값 저장된 배열의 마지막 값을 저장
-                    arr_Hstd_log = np.append(arr_Hstd_log, arr_ratios_Hstd[-1])
-                    arr_ratios_Havg = np.array([])  # 평균값들이 저장된 배열 초기화
-                    arr_ratios_Hstd = np.array([])  # 평균값들이 저장된 배열 초기화
-                    arr_Havg_log = np.mean(arr_Havg_log)  # 평균값 저장된 배열 내 값들을 평균
-                    arr_Hstd_log = np.mean(arr_Hstd_log)  # 평균값 저장된 배열 내 값들을 평균
+                # headLog_sorted = sorted(head_log.items(),key=lambda x:x[0]) #ToDo - 지워도 됨. 딕셔너리 확인용
+                # print(f"headLog = {headLog_sorted}") #ToDo - 지워도 됨. 딕셔너리 확인용
+
+                # headStatus_log = head.updated_statusLog(headStatus_log, headThold, headRatio) #ToDo - 지워도 됨. 그래프 확인용
+                # arr_headRatios = np.append(arr_headRatios, headRatio) #ToDo-Delete 그래프 확인용
+                # arr_headThold = np.append(arr_headThold, headThold) #ToDo-Delete 그래프 확인용
+
+                # cv2.putText(imgNdarray, f"Down: {head_down}", (500, 300), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
+                # cv2.putText(imgNdarray, f"Ratio: {headRatio}", (500, 330), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 0, 2)
+                # cv2.putText(imgNdarray, f"Thold: {headThold}", (500, 360), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 0, 2)
+                # cv2.putText(imgNdarray, f"Mode: {headRatio_mode}", (500, 390), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 0, 2)
+                """ SY - HEAD CEHCK ENDS HERE """
 
                 """
                 analyze_v2
                 """
-                sleeping = dm2.Update(imgNdarray, status, lowerheadRasio, dirctn)
+                warning = dm2.Update(imgNdarray, status, head_down, eye_gaze, headDirection)
                 # imgNdarray = drawCornerRect(imgNdarray, rect, sleeping, color)
+                end_time = timeit.default_timer()
+                dfps.append(int(1./(end_time-start_time)))
+                y_value = None
+                if int(line.split(",")[1][1]) == 1:
+                    y_value = True
+                else:
+                    y_value = False
+                # print(f"y_value:{y_value}, warning: {warning}")
+                if y_value == warning:
+                    hit += 1
+                else:
+                    miss += 1
 
-                cv2.putText(imgNdarray, f"{sleeping}",
-                            (rect.right() + 30, rect.top()), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
-                cv2.putText(imgNdarray, f"{head_down}",
-                            (rect.right() + 30, rect.top() + 30), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
-                cv2.putText(imgNdarray, f"{dirctn}",
-                            (rect.right() + 30, rect.top() + 60), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
+                # cv2.putText(imgNdarray, f"warning: {warning}",
+                #             (100, 40), cv2.FONT_HERSHEY_PLAIN,
+                #             fontScale=2, color=(0, 0, 255), thickness=3)
+
             else:
-                cv2.putText(imgNdarray, f"not found detection",
-                            (20, 80), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
-            cv2.imshow("output", imgNdarray)
-
+                # cv2.putText(imgNdarray, f"not found detection",
+                #             (20, 80), cv2.FONT_HERSHEY_PLAIN,
+                #             fontScale=2, color=(0, 0, 255), thickness=3)
+                pass
+            if total_frame % 500 == 0:
+                print(f"{round(total_frame/TF[loop], 2)}%")
         else:
             cv2.destroyAllWindows()
             cm.cap.release()
+            print(f"{video}\n"
+                  f"total_frame:{total_frame}, detection_frame:{detection_frame}\n"
+                  f"avg FPS:{sum(dfps) // detection_frame} acc:{round((hit / detection_frame) * 100, 4)}")
             break
+        # cv2.imshow("output", imgNdarray)
     if key == 27:
+        break
+    loop += 1
+    if loop == 4:
         break

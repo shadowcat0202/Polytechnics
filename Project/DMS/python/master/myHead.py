@@ -1,8 +1,6 @@
 from collections import deque
 import cv2
 import numpy as np
-
-
 class myHead:
     def __init__(self, frame_control):
         self.count_head = deque(maxlen=1)
@@ -70,68 +68,76 @@ class myHead:
         """
         axis = axis.tolist()  # numpy array를 list로 변환
         if self.directionCheck(axis) == 0:
-            return "LEFT"
+            # return "LEFT"
+            return 1
             # cv2.putText(frame, "LEFT", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
         elif self.directionCheck(axis) == 2:
-            return "FACADE"
+            # return "FACADE"
+            return 0
             # cv2.putText(frame, "FACADE", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
         elif self.directionCheck(axis) == 1:
-            return "RIGHT"
+            # return "RIGHT"
+            return 1
             # cv2.putText(frame, "RIGHT", (50, 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, 255, 2)
 
     """ SY """
 
-    def new_minlmax_and_normalized_ratios(self, head_ratio, ratio_minlmax):
 
-        ratio = head_ratio
-        arr_minlmax = ratio_minlmax
+    def updatedLog_modeRatio_tholdRatio(self, headLog, headRatio):
+        ratio = headRatio
+        keys = np.array(list(headLog.keys()))
 
-        """ min/max update """
-        arr_minlmax[0] = ratio if (ratio < arr_minlmax[0]) else arr_minlmax[0]  # min update
-        arr_minlmax[1] = ratio if (ratio > arr_minlmax[1]) else arr_minlmax[1]  # max update
+        headLog[ratio] = headLog[ratio]+1 if ratio in keys else 1
 
-        """ calculate normalized ratios / exception """
-        # formula for nomalization = (observed value - min) / range
-        # range = max - min
-        range_ratio = arr_minlmax[1] - arr_minlmax[0]  # range calculated.
-        nmRatio = (ratio - arr_minlmax[0]) / range_ratio if range_ratio != 0 else np.nan  # normalized ratio or nan
+        max_inDic = max(headLog, key=headLog.get)
+        headLog_sorted = sorted(headLog.items(), key=lambda x: x[0])
+        arr_sorted = np.array(headLog_sorted)
+
+        i = 0
+        num_row = len(arr_sorted)
+        # print(num_row)
+        while (i<num_row):
+            if arr_sorted[i][0] == max_inDic:
+                break
+            else:
+                i += 1
+        # print(f"index of mode = {i}")
+
+        while (i+1<num_row):
+            if arr_sorted[i+1][1] <= arr_sorted[i][1]:
+                i += 1
+            else:
+                break
+        # print(f"index of optimal_value = {i}")
+        thold = arr_sorted[i][0]
+
+        return headLog, max_inDic, thold
+
+    def head_down(self, ratio, thold):
+        status = 1 if ratio > thold else 0
+
+        return status
+
+
+    def headMinlMax_and_nmRatio(self, arr_minlmax, ratio):
+        arr_minlmax[0] = ratio if ratio<arr_minlmax[0] else arr_minlmax[0]
+        arr_minlmax[1] = ratio if ratio>arr_minlmax[1] else arr_minlmax[1]
+
+        range = arr_minlmax[1]-arr_minlmax[0]
+        nmRatio = (ratio - arr_minlmax[0])/range if range !=0 else np.nan
 
         return arr_minlmax, nmRatio
 
-    def append_headRto(self, arr, val):
-        array_updated = np.append(arr, val)
 
-        return array_updated
 
-    def delete_then_append_head(self, arr, val):
-        array_deleted = np.delete(arr, 0)
-        array_updated = np.append(array_deleted, val)
-        return array_updated
 
-    def update_array(self, arr, val):
-        frame_control = self.frame_control
-        num_data = len(arr)
-        # print(f"data to load = {val}")
-        # print(f"array to load in = {arr}")
-        array_updated = self.append_headRto(arr, val) if num_data < frame_control else self.delete_then_append_head(arr,
-                                                                                                                    val)
-        # print(f"array after load = {array_updated}")
-        # print(f"array_updated(head) = {array_updated}")
+    def updated_statusLog(self, arr_log, thold, ratio):
+        arr_status = arr_log
+        # print(f"log/thold/ratio = {arr_log}/{thold}/{ratio}")
+        if ratio>thold:
+            output = 1
+        else:
+            output = 0
+        arr_status = np.append(arr_status, output)
 
-        return array_updated
-
-    #
-    # def array_headRatios_forFrames(self, arr, val):
-    #     val = val*100
-    #     # print(f"len(arr_hdRto) = {len(self.arr_hdRto)}")
-    #     num_data = len(arr)
-    #     # print(f"new_ratio(head) = {self.rto_head}")
-    #     array_updated = self.append_headRto(arr, val)
-    #     # array_updated = self.append_headRto(arr, val) if num_data<=300 else self.delete_then_append_head(arr, val)
-    #     # print(f"array_updated(head) = {array_updated}")
-    #
-    #     return array_updated
-    def head_down(self, avg, std, ratio):
-        output = 1 if ratio > avg+std else 0
-
-        return output
+        return arr_status

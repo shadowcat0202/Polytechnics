@@ -73,7 +73,7 @@ class BlinkDetector():
         return arr_fromTo
 
     def pupil_xy_inOriginal(self, image, topLeft, show):
-        xy_crpPupl = None
+        xy_crpPupl = (0, 0)
         x_topLft, y_topLft = topLeft
         contours, _ = cv2.findContours(image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
         contours = sorted(contours, key=lambda x: cv2.contourArea(x),
@@ -297,20 +297,21 @@ class BlinkDetector():
             idx_direction = self.classify_gaze_direcetion(x_min, x_max, xy_crpPupl[0])
             indice_direction.append(idx_direction)
             # print("ONESIDE DONE")
-
+        result = False
         if sum(indice_direction) <= 1:
             msg = "LEFT"
-            msg = 1
+            result = True
         elif sum(indice_direction) == 2:
             msg = "CENTRE"
-            msg = 0
+            result = False
         elif sum(indice_direction) >= 3:
             msg = "RIGHT"
-            msg = 1
+            result = True
         else:
             msg = "ERROR"
+            result = False
 
-        return indice_direction, msg
+        return indice_direction, msg, result
 
     def display_gaze_estimation(self,results_direction, direction):
 
