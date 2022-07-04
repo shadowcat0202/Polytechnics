@@ -93,10 +93,10 @@ TF = [14134, 13257, 12778, 10281]
 
 
 
-loop = 0
+loop = 3
 key = None
 while True:
-    test_y = path + filename[loop] + "._final.txt"
+    test_y = path + filename[loop] + "._세환.txt"
     video = path + filename[loop] + ".mp4"
 
     if loop % len(filename) == 0:
@@ -129,6 +129,8 @@ while True:
     miss = 0
     acc = 0
     file = open(test_y, "r")
+    y1 = []
+    y2 = []
 
     ###
     arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
@@ -282,7 +284,9 @@ while True:
                 #             fontScale=2, color=(0, 0, 255), thickness=3)
                 pass
             if total_frame % 500 == 0:
-                print(f"{round(total_frame/TF[loop], 2)}%")
+                print(f"{round(total_frame/TF[loop] * 100, 2)}%")
+
+
         else:
             cv2.destroyAllWindows()
             cm.cap.release()
