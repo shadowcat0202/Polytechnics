@@ -26,18 +26,18 @@ def matmul(mat1, mat2, result):
 
 
 def MML_Exam_1():
-    # n = np.random.randint(3, 20)
-    # m = np.random.randint(3, 20)
-    n = 4
-    m = 3
+    n = np.random.randint(3, 20)
+    m = np.random.randint(3, 20)
+    # n = 4
+    # m = 3
     print(n, m)
     mat1 = np.zeros((n, m))
     mat2 = np.zeros((m, n))
     result = np.zeros((n, n))
     gen_data(mat1, n, m)
     gen_data(mat2, m, n)
-    print(mat1)
-    print(mat2)
+    # print(mat1)
+    # print(mat2)
     matmul(mat1, mat2, result)
     print(result, result.shape)
 MML_Exam_1()
@@ -56,11 +56,12 @@ def inner_product(vectors, in_vec):
     for i in range(len(vectors)):
         mse = 0
         for v in range(len(vectors[i])):
-            mse += np.sqrt((vectors[i][v] - in_vec[v]) ** 2)
+            # mse += np.sqrt((vectors[i][v] - in_vec[v]) ** 2)
+            mse += vectors[i][v] * in_vec[v]
         if max[0] < mse:
             max[0] = mse
             max[1] = i
-    max = (max[0], max[1])
+    max = (round(max[0], 2), max[1])
     return max
 
 
@@ -68,8 +69,9 @@ def MML_Exam_2():
     np.random.seed(1234)
     doc_vec = np.zeros((100, 6))
     for i in range(100):
-        doc_vec[i] = round(np.random.random(), 2)
-    print(doc_vec)
+        for j in range(6):
+            doc_vec[i][j] = round(np.random.random(), 2)
+    # print(doc_vec)
     vec_doc_1 = [0.2, 0.4, 0.02, 0.1, 0.9, 0.8]
 
     print(inner_product(doc_vec, vec_doc_1))
@@ -99,7 +101,8 @@ def backpropagation_1(weight, d_weight, target, output):
 
 
 def MML_Exam_3():
-    x1, x2 = 0.1, 0.2
+    x =[0, 0.1, 0.2]
+    lr = 0.5
     """
     code
     """
@@ -112,7 +115,24 @@ def MML_Exam_3():
     h = [0 for _ in range(3)]
     z = [0 for _ in range(5)]
 
-    z[1] = x1
+    """
+    forward
+    """
+    z[1] = w[1] * x[1] + w[2] * x[2]
+    z[2] = w[3] * x[1] + w[4] * x[2]
+    h[1] = sigmoid(z[1])
+    h[2] = sigmoid(z[2])
+
+    z[3] = w[5] * h[1] + w[6] * h[2]
+    z[4] = w[7] * h[1] + w[8] * h[2]
+
+    target_o1 = sigmoid(z[3])
+    target_o2 = sigmoid(z[4])
+
+
+
+
+    z[1] = x[1]
 
     z[3] = w[5] * h[1] + w[6] * h[2]
     dz3_w5 = h[1]
