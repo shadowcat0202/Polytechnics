@@ -4,6 +4,7 @@ import cv2
 import dlib
 import numpy as np
 import time
+import matplotlib.pyplot as plt
 
 from visualization import Camera  # 카메라 관련 (Color도 여기에서 get함수로 받아올 수 있다)
 from tracker import *  # 트래킹
@@ -18,6 +19,24 @@ from myHead import *
 from myMouth import *
 
 from DecisionModel_v2 import *
+class graph:
+    def __init__(self):
+        self.len = 1200
+        self.q_count = 0
+        self.pred_use_sliding_window = deque(maxlen=self.len)
+        self.pred_non_use_sliding_window = deque(maxlen=self.len)
+
+    def show(self):
+        y1 = np.array(self.pred_use_sliding_window)
+        y2 = np.array(self.pred_non_use_sliding_window)
+        fig, ax = plt.subplots(2,1)
+        fig.subplots_adjust(hspace=1)
+        ax[0].plot(y1)
+        ax[1].plot(y2)
+        ax[0].set_title("use_sliding_window")
+        ax[1].set_title("non_use_sliding_window")
+        plt.show()
+
 
 def testPreprocessing(img):
     size = (35, 35)
@@ -85,11 +104,13 @@ def ROIinWindow(r, h, w):
 
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
-path = "D:/JEON/dataset/drive-download-20220627T050141Z-001/"
+# path = "D:/JEON/dataset/drive-download-20220627T050141Z-001/"
 # path = "D:/JEON/dataset/"
+path = "D:/Dataset/"
 filename = ["WIN_20220624_15_58_44_Pro", "WIN_20220624_15_49_03_Pro", "WIN_20220624_15_40_21_Pro",
             "WIN_20220624_15_29_33_Pro"]    # , "dataset_ver1.1"
 TF = [14134, 13257, 12778, 10281]
+
 
 
 
@@ -119,6 +140,7 @@ while True:
     head = myHead(frame_control)
     mouth = myMouth()
     dm2 = DecisionModel()
+    g = graph()
 
     start_time = None
     end_time = None
@@ -128,7 +150,7 @@ while True:
     hit = 0
     miss = 0
     acc = 0
-    file = open(test_y, "r")
+    # file = open(test_y, "r")
 
     ###
     arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
@@ -154,7 +176,7 @@ while True:
         if ret:
             total_frame += 1
             start_time = timeit.default_timer()
-            line = file.readline()
+            # line = file.readline()
             # frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
             imgNdarray = cm.getFrameResize2ndarray(frame)  # frame to ndarray
             gray = cv2.cvtColor(imgNdarray, cv2.COLOR_BGR2GRAY)  # (H, W)
@@ -192,13 +214,13 @@ while True:
                 results, status = blk.eye_status_open(arr_nmRatios)
 
                 # blk.display_eye_status(results, status)
-                # # status = 0 (눈을 감음), 1 (눈을 뜸)
+                # # status = 1 (눈을 감음), 0 (눈을 뜸)
 
                 """
                 Gaze Estimation Starts Here
                 """
                 eye_gaze = None
-                if status == 0:
+                if status == 1:
                     pass
                 else:
                     results_pred, dirctn, eye_gaze = blk.eye_gaze_estimation(show=True)  # 동공표시 True
@@ -257,32 +279,41 @@ while True:
                 """
                 analyze_v2
                 """
-                warning = dm2.Update(imgNdarray, status, head_down, eye_gaze, headDirection)
+                pred = dm2.Update(imgNdarray, status, head_down, eye_gaze, headDirection)
+                g.pred_use_sliding_window.append(1 if pred else 0)
+                if status == 1 or head_down == 1 or eye_gaze == 1 or headDirection == 1:
+                    g.pred_non_use_sliding_window.append(1)
+                else:
+                    g.pred_non_use_sliding_window.append(0)
                 # imgNdarray = drawCornerRect(imgNdarray, rect, sleeping, color)
                 end_time = timeit.default_timer()
                 dfps.append(int(1./(end_time-start_time)))
                 y_value = None
-                if int(line.split(",")[1][1]) == 1:
-                    y_value = True
-                else:
-                    y_value = False
+                # if int(line.split(",")[1][1]) == 1:
+                #     y_value = True
+                # else:
+                #     y_value = False
                 # print(f"y_value:{y_value}, warning: {warning}")
-                if y_value == warning:
-                    hit += 1
-                else:
-                    miss += 1
+                # if y_value == pred:
+                #     hit += 1
+                # else:
+                #     miss += 1
 
                 # cv2.putText(imgNdarray, f"warning: {warning}",
                 #             (100, 40), cv2.FONT_HERSHEY_PLAIN,
                 #             fontScale=2, color=(0, 0, 255), thickness=3)
 
+                g.q_count+=1
+                if g.q_count == g.len:
+                    g.show()
+                    g.q_count = 0
             else:
                 # cv2.putText(imgNdarray, f"not found detection",
                 #             (20, 80), cv2.FONT_HERSHEY_PLAIN,
                 #             fontScale=2, color=(0, 0, 255), thickness=3)
                 pass
             if total_frame % 500 == 0:
-                print(f"{round(total_frame/TF[loop], 2)}%")
+                print(f"{round(total_frame/TF[loop] * 100, 2)}%")
         else:
             cv2.destroyAllWindows()
             cm.cap.release()
@@ -290,7 +321,7 @@ while True:
                   f"total_frame:{total_frame}, detection_frame:{detection_frame}\n"
                   f"avg FPS:{sum(dfps) // detection_frame} acc:{round((hit / detection_frame) * 100, 4)}")
             break
-        # cv2.imshow("output", imgNdarray)
+        cv2.imshow("output", imgNdarray)
     if key == 27:
         break
     loop += 1
