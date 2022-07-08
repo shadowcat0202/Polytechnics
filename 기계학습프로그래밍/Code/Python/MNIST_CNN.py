@@ -39,13 +39,13 @@ def make_model():
 
 def make_model_CNN():
     model = Sequential()
-    model.add(Conv2D(filters=40, kernel_size=(5, 5),
+    model.add(Conv2D(filters=40, kernel_size=(3, 3),
                      strides=(1, 1),  # 이동하는 범위(건너뛰는 범위)
                      activation="relu",
                      input_shape=(28, 28, 1),
                      padding="same"))  # 28 x 28
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다 14 x 14
-    model.add(Conv2D(64, (5, 5), activation="relu", padding="same"))  # Conv2d(filter, kernel_size 부터 시작한다)
+    model.add(Conv2D(64, (3, 3), activation="relu", padding="same"))  # Conv2d(filter, kernel_size 부터 시작한다)
     model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))  # 단순 사이즈를 줄이는 것이기 때문에 W가 늘어나지는 않는다
 
     model.add(Flatten())  # 7 x 7 로 만들어진 이미지를 1 차원으로 핀다
@@ -65,7 +65,7 @@ def train(model, X, Y):
     MY_BATCHSIZE = 200
     Y = tf.keras.utils.to_categorical(Y, 10)
     history = model.fit(X, Y, epochs=MY_EPOCH, batch_size=MY_BATCHSIZE)
-    filename = "./model/cnn_e({0}).h5".format(MY_EPOCH)
+    filename = "./model/cnn_e_(3 3)({0}).h5".format(MY_EPOCH)
     model.save(filename)
     return history
 
@@ -83,13 +83,13 @@ X_train, X_test, y_train, y_test = train_test_split(train_set, train_label, test
 # NN으로 할때 1차원으로 만들어주어야 하기 때문에
 # train_set_1d = train_set.reshape(len(train_set), train_set.shape[1] * train_set.shape[2])
 # test_set_1d = test_set.reshape(len(test_set), test_set.shape[1] * test_set.shape[2])
-# model = make_model_CNN()
+model = make_model_CNN()
 # his = train(model, train_set_1d, train_label)
 
 # model = make_model_CNN()
 # CNN은 2차원 배열(이미지)를 그대로 해주어야 한다
-# train_data_2d = train_set.reshape(train_set.shape[0], train_set.shape[1], train_set.shape[2], 1)
-# train(model, train_data_2d, train_label)
+train_data_2d = train_set.reshape(train_set.shape[0], train_set.shape[1], train_set.shape[2], 1)
+train(model, train_data_2d, train_label)
 
 from tensorflow.keras.models import load_model
 #
