@@ -1,0 +1,143 @@
+<<<<<<< HEAD
+<!DOCTYPE html>
+<html lang = "ko">
+    <!--시맨틱(semantic) : 의미론적인, 의미가 통하는 이름만 봐도 의미를 알 수 있는 HTML 태그-->
+    <!--왜 사용할까?
+        화면 낭독기 같은 보조 기기에서 사이트의 구조를 이해
+        할 수 있다
+        문서 구조가 정확히 나눠지므로 PC나 모바일 등 다양한 화면에서 웹 문서를 표현하기가 쉽다
+        웹 사이트를 검색할 때 필요한 내용을 정확히 찾을 수 있다
+    -->
+
+    <!--
+        <article> tag는 문서 혹은 요소가 독립적으로 존재할 수 있을 때 사용한다.
+        <section> tag는 논리적으로 관계 있는 문서 혹은 요소를 분리할 때 사용한다.
+        <div> 요소간 논리적 관계와는 상관없이 요소를 나눠야 할 필요가 있을 경우 사용한다.
+    -->
+    <div>
+        <!--
+            여러 소스를 묶는 <div>
+            - 소스를 묶는 용도
+            - 영역을 구별하거나 스타일 적용하기 위해
+        -->
+        <head>
+            헤드다
+            <style>
+                ul li {list-style-type: type none; float: left; outline: 1px dotted red; margin-left:20px;}
+            </style>
+            <div id = "logo">
+                <a href="#" onclick = "alert('사이트 링크 준비중 입니다.');"  style="cursor:pointer"><h1>Dream Jeju</h1></a>
+            </div>
+            <nav>
+                <ul id = "topMenu"> <!--점으로 순서?를 표시함-->
+                    <li><a href="#"onclick = "alert('단체여행 페이지가 준비중 입니다.');"  style="cursor:pointer">단체여행</a></li>
+                    <li><a href="#"onclick = "alert('맞춤여행 페이지가 준비중 입니다.');"  style="cursor:pointer">맞춤여행</a></li>
+                    <li><a href="#"onclick = "alert('갤러리 페이지가 준비중 입니다.');"  style="cursor:pointer">갤러리</a></li>
+                    <li><a href="#"onclick = "alert('문의하기 페이지가 준비중 입니다.');"  style="cursor:pointer">문의하기</a></li>
+                </ul> 
+            </nav>
+        </head>
+        <main>
+            <br><hr>
+            main 이다!
+            <section id = "section1">   <!--id를 사용하여 해당 위치(tag를 보다 빠르게 찾을 수 있다)-->
+               <br><br>
+                <img src="사진2.png" alt="My Image">
+                section1
+            </section>
+            <section id = "section2">
+                <img src="window.png" alt="My Image">
+                section2    
+            </section>
+        </main>
+        <footer>
+            <hr>
+            <section id = "bottomMunu">
+                다RE다(footer)<br>
+                - 사이트 제작 정보나 저작권 정보, 연락처 등<br>
+                - 다른 시맨틱 태그 사용해 다양한 정보 포함  
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+
+            </section>
+        </footer>
+    
+    
+    </div>
+</html>
+=======
+<!DOCTYPE html>
+<html lang = "ko">
+    <!--시맨틱(semantic) : 의미론적인, 의미가 통하는 이름만 봐도 의미를 알 수 있는 HTML 태그-->
+    <!--왜 사용할까?
+        화면 낭독기 같은 보조 기기에서 사이트의 구조를 이해
+        할 수 있다
+        문서 구조가 정확히 나눠지므로 PC나 모바일 등 다양한 화면에서 웹 문서를 표현하기가 쉽다
+        웹 사이트를 검색할 때 필요한 내용을 정확히 찾을 수 있다
+    -->
+
+    <!--
+        <article> tag는 문서 혹은 요소가 독립적으로 존재할 수 있을 때 사용한다.
+        <section> tag는 논리적으로 관계 있는 문서 혹은 요소를 분리할 때 사용한다.
+        <div> 요소간 논리적 관계와는 상관없이 요소를 나눠야 할 필요가 있을 경우 사용한다.
+    -->
+    <div>
+        <!--
+            여러 소스를 묶는 <div>
+            - 소스를 묶는 용도
+            - 영역을 구별하거나 스타일 적용하기 위해
+        -->
+        <head>
+            헤드다
+            <style>
+                ul li {list-style-type: type none; float: left; outline: 1px dotted red; margin-left:20px;}
+            </style>
+            <div id = "logo">
+                <a href="#" onclick = "alert('사이트 링크 준비중 입니다.');"  style="cursor:pointer"><h1>Dream Jeju</h1></a>
+            </div>
+            <nav>
+                <ul id = "topMenu"> <!--점으로 순서?를 표시함-->
+                    <li><a href="#"onclick = "alert('단체여행 페이지가 준비중 입니다.');"  style="cursor:pointer">단체여행</a></li>
+                    <li><a href="#"onclick = "alert('맞춤여행 페이지가 준비중 입니다.');"  style="cursor:pointer">맞춤여행</a></li>
+                    <li><a href="#"onclick = "alert('갤러리 페이지가 준비중 입니다.');"  style="cursor:pointer">갤러리</a></li>
+                    <li><a href="#"onclick = "alert('문의하기 페이지가 준비중 입니다.');"  style="cursor:pointer">문의하기</a></li>
+                </ul> 
+            </nav>
+        </head>
+        <main>
+            <br><hr>
+            main 이다!
+            <section id = "section1">   <!--id를 사용하여 해당 위치(tag를 보다 빠르게 찾을 수 있다)-->
+               <br><br>
+                <img src="사진2.png" alt="My Image">
+                section1
+            </section>
+            <section id = "section2">
+                <img src="window.png" alt="My Image">
+                section2    
+            </section>
+        </main>
+        <footer>
+            <hr>
+            <section id = "bottomMunu">
+                다RE다(footer)<br>
+                - 사이트 제작 정보나 저작권 정보, 연락처 등<br>
+                - 다른 시맨틱 태그 사용해 다양한 정보 포함  
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+                <p>안녕하세요</p>
+
+            </section>
+        </footer>
+    
+    
+    </div>
+</html>
+>>>>>>> 367930bd7abb1210c0f4aa3318a60d33fb395f8b

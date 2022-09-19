@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <div id="container">    
+            <h1>DOM을 공부합시다</h1>
+            <a href="#" onclick="addContents(); this.onclick='';">더 보기</a>    
+            <div id="info"></div>
+        </div>
+        <img src="./img_collect/windows_xp.jpg" id="cover">
+       
+
+        <h1>할 일 목록</h1>
+        <ul>
+            <li><span class="check">&check;</span>할 일 1 </li>
+            <li><span class="check">&check;</span>할 일 2 </li>
+            <li><span class="check">&check;</span>할 일 3 </li>
+            <li><span class="check">&check;</span>할 일 4 </li>
+            <li><span class="check">&check;</span>할 일 5 </li>
+        </ul>
+
+        <form>
+            <input type="text" id="rCount" value="1">행 
+            <input type="text" id="cCount" value="1">열    
+            <button onclick="drawTable(); return false;">작성</button>
+        </form>
+        <div id="contents"></div>
+
+
+        <script>
+            var cover = document.getElementById("cover");
+            cover.addEventListener("mouseover", function(){
+                cover.src = "./img_collect/라이언.png";
+            });
+            cover.addEventListener("mouseout", function(){
+                cover.src = "./img_collect/windows_xp.jpg";
+            });
+
+            function addContents() {
+                var newP = document.createElement("p");
+                var txtNode = document.createTextNode("DOM은 Document Object Model의 줄임말입니다.");
+                newP.appendChild(txtNode);
+                
+                var newImg = document.createElement("img");
+                var srcNode = document.createAttribute("src");
+                var altNode = document.createAttribute("alt");
+                srcNode.value = "./img_collect/라이언.png";
+                altNode.value = "돔 트리 예제 이미지";
+                newImg.setAttributeNode(srcNode);
+                newImg.setAttributeNode(altNode);
+
+                document.getElementById("info").appendChild(newP);
+                document.getElementById("info").appendChild(newImg);
+            }
+
+            var checks = document.querySelectorAll(".check");
+            for(var i = 0; i < checks.length; i++){
+                checks[i].addEventListener("click", function(){
+                    this.style.color = "#ccc";
+                    this.parentNode.style.color = "#ccc";
+                    this.parentNode.style.textDecoration="line-through";
+                })
+            }
+
+            function drawTable(){
+                var rcount = document.querySelector("#rCount").value;
+                var ccount = document.querySelector("#cCount").value;
+
+                var newTable = document.createElement("table");
+                for(var i = 0; i < rcount; i++){
+                    var newRow = document.createElement("tr");
+                    for(var j = 0; j < ccount; j++){
+                        var newCell = document.createElement("td");
+                        var cellText = document.createTextNode(i + ", " + j);
+
+                        newCell.appendChild(cellText);
+                        newRow.appendChild(newCell);
+                    }
+                    newTable.appendChild(newRow);
+                }
+                var contents = document.querySelector("#contents");\
+                contents.appendChild(newTable);
+            }
+        </script>
+        
+    </body>
+    
+</html>

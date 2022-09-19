@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            .contents1 img {
+                margin-right: 50px;
+                border: 1px solid #ccc;
+                box-shadow: 2px 2px 5px #ccc;
+            }
+            .contents1 img:nth-child(1) {
+                border: 2px solid #f00;
+            }
+            .contents2 .top-menu {
+                margin: 50px auto;
+                padding: 0;
+                list-style: none;
+                width: 606px;
+                height: 35px;
+                box-shadow: 0 3px 4px #8b8b8b;
+                background-color: #dadada;
+            }
+            .contents2 .top-menu li {
+                float: left;
+                border-right: 1px solid #929292;
+            }
+            .contents2 .top-menu li a:link {
+                color: black;
+                text-decoration: none;
+                text-align: center;
+                display: block;
+                width: 100px;
+                height: 35px;
+                line-height: 35px;
+            }
+            .contents2 .top-menu :last-child{
+                border-right: none;
+            }
+            .contents2 .top-menu li:not(:last-child) a:hover{
+                background-color: #555;
+                color: white;
+            }
+            .contents2 .top-menu li:last-child a:hover{
+                background-color: #b30000;
+                color: white;
+            }
+            .contents2 .top-menu li a:visited {
+                color: black;
+            }
+        </style>
+    </head>    
+    <body>
+        <div class="contents2">
+            <nav>
+                <ul class="top-menu">
+                    <li><a href="#">메뉴1</a></li>
+                    <li><a href="#">메뉴2</a> </li>
+                    <li><a href="#">메뉴3</a></li>
+                    <li><a href="#">메뉴4</a></li>
+                    <li><a href="#">메뉴5</a></li>
+                    <li><a href="#">메뉴6</a></li>
+                </ul>
+            </nav>
+        </div>
+        <div class="contents1">
+            <img src="img/house_1.jpg" alt="">
+            <img src="img/house_2.jpg" alt="">
+            <img src="img/house_3.jpg" alt="">
+        </div>
+        
+    </body>
+</html>
