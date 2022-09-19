@@ -7,7 +7,7 @@ green = [0, 255, 0]
 red = [0, 0, 255]
 
 
-def face_roi(_img):
+def face_roi(_img, _img_show=False):
     # face = _img[240:400, 217:365]
     face = _img[240:400, 217:365].copy()  # Deep copy
     face[:, :, 0] = 255
@@ -21,21 +21,22 @@ def change_raw_col(_img):
     _img[:, 100] = blue
 
 
-def img_split_merge(_img):
+def img_split_merge(_img, _show_img=False):
     b = _img[:, :, 0]
     g = _img[:, :, 1]
     r = _img[:, :, 2]
 
-    hstack = np.hstack([b, g, r])
-    cv2.imshow("bgr_split", hstack)
+    if _show_img:
+        hstack = np.hstack([b, g, r])
+        cv2.imshow("bgr_split", hstack)
 
-    merge_img = cv2.merge((r, g, b))
-    cv2.imshow("mrege(r,g,b)", merge_img)
+        merge_img = cv2.merge((r, g, b))
+        cv2.imshow("mrege(r,g,b)", merge_img)
 
-    cv2.waitKey(0)
-    cv2.destroyWindow("bgr_split")
-    cv2.destroyWindow("mrege(r,g,b)")
-
+        cv2.waitKey(0)
+        cv2.destroyWindow("bgr_split")
+        cv2.destroyWindow("mrege(r,g,b)")
+    return b, g, r
 
 def color_img_to_gray(_img):
     """
@@ -237,7 +238,7 @@ def equalization_img(_img, _show_hist=False, _show_img=False):
 
     he_img = norm_img.copy()
     for y in range(H):
-        for x in range(H):
+        for x in range(W):
             he_img[y, x] = h_v[norm_img[y, x]]
 
     # 사실상 위의 작업들은 아래와 같은 opencv lib 코드 한줄로 가능
@@ -257,7 +258,7 @@ def equalization_img(_img, _show_hist=False, _show_img=False):
         # h1 = np.hstack([gray, norm_img])
         # h2 = np.hstack([he_img, opencv_eq])
         # stack_img = np.vstack([h1, h2])
-        stack_img = np.vstack([gray, norm_img, he_img])
+        stack_img = np.hstack([gray, norm_img, he_img])
         cv2.imshow('gray, Noralize, he_img, opencv', stack_img)
         cv2.waitKey(0)
         cv2.destroyAllWindows()
@@ -284,7 +285,7 @@ def color_equalize(_img):
 
 
 def practice_1(_img):
-    cv2.imshow('_img', _img)
+
     b = _img[:, :, 0]
     g = _img[:, :, 1]
     r = _img[:, :, 2]
@@ -292,7 +293,7 @@ def practice_1(_img):
     g = equalization_img(g)
     r = equalization_img(r)
     eq_img = cv2.merge((b,g,r))
-    cv2.imshow('eq_img', eq_img)
+    cv2.imshow('img', np.hstack([_img, eq_img]))
     cv2.waitKey(0)
     cv2.destroyAllWindows()
 
