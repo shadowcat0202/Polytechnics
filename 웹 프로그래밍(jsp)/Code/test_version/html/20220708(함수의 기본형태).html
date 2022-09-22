@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+
+    </head>
+    <body>
+        <script>
+            function min(...items){ //나머지 매개변수
+            let output = items[0]
+                for(const item of items){
+                    if(output >item){
+                        output = item
+                    }
+                }
+                return output
+            }       
+            console.log('min()52, 173, 32, 103, 275, 24, 57')
+            console.log(`=${min(52, 173, 32, 103, 275, 24, 57)}`)
+            
+
+            function sample(a,b,...c){
+                console.log(a,b,c)
+            }
+            sample(1,2)
+            sample(1,2,3)
+            sample(1,2,3,4)
+
+
+            function multiplyAll(a, b){
+                let output = 1
+                for(let i = a; i <= b; i++){
+                    output *= i
+                }
+                return output
+            }
+            console.log(`1에서 2까지의 곱은 ${multiplyAll(1,2)}`)
+            console.log(`1에서 3까지의 곱은 ${multiplyAll(1,3)}`)
+
+            const max = function(array, ...rests){
+                let output = 0
+                if(Array.isArray(array)){
+                    output = array[0]
+                    items = array
+                }
+                else if(typeof(array) == 'number'){
+                    output = array
+                    items = rests
+                }
+                for(const data of items){
+                    if(output < data){
+                        output = data
+                    }
+                }  
+                return output
+            }
+            console.log(`(1,2,3,4) 중에 최대값은 ${max(1,2,3,4)}`)
+            console.log(`([1,2,3,4]) 중에 최대값은 ${max([1,2,3,4])}`)
+
+
+            // setTimeout(()=>{
+            //     console.log('1초후에 실행됩니다.')
+            // }, 1 * 1000)
+
+            // let count = 0
+            // let id = setInterval(() => {
+            //     console.log(`1초마다 실행됩니다. (${count}번째)`)
+            //     count++
+            // }, 1*1000)
+
+            // setTimeout(() => {
+            //     console.log('3초 타이머를 종료합니다.')
+            //     clearInterval(id)
+            // }, 3 * 1000)
+            
+            let number = [273,25,75,52,103,32,57,24,76]
+            numberf = number.filter(function(value){
+                if(value % 2 === 1 && value <= 100 && value % 5 === 0)
+                    return value 
+            })
+            console.log(`${number} 중에서 홀수 and 100이하 and 5의 배수 = ${numberf}`)
+            
+
+        </script>
+    </body>
+</html>

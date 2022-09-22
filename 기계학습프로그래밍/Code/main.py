@@ -145,10 +145,10 @@ def practice3():
 
         return _img[_y:_y + _h, _x:_x + _w], (_x, _y, _w, _h)
 
-    filename = "./Python/model/cnn_e(5).h5"
+    filename = "./Python/model/cnn_e_(3 3)(5).h5"
     model = load_model(filename)
 
-    src = cv2.imread("hand_write_number.png")
+    src = cv2.imread("my_hand_write.png")
     view = src.copy()
     img = src.copy()
 
@@ -164,8 +164,7 @@ def practice3():
     # cv2.imshow("binary+otsu", img)
 
     img = cv2.dilate(img, None, iterations=3)
-    # plt.imshow(img)
-    # plt.show()
+    # plt.imshow("dilate", img)
 
     n_blod, label_img, stats, centroids = cv2.connectedComponentsWithStats(img)
 
@@ -185,8 +184,10 @@ def practice3():
 
         # cv2.putText(view, f"{pred_y[-1]}", (pos[0], pos[1]), 1, 2, (255, 0, 255), cv2.LINE_4)  # border pos
         # cv2.rectangle(view, pos, (255, 0, 255), thickness=2)
-        cv2.putText(view, f"{pred_y[-1]}", (x, y), 1, 2, (255, 0, 255), cv2.LINE_4) # original pos
+        cv2.putText(view, f"{pred_y[-1]}", (x, y-3), 1, 2, (255, 0, 255), cv2.LINE_4) # original pos
         cv2.rectangle(view, (x,y,w,h), (255, 0, 255), thickness=2)
+        # cv2.putText(view, f"{pred_y[-1]}", (pos[0], pos[1]), 1, 2, (255, 0, 255), cv2.LINE_4)  # original pos
+        # cv2.rectangle(view, pos, (255, 0, 255), thickness=2)
 
     # print(pred_y)
     hst = np.hstack(hst)

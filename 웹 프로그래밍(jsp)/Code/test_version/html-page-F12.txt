@@ -1,0 +1,5 @@
+F5 = chach all clear
+alert(messege)
+confirm(messege)
+prompt(messege) or prompt(messege, default)
+consol.log(show messege in consol)
