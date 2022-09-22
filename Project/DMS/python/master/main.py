@@ -117,7 +117,7 @@ TF = [14134, 13257, 12778, 10281]
 loop = 0
 key = None
 while True:
-    test_y = path + filename[loop] + "._final.txt"
+    test_y = path + filename[loop] + "._세환.txt"
     video = path + filename[loop] + ".mp4"
 
     if loop % len(filename) == 0:
@@ -150,7 +150,9 @@ while True:
     hit = 0
     miss = 0
     acc = 0
-    # file = open(test_y, "r")
+    file = open(test_y, "r")
+    y1 = []
+    y2 = []
 
     ###
     arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
