@@ -95,131 +95,141 @@ TF = [14134, 13257, 12778, 10281]
 
 loop = 0
 key = None
-while True:
-    video = path + filename[loop] + ".mp4"
-    print(video)
-    loop += 1
-    if loop % len(filename) == 0:
-        loop = 0
-    color = (0, 255, 0)
-    # cm = Camera(path=0)  # path를 안하면 카메라 하면 영상
-    cm = Camera(path=video)  # path를 안하면 카메라 하면 영상
 
-    frame_control = 150
-    tk = Tracker()
-    fd = FaceDetector()
-    md = MarkDetector()
-    ey = HaarCascadeBlobCapture()
-    pe = PoseEstimator()
-    head = myHead(frame_control)
-    mouth = myMouth()
-    dm2 = DecisionModel()
-    ###
-    arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
-    arr_ratios = np.array([[], [], [], []])
-    # [min, max]
-    # [ L_facetoEye, L_eyeHeightToWidth, R_facetoEye, R_eyeHeightToWidth]
-    ###
-    while cm.cap.isOpened():
-        fourcc = cv2.VideoWriter_fourcc(*'DIVX')
-        ret, frame = cm.cap.read()  # 영상 프레임 받기
-        key = cv2.waitKey(1)
-        if key == ord('n') or key == 27:
-            break
-        # md.changeMarkIndex(key)  # 랜드마크 점 종류를 바꾸고 싶다면 활성화 (미완성)
+color = (0, 255, 0)
+cm = Camera(1)  # path를 안하면 카메라 하면 영상
+# cm = Camera(path=video)  # path를 안하면 카메라 하면 영상
 
-        if ret:
-            # frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
-            imgNdarray = cm.getFrameResize2ndarray(frame)  # frame to ndarray
-            gray = cv2.cvtColor(imgNdarray, cv2.COLOR_BGR2GRAY)  # (H, W)
+frame_control = 150
+tk = Tracker()
+fd = FaceDetector()
+md = MarkDetector()
+ey = HaarCascadeBlobCapture()
+pe = PoseEstimator()
+head = myHead(frame_control)
+mouth = myMouth()
+dm2 = DecisionModel()
+###
+arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
+arr_ratios = np.array([[], [], [], []])
+# [min, max]
+# [ L_facetoEye, L_eyeHeightToWidth, R_facetoEye, R_eyeHeightToWidth]
+###
 
-            rect = tk.getRectangle(gray, fd)  # 트래킹 하는것과 동시에 face detect 반환
-            if rect is not None and ROIinWindow(rect, cm.RES_H, cm.RES_W):
-                landmarks = md.get_marks(gray, rect)
-                landmarks = md.full_object_detection_to_ndarray(landmarks)
-                # md.draw_marks(imgNdarray, landmarks, color=cm.getRed())
+# video record
+recoding = False
+rec_trigger = False
 
-                """
-                Blinking Test Starts Here
-                """
-                blk = BlinkDetector(imgNdarray, gray, landmarks)  # 블링크 디텍트 클래스 가동
+while cm.cap.isOpened():
+    ret, frame = cm.cap.read()  # 영상 프레임 받기
+    # 키 입력 대기
+    key = cv2.waitKey(1)
+    if key == ord('n') or key == 27:    # n 이나 esc였나? 누르면 종료
+        break
 
-                # blk.time_it(blk.__init__())
-                # 각 ratio의 정규화 값이 0.4를 초과하는지 여부 확인.
-                # 0.4 초과 시 1 (눈을 뜸), 0.4 이하(눈을 감음)
-                arr_minlmax, arr_nmRatios = blk.new_minlmax_and_normalized_ratios(arr_minlmax)
 
-                """
-                    arr_minlmax = [ [min1/max1], [min2/max2], [min3/max3], [min4, max4] ]
-                         * 1,2,3,4 = ratio1, ratio2, ratio3, ratio4
-                         * ratio1 = 눈 면적(L) / 얼굴면적
-                         * ratio2 = 눈 면적(R) / 얼굴면적
-                         * ratio3 = 눈 높이(L) / 눈 너비(L)
-                         * ratio4 = 눈 눞이(R) / 눈 너비(R)
-                    arr_NMratios = [ ratio1, ratio2, ratio3, ratio4 ]
-    
-                """
-                # # results, status = blk.is_open(ratios_NM)
-                # # results = [1,1,1,0] 3개의 지표에서 떴다고 판단, 1개의 지표는 감았다고 판단
-                # # result 내 1의 갯수가 0 갯수 초과일 경우 1을 산출.
-                results, status = blk.eye_status_open(arr_nmRatios)
+    # md.changeMarkIndex(key)  # 랜드마크 점 종류를 바꾸고 싶다면 활성화 (미완성)
 
-                # blk.display_eye_status(results, status)
-                # # status = 0 (눈을 감음), 1 (눈을 뜸)
+    if ret:
+        # frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
+        imgNdarray = cm.getFrameResize2ndarray(frame)  # frame to ndarray
+        gray = cv2.cvtColor(imgNdarray, cv2.COLOR_BGR2GRAY)  # (H, W)
 
-                """
-                Gaze Estimation Starts Here
-                """
-                dirctn = ""
-                if status == 0:
-                    pass
-                else:
-                    results_pred, dirctn, _ = blk.eye_gaze_estimation(show=True)  # 동공표시 True
-                    # blk.display_gaze_estimation(results_pred, dirctn)
+        rect = tk.getRectangle(gray, fd)  # 트래킹 하는것과 동시에 face detect 반환
+        if rect is not None and ROIinWindow(rect, cm.RES_H, cm.RES_W):
+            landmarks = md.get_marks(gray, rect)
+            landmarks = md.full_object_detection_to_ndarray(landmarks)
+            # md.draw_marks(imgNdarray, landmarks, color=cm.getRed())
 
-                """
-                headPose estimation start
-                """
-                lowerheadRasio, _ = head.lowerHeadCheck(landmarks)
-                sleepHead = head.lowerHeadText(landmarks, gray)  # 수정했습니다 (class pose_estimator file_name= 부분)
-                mouth.openMouthText(landmarks, gray)
-                # x, y, z 축 보고 싶다면?
-                landmarks_32 = np.array(landmarks, dtype=np.float32)
-                pose = pe.solve_pose_by_68_points(landmarks_32)
-                axis = pe.get_axis(gray, pose[0], pose[1])
-                # axis = [[[RED_x RED_y]],[[GREEN_x GREEN_y]],[[BLUE_x BLUE_y]],[[CENTER_x CENTER_y]]]
-                # --> BLUE(정면) GREEN(아래) RED(좌측) CENTER(중심)
-                headDirection = None
-                if axis is not None:
-                    pe.draw_axes(gray, pose[0], pose[1])
-                    headDirection = head.directionText(axis, imgNdarray)
-                    cv2.putText(imgNdarray, f"{headDirection}",
-                                (rect.right() + 30, rect.top() + 30),
-                                cv2.FONT_HERSHEY_PLAIN,
-                                fontScale=2, color=(0, 0, 255), thickness=3)
+            """
+            Blinking Test Starts Here
+            """
+            blk = BlinkDetector(imgNdarray, gray, landmarks)  # 블링크 디텍트 클래스 가동
 
-                """
-                analyze_v2
-                """
-                sleeping = dm2.Update(imgNdarray, status, lowerheadRasio, 0, headDirection)
-                imgNdarray = drawCornerRect(imgNdarray, rect, sleeping, color)
+            # blk.time_it(blk.__init__())
+            # 각 ratio의 정규화 값이 0.4를 초과하는지 여부 확인.
+            # 0.4 초과 시 1 (눈을 뜸), 0.4 이하(눈을 감음)
+            arr_minlmax, arr_nmRatios = blk.new_minlmax_and_normalized_ratios(arr_minlmax)
 
-                cv2.putText(imgNdarray, f"{'sleep' if sleeping else 'open'}",
-                            (rect.right() + 30, rect.top()), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
-                cv2.putText(imgNdarray, f"{dirctn}",
-                            (rect.right() + 30, rect.top() + 60), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
+            """
+                arr_minlmax = [ [min1/max1], [min2/max2], [min3/max3], [min4, max4] ]
+                     * 1,2,3,4 = ratio1, ratio2, ratio3, ratio4
+                     * ratio1 = 눈 면적(L) / 얼굴면적
+                     * ratio2 = 눈 면적(R) / 얼굴면적
+                     * ratio3 = 눈 높이(L) / 눈 너비(L)
+                     * ratio4 = 눈 눞이(R) / 눈 너비(R)
+                arr_NMratios = [ ratio1, ratio2, ratio3, ratio4 ]
+
+            """
+            # # results, status = blk.is_open(ratios_NM)
+            # # results = [1,1,1,0] 3개의 지표에서 떴다고 판단, 1개의 지표는 감았다고 판단
+            # # result 내 1의 갯수가 0 갯수 초과일 경우 1을 산출.
+            results, status = blk.eye_status_open(arr_nmRatios)
+
+            # blk.display_eye_status(results, status)
+            # # status = 0 (눈을 감음), 1 (눈을 뜸)
+
+            """
+            Gaze Estimation Starts Here
+            """
+            dirctn = ""
+            if status == 0:
+                pass
             else:
-                cv2.putText(imgNdarray, f"not found detection",
-                            (20, 80), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
-            cv2.imshow("output", imgNdarray)
+                results_pred, dirctn, _ = blk.eye_gaze_estimation(show=True)  # 동공표시 True
+                # blk.display_gaze_estimation(results_pred, dirctn)
 
+            """
+            headPose estimation start
+            """
+            lowerheadRasio, _ = head.lowerHeadCheck(landmarks)
+            sleepHead = head.lowerHeadText(landmarks, gray)  # 수정했습니다 (class pose_estimator file_name= 부분)
+            mouth.openMouthText(landmarks, gray)
+            # x, y, z 축 보고 싶다면?
+            landmarks_32 = np.array(landmarks, dtype=np.float32)
+            pose = pe.solve_pose_by_68_points(landmarks_32)
+            axis = pe.get_axis(gray, pose[0], pose[1])
+            # axis = [[[RED_x RED_y]],[[GREEN_x GREEN_y]],[[BLUE_x BLUE_y]],[[CENTER_x CENTER_y]]]
+            # --> BLUE(정면) GREEN(아래) RED(좌측) CENTER(중심)
+            headDirection = None
+            if axis is not None:
+                pe.draw_axes(gray, pose[0], pose[1])
+                headDirection = head.directionText(axis, imgNdarray)
+                cv2.putText(imgNdarray, f"{headDirection}",
+                            (rect.right() + 30, rect.top() + 30),
+                            cv2.FONT_HERSHEY_PLAIN,
+                            fontScale=2, color=(0, 0, 255), thickness=3)
+
+            """
+            analyze_v2
+            """
+            sleeping = dm2.Update(imgNdarray, status, lowerheadRasio, 0, headDirection)
+            imgNdarray = drawCornerRect(imgNdarray, rect, sleeping, color)
+
+            cv2.putText(imgNdarray, f"{'sleep' if sleeping else 'open'}",
+                        (rect.right() + 30, rect.top()), cv2.FONT_HERSHEY_PLAIN,
+                        fontScale=2, color=(0, 0, 255), thickness=3)
+            cv2.putText(imgNdarray, f"{dirctn}",
+                        (rect.right() + 30, rect.top() + 60), cv2.FONT_HERSHEY_PLAIN,
+                        fontScale=2, color=(0, 0, 255), thickness=3)
         else:
-            out = cv2.VideoWriter('output.avi', fourcc, 30.0, (cm.RES_W, cm.RES_H))
-            cv2.destroyAllWindows()
-            cm.cap.release()
-            break
-    if key == 27:
+            cv2.putText(imgNdarray, f"not found detection",
+                        (20, 80), cv2.FONT_HERSHEY_PLAIN,
+                        fontScale=2, color=(0, 0, 255), thickness=3)
+        # recoding start =============================================================================
+        if key == ord('r'):
+            rec_trigger = True
+        cm.rec(imgNdarray, 'rec_test', rec_trigger)
+        rec_trigger = False
+        if cm.recoding:
+            imgNdarray = cm.rec_logo(imgNdarray)
+        # recoding end ===============================================================================
+
+
+
+        cv2.imshow("output", imgNdarray)
+
+    else:
+        cv2.destroyAllWindows()
+        cm.cap.release()
         break

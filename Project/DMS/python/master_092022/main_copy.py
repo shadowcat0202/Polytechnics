@@ -4,6 +4,7 @@ import cv2
 import dlib
 import numpy as np
 import time
+from datetime import timedelta
 
 from visualization import Camera  # 카메라 관련 (Color도 여기에서 get함수로 받아올 수 있다)
 from tracker import *  # 트래킹
@@ -25,7 +26,7 @@ def testPreprocessing(img):
     # 커널 모양
     kernel = []
     kernel.append(cv2.getStructuringElement(cv2.MORPH_RECT, size))  # 네모(avg)
-    kernel.append(cv2.getStructuringElement(cv2.MORPH_ELLIPSE, size))  # 타원(best!!
+    kernel.append(cv2.getStructuringElement(cv2.MORPH_ELLIPSE, size))  # 타원(best!!)
     kernel.append(cv2.getStructuringElement(cv2.MORPH_CROSS, size))  # 십자가(worst)
     thold = np.min(img) + np.std(img)
     img = cv2.medianBlur(img, 3, 3)
@@ -87,26 +88,32 @@ def ROIinWindow(r, h, w):
 
 print(__doc__)
 print("OpenCV version: {}".format(cv2.__version__))
-path = "D:/JEON/dataset/drive-download-20220627T050141Z-001/"
-# path = "D:/JEON/dataset/"
-filename = ["WIN_20220624_15_58_44_Pro", "WIN_20220624_15_49_03_Pro", "WIN_20220624_15_40_21_Pro",
-            "WIN_20220624_15_29_33_Pro"]  # , "dataset_ver1.1"
-TF = [14134, 13257, 12778, 10281]
+# path = "D:/JEON/dataset/drive-download-20220627T050141Z-001/"
+# # path = "D:/JEON/dataset/"
+# filename = ["WIN_20220624_15_58_44_Pro", "WIN_20220624_15_49_03_Pro", "WIN_20220624_15_40_21_Pro",
+#             "WIN_20220624_15_29_33_Pro"]    # , "dataset_ver1.1"
+# TF = [14134, 13257, 12778, 10281]
 
-loop = 3
+
+dur_danger = []
+loop = 0
 key = None
 while True:
-    test_y = path + filename[loop] + "._final.txt"
-    video = path + filename[loop] + ".mp4"
+    # test_y = path + filename[loop] + "._세환.txt"
+    # video = path + filename[loop] + ".mp4"
+    video = "IMG_8721.MOV"
+    filename = "IMG_8721.MOV"
 
     if loop % len(filename) == 0:
         loop = 0
     color = (0, 255, 0)
-    # cm = Camera()  # path를 안하면 카메라 하면 영상
-    cm = Camera(path=video)  # path를 안하면 카메라 하면 영상
+    cm = Camera()  # path를 안하면 카메라 하면 영상
+    # cm = Camera(path=video)  # path를 안하면 카메라 하면 영상
     # cm = Camera(
     #     path="D:/JEON/dataset/drive-download-20220627T050141Z-001/WIN_20220624_15_40_21_Pro.mp4")  # path를 안하면 카메라 하면 영상
 
+    fourcc = cv2.VideoWriter_fourcc(*'DIVX')
+    out = cv2.VideoWriter("DMS.avi", fourcc, 30, (1280, 720))
     frame_control = 150
 
     tk = Tracker()
@@ -126,7 +133,10 @@ while True:
     hit = 0
     miss = 0
     acc = 0
-    file = open(test_y, "r")
+    time_start = time.time()
+    # file = open(test_y, "r")
+    # y1 = []
+    # y2 = []
 
     ###
     arr_minlmax = np.array([[1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0], [1000.0, -1000.0]])
@@ -139,10 +149,11 @@ while True:
     # [min, max]
     # [ L_facetoEye, L_eyeHeightToWidth, R_facetoEye, R_eyeHeightToWidth]
     ###
-    cnt_frm = 0
+
     head_down = None
     while cm.cap.isOpened():
         ret, frame = cm.cap.read()  # 영상 프레임 받기
+        tpf_sp = time.time()
         key = cv2.waitKey(1)
         if key == ord('n') or key == 27:
             cv2.destroyAllWindows()
@@ -152,7 +163,7 @@ while True:
         if ret:
             total_frame += 1
             start_time = timeit.default_timer()
-            line = file.readline()
+            # line = file.readline()
             # frame = cv2.rotate(frame, cv2.ROTATE_90_COUNTERCLOCKWISE)
             imgNdarray = cm.getFrameResize2ndarray(frame)  # frame to ndarray
             gray = cv2.cvtColor(imgNdarray, cv2.COLOR_BGR2GRAY)  # (H, W)
@@ -226,9 +237,9 @@ while True:
                 시영 코드
                 """
                 """ SY - HEAD NORMALIZED STARTS HERE """
-                lowerheadRasio, _ = head.lowerHeadCheck(landmarks)
+                lowerheadRatio, _ = head.lowerHeadCheck(landmarks)
                 # 두 자리 정수로 ratio 변환
-                headRatio = round(lowerheadRasio * 100, 0).astype('int8')
+                headRatio = round(lowerheadRatio * 100, 0).astype('int8')
 
                 # ratio 관련 정보 저장/계산
                 head_log, headRatio_mode, headThold = head.updatedLog_modeRatio_tholdRatio(head_log, headRatio)
@@ -255,52 +266,74 @@ while True:
                 """
                 analyze_v2
                 """
-                warning = dm2.Update(imgNdarray, status, head_down, eye_gaze, headDirection)
-                # imgNdarray = drawCornerRect(imgNdarray, rect, sleeping, color)
+                danger = dm2.Update(imgNdarray, status, head_down, eye_gaze, headDirection)
+                msg_danger = "DANGER" if danger is True else "OK"
+                tpf_ep = time.time()
+                tpf = tpf_ep - tpf_sp
+                time_end = time.time()
+                time_run = time_end - time_start
+
+                # print(f"tpf = {tpf}")
+
+                if danger is True:
+                    dur_danger.append(tpf)
+                else:
+                    dur_danger = []
+
+                warning = "-ALARM" if sum(dur_danger) >= 5 else ""
+                time_danger = sum(dur_danger)
+                msg_dangerT = f"({time_danger:.1f}s)" if time_danger > 0 else ""
+
+                # imgNdarray = drawCornerRect(imgNdarray, rect, danger, color)
                 end_time = timeit.default_timer()
-                dfps.append(int(1. / (end_time - start_time)))
-                y_value = None
-                y = int(line.split(",")[1][1])
-                if y == 1:
-                    y_value = True
-                else:
-                    y_value = False
-                # print(f"y_value:{y_value}, warning: {warning}")
-                if y_value == warning:
-                    hit += 1
-                else:
-                    miss += 1
 
+                h, w, _ = imgNdarray.shape
+                msg_shape = f"{w}x{h}"
+                cv2.putText(imgNdarray, f"{msg_danger}{msg_dangerT}{warning}",
+                            (rect.right() + 30, rect.top()), cv2.FONT_HERSHEY_PLAIN,
+                            fontScale=1, color=(0, 0, 255), thickness=2)
 
-                cv2.putText(imgNdarray, f"pred: {warning}",
-                            (500, 180), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
-                cv2.putText(imgNdarray, f"ans: {y_value}",
-                            (500, 200), cv2.FONT_HERSHEY_PLAIN,
-                            fontScale=2, color=(0, 0, 255), thickness=3)
-                # if y_value and not warning:
-                #     while True:
-                #         bbb = cv2.waitKey(1)
-                #         if bbb == ord('c'):
-                #             break
+                cv2.putText(imgNdarray, f"resolution: {msg_shape}",
+                            (1000, 80), cv2.FONT_HERSHEY_PLAIN,
+                            fontScale=1, color=(255, 0, 0), thickness=2)
+                cv2.putText(imgNdarray, f"frames: {total_frame}",
+                            (1000, 100), cv2.FONT_HERSHEY_PLAIN,
+                            fontScale=1, color=(255, 0, 0), thickness=2)
+                cv2.putText(imgNdarray, f"time: {time_run:.0f}",
+                            (1000, 120), cv2.FONT_HERSHEY_PLAIN,
+                            fontScale=1, color=(255, 0, 0), thickness=2)
+                cv2.putText(imgNdarray, f"fps: {detection_frame / time_run:.0f}",
+                            (1000, 140), cv2.FONT_HERSHEY_PLAIN,
+                            fontScale=1, color=(255, 0, 0), thickness=2)
+
+                # cv2.putText(imgNdarray, f"{dirctn}",
+                #             (rect.right() + 30, rect.top() + 60), cv2.FONT_HERSHEY_PLAIN,
+                #             fontScale=2, color=(0, 0, 255), thickness=3)
+
 
             else:
-                # cv2.putText(imgNdarray, f"not found detection",
-                #             (20, 80), cv2.FONT_HERSHEY_PLAIN,
-                #             fontScale=2, color=(0, 0, 255), thickness=3)
+                cv2.putText(imgNdarray, f"not found detection",
+                            (20, 80), cv2.FONT_HERSHEY_PLAIN,
+                            fontScale=2, color=(0, 0, 255), thickness=3)
                 pass
             # if total_frame % 500 == 0:
-            #     print(f"{round(total_frame / TF[loop], 2)}%")
+            #     print(f"{round(total_frame/TF[loop] * 100, 2)}%")
+
+
         else:
-            cv2.destroyAllWindows()
             cm.cap.release()
+            out.release()
+            cv2.destroyAllWindows()
             # print(f"{video}\n"
             #       f"total_frame:{total_frame}, detection_frame:{detection_frame}\n"
-            #       f"avg FPS:{sum(dfps) // detection_frame} acc:{round((hit / detection_frame) * 100, 4)}")
+            #       f"time: {time_run} / fps: {total_frame/time_run}")
+            # f"avg FPS:{sum(dfps) // detection_frame} acc:{round((hit / detection_frame) * 100, 4)}")
             break
-        cv2.imshow("output", imgNdarray)
+        # cv2.imshow("output", imgNdarray)
+        out.write(imgNdarray)
     if key == 27:
         break
     loop += 1
-    if loop == 4:
-        break
+    break
+
+# 22

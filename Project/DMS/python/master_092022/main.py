@@ -25,7 +25,7 @@ def testPreprocessing(img):
     # 커널 모양
     kernel = []
     kernel.append(cv2.getStructuringElement(cv2.MORPH_RECT, size))  # 네모(avg)
-    kernel.append(cv2.getStructuringElement(cv2.MORPH_ELLIPSE, size))  # 타원(best!!
+    kernel.append(cv2.getStructuringElement(cv2.MORPH_ELLIPSE, size))  # 타원(best!!)
     kernel.append(cv2.getStructuringElement(cv2.MORPH_CROSS, size))  # 십자가(worst)
     thold = np.min(img) + np.std(img)
     img = cv2.medianBlur(img, 3, 3)
