@@ -17,7 +17,7 @@ if __name__ == "__main__":
     RES_W = None
     RES_H = None
 
-    vid = cv2.VideoCapture(1)
+    vid = cv2.VideoCapture(0)
 
     if vid.isOpened():
         fps = vid.get(cv2.CAP_PROP_FPS)

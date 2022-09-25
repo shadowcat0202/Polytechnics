@@ -4,9 +4,9 @@ import matplotlib.pyplot as plt
 from mark_detector import *
 from SYcommon_calculator import *
 import timeit
-from visualization import*
+from visualization import *
 
-cm = Camera()
+
 
 class BlinkDetector():
     def __init__(self, view, img_ip, allLandmarks):
@@ -262,11 +262,11 @@ class BlinkDetector():
 
         msg = "OPEN" if status == 1 else "CLOSED"  # 이미지에 표기할 메시지
 
-        cv2.putText(self.view, f"{msg}", (500, 300), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=cm.getGreen(),
+        cv2.putText(self.view, f"{msg}", (500, 300), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=getGreen(),
                     thickness=2)
         # cv2.putText(self.view, f"Dicrection?{direction}", (620, 330), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=cm.getBlue())
         cv2.putText(self.view, f"results_close: {results_close}", (400, 330), cv2.FONT_HERSHEY_PLAIN, fontScale=1,
-                    color=cm.getRed(), thickness=1)
+                    color=getRed(), thickness=1)
 
     """ 
     METHODS FOR EEF(Lft Eye, Ryt Eye, Face) START HERE
@@ -315,8 +315,8 @@ class BlinkDetector():
 
     def display_gaze_estimation(self,results_direction, direction):
 
-        cv2.putText(self.view, f"{direction}", (700, 300), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=cm.getGreen(),
+        cv2.putText(self.view, f"{direction}", (700, 300), cv2.FONT_HERSHEY_SIMPLEX, fontScale=0.5, color=getGreen(),
                     thickness=2)
         # cv2.putText(self.view, f"Dicrection?{direction}", (620, 330), cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=cm.getBlue())
         cv2.putText(self.view, f"results_direction: {results_direction}", (700, 330), cv2.FONT_HERSHEY_PLAIN, fontScale=1,
-                    color=cm.getRed(), thickness=1)
+                    color=getRed(), thickness=1)
