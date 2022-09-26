@@ -87,7 +87,6 @@ class DecisionModel:
         """
         eyeClose frame buffer
         """
-        eyeClose = not eyeClose
         if len(self.eyeCloseShortTerm) == self.shortLen:
             self.eyeCloseShortSum += (eyeClose - self.eyeCloseShortTerm.popleft())
             self.eyeCloseShortTerm.append(eyeClose)

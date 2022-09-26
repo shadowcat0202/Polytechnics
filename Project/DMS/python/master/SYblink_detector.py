@@ -254,7 +254,7 @@ class BlinkDetector():
     def eye_status_open(self, arr_nmRatios):
         thold = 0.4
         results = [1 if ratio > thold else 0 for ratio in arr_nmRatios]
-        status = 1 if results.count(1) > results.count(0) else 0
+        status = 0 if results.count(1) > results.count(0) else 1
 
         return results, status
 

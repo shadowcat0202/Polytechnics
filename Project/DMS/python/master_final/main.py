@@ -100,7 +100,7 @@ loop = 0
 key = None
 
 color = (0, 255, 0)
-cm = Camera(1)  # path를 안하면 카메라 하면 영상
+cm = Camera()  # path를 안하면 카메라 하면 영상
 # cm = Camera(path=video)  # path를 안하면 카메라 하면 영상
 # cm = Camera(
 #     path="D:/JEON/dataset/drive-download-20220627T050141Z-001/WIN_20220624_15_40_21_Pro.mp4")  # path를 안하면 카메라 하면 영상
@@ -144,7 +144,7 @@ arr_headThold = np.array([])
 
 head_down = None
 
-# video record
+# video record ================================================
 recoding = False
 rec_trigger = False
 
@@ -263,8 +263,13 @@ while cm.cap.isOpened():
             """
             analyze_v2
             """
-            danger = dm2.Update(imgNdarray, status, head_down, eye_gaze, headDirection)
-            msg_danger = "DANGER" if danger is True else "OK"
+            danger, eyeclose_danger, headDrop_danger, gaze_danger, head_side_danger = \
+                dm2.Update(imgNdarray, status, head_down, eye_gaze, headDirection)
+            msg_danger = "DANGER!\n" if danger is True else "OK\n"
+            # msg_Eye = "Eye Close:" + "Close!\n" if eyeclose_danger is True else "Open\n"
+            # msg_head_drop = "DeadDrop:" + "Drop!\n" if headDrop_danger is True else "fine\n"
+            # msg_Gaze = "Gaze:" + "other side!\n" if gaze_danger is True else "forward\n"
+            # msg_head_side = "head side:" + "other side!\n" if head_side_danger is True else "forward\n"
             tpf_ep = time.time()
             tpf = tpf_ep - tpf_sp
             time_end = time.time()
@@ -289,6 +294,18 @@ while cm.cap.isOpened():
             cv2.putText(imgNdarray, f"{msg_danger}{msg_dangerT}{warning}",
                         (rect.right() + 30, rect.top()), cv2.FONT_HERSHEY_PLAIN,
                         fontScale=1, color=(0, 0, 255), thickness=2)
+            # cv2.putText(imgNdarray, f"{msg_Eye}",
+            #             (rect.right() + 30, rect.top() + 20), cv2.FONT_HERSHEY_PLAIN,
+            #             fontScale=1, color=(0, 0, 255), thickness=2)
+            # cv2.putText(imgNdarray, f"{msg_head_drop}",
+            #             (rect.right() + 30, rect.top() + 40), cv2.FONT_HERSHEY_PLAIN,
+            #             fontScale=1, color=(0, 0, 255), thickness=2)
+            # cv2.putText(imgNdarray, f"{msg_Gaze}",
+            #             (rect.right() + 30, rect.top() + 60), cv2.FONT_HERSHEY_PLAIN,
+            #             fontScale=1, color=(0, 0, 255), thickness=2)
+            # cv2.putText(imgNdarray, f"{msg_head_side}",
+            #             (rect.right() + 30, rect.top() + 80), cv2.FONT_HERSHEY_PLAIN,
+            #             fontScale=1, color=(0, 0, 255), thickness=2)
 
             cv2.putText(imgNdarray, f"resolution: {msg_shape}",
                         (1000, 80), cv2.FONT_HERSHEY_PLAIN,
@@ -314,14 +331,15 @@ while cm.cap.isOpened():
         # if total_frame % 500 == 0:
         #     print(f"{round(total_frame/TF[loop] * 100, 2)}%")
 
-        # recoding start =============================================================================
-        if key == ord('r'):
-            rec_trigger = True
-        cm.rec(imgNdarray, 'rec_test', rec_trigger)
-        rec_trigger = False
+        # recoding part start =============================================================================
+        if key == ord('r'): # 녹화 버튼 눌렸을때
+            cm.rec(imgNdarray, 'test_video', _rec_trigger=True)
+        else:
+            cm.rec(imgNdarray, 'test_video')     # 녹화
+
         if cm.recoding:
-            imgNdarray = cm.rec_logo(imgNdarray)
-        # recoding end ===============================================================================
+            imgNdarray = cm.rec_logo(imgNdarray)    # 녹화 중 일때 화면에 녹화 ●REC 표시
+        # recoding part end ===============================================================================
     else:
         cm.cap.release()
         cv2.destroyAllWindows()

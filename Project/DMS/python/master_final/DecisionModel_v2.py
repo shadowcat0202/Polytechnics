@@ -190,5 +190,5 @@ class DecisionModel:
         cv2.putText(img, f"head_drop:{head_drop}", (1000, 240), cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255, 0, 0), thickness=2)
         cv2.putText(img, f"head_side:{head_side}", (1000, 260), cv2.FONT_HERSHEY_PLAIN, fontScale=1, color=(255, 0, 0), thickness=2)
         if eye_close or head_drop or non_gaze or head_side:
-            return True
-        return False
+            return True, eyeClose, headDrop, non_gaze, head_side
+        return False, False, False, False, False
