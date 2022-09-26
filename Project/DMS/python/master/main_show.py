@@ -192,12 +192,12 @@ while True:
                     cv2.putText(imgNdarray, f"{headDirection}",
                                 (rect.right() + 30, rect.top() + 30),
                                 cv2.FONT_HERSHEY_PLAIN,
-                                fontScale=2, color=(0, 0, 255), thickness=3)
+                                fontScale=2, color=(0, 0, 255), thickness=3)d
 
                 """
                 analyze_v2
                 """
-                sleeping = dm2.Update(imgNdarray, status, lowerheadRasio, 0)
+                sleeping = dm2.Update(imgNdarray, status, lowerheadRasio, 0, headDirection)
                 imgNdarray = drawCornerRect(imgNdarray, rect, sleeping, color)
 
                 cv2.putText(imgNdarray, f"{sleeping}",

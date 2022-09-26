@@ -42,6 +42,8 @@ class DecisionModel:
 
     def Update(self, img, eyeClose, headDrop, gaze, headDir):
         """
+        :param headDir:
+        :param gaze:
         :param img: 원본 이미지
         :param eyeClose: 눈 감김 boolean
         :param headDrop: ratio
